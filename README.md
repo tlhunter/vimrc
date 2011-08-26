@@ -28,4 +28,4 @@ Requirements
 Install ctags and configure on your Mac:
 http://www.renownedmedia.com/blog/installing-vim-taglist-with-macvim-in-os-x/
 
-![Screenshot](http://www.renownedmedia.com/wp-content/uploads/2011/08/nerdtree-taglist.png "Screenshot of Configuration")
+-> ![Screenshot](http://www.renownedmedia.com/wp-content/uploads/2011/08/nerdtree-taglist.png "Screenshot of Configuration") <-
