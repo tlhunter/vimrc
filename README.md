@@ -21,24 +21,28 @@ to open up a quick/fuzzy file browser (Command-T). If you want to edit another f
 open it just like before. When you want to move between files, use the buffer movement keys mentioned
 below. Feel free to open as many buffers as you want!
 
-__Buffers__
+Buffer Movement
+---
 * Use _,q_ to close the current buffer (a different buffer will replace it)
 * Use _Ctrl h Ctrl l_ to move between open buffers (or _Ctrl Left Ctrl Right_)
 
-__Windows__
+Windows
+---
 * Use _,h ,j ,k ,l_ to move around between windows
 * Use _,Q_ to close the current window (which doesn't happen often)
 * Use _,n_ to show and hide the file browser
 * Use _,y_ to show and hide the tag browser
 
-__File Browser (NERDTree)__
+File Browser (NERDTree)
+---
 * Use standard movement keys to move around
 * Use _Ctrl j_ and _Ctrl k_ to move between siblings
 * Use _C_ to make a node the current working directory
 * Use _:Bookmark BookmarkName_ to bookmark the current selection
 * Use _B_ to toggle the bookmark menu
 
-__Tag Browser (Tag List)__
+Tag Browser (Tag List)
+---
 * Use _s_ to reorder the items by alpha or occurance
 
 Installation
