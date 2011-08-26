@@ -7,7 +7,7 @@ managing my VIM configuraiton more easy, especially with deploying it to differe
 sure if I will make this a community projects.
 
 Installation
-===
+---
 
 Run these commands in your terminal (I'm sure there will be more to it)
 
@@ -15,7 +15,7 @@ Run these commands in your terminal (I'm sure there will be more to it)
     ln -s ~/.vim/vimrc ~/.vimrc
 
 Features
-===
+---
 
 * File Browser on left side of screen
 * Functions, Variables, Classes on right
@@ -23,9 +23,9 @@ Features
 
 
 Requirements
-===
+---
 
 Install ctags and configure on your Mac:
 http://www.renownedmedia.com/blog/installing-vim-taglist-with-macvim-in-os-x/
 
-|### ![Screenshot](http://www.renownedmedia.com/wp-content/uploads/2011/08/nerdtree-taglist.png "Screenshot of Configuration") ###|
+![Screenshot](http://www.renownedmedia.com/wp-content/uploads/2011/08/nerdtree-taglist.png "Screenshot of Configuration")
