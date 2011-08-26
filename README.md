@@ -1,16 +1,20 @@
 Vim as a PHP IDE
 ===
 
-Installation:
-git@github.com:renownedmedia/Vim-PHP-IDE.git
-ln -s ~/.vim/vimrc ~/.vimrc
-
 This Vim configuration is meant to be used to make Vim act more like an IDE. I use it mostly under MacVIM,
 so some things may be weird in different environments. For now, I'm just planning on using github to make
 managing my VIM configuraiton more easy, especially with deploying it to different environments. I'm not
 sure if I will make this a community projects.
 
-Feautres
+Installation
+===
+
+Run these commands in your terminal (I'm sure there will be more to it)
+
+    git@github.com:renownedmedia/Vim-PHP-IDE.git
+    ln -s ~/.vim/vimrc ~/.vimrc
+
+Features
 ===
 
 * File Browser on left side of screen
