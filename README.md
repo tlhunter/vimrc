@@ -67,4 +67,4 @@ http://www.renownedmedia.com/blog/installing-vim-taglist-with-macvim-in-os-x/
 
 Screenshots
 ---
-![Screenshot](http://www.renownedmedia.com/wp-content/uploads/2011/08/nerdtree-taglist.png "Screenshot of Configuration")
+![Screenshot](http://www.renownedmedia.com/wp-content/uploads/2011/08/nerdtree-tagbar.png "Screenshot of Configuration")
