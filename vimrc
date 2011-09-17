@@ -135,7 +135,7 @@ if has("gui_running")
 
     " Show tabs and newline characters with ,s
     nmap <Leader>s :set list!<CR>
-    set listchars=tab:â¸\ ,eol:ÂŹ
+    set listchars=tab:▸\ ,eol:¬
     "Invisible character colors
     highlight NonText guifg=#4a4a59
     highlight SpecialKey guifg=#4a4a59
