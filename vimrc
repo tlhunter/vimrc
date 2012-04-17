@@ -35,6 +35,7 @@ set hlsearch                "Highlight all search results
 nnoremap <leader>b :nohlsearch<CR>
 " http://www.vim.org/scripts/script.php?script_id=2572
 noremap <leader>a :Ack 
+let g:ackprg="ack -H --nocolor --nogroup --column --type-add php=.tpl"
 
 "------  NERDTree Options  ------
 let NERDTreeIgnore=['CVS']
