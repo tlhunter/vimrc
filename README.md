@@ -51,7 +51,7 @@ Run these commands in your terminal to fully install this vim setup. There is an
 (instructions coming soon!).
 
     cd ~
-    git clone git@github.com:renownedmedia/Vim-PHP-IDE.git .vim
+    git clone git@github.com:tlhunter/Vim-PHP-IDE.git .vim
     ln -s ~/.vim/vimrc ~/.vimrc
     cd .vim
     git submodule init
@@ -67,8 +67,8 @@ Features
 Requirements
 ---
 Install ctags and configure on your Mac:
-http://www.renownedmedia.com/blog/installing-vim-taglist-with-macvim-in-os-x/
+http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/
 
 Screenshots
 ---
-![Screenshot](http://www.renownedmedia.com/wp-content/uploads/2011/08/nerdtree-tagbar.png "Screenshot of Configuration")
+![Screenshot](http://thomashunter.name/wp-content/uploads/2011/08/nerdtree-tagbar.png "Screenshot of Configuration")
