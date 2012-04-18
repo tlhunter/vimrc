@@ -69,8 +69,8 @@ Features
 
 Requirements
 ---
-Install ctags and configure on your Mac:
-http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/
+* Install ctags and configure on your Mac: http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/
+* Ruby (to compile command-t)
 
 Screenshots
 ---
