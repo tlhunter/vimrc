@@ -141,7 +141,8 @@ if has("gui_running")
     highlight NonText guifg=#4a4a59
     highlight SpecialKey guifg=#4a4a59
 else
-    colorscheme darkblue        "Default VIM colorscheme which works in terminals
+    set t_Co=256
+    colorscheme ir_black            "Cool color scheme
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparencY
