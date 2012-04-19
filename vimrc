@@ -142,7 +142,7 @@ if has("gui_running")
     highlight SpecialKey guifg=#4a4a59
 else
     set t_Co=256
-    colorscheme ir_black            "Cool color scheme
+    colorscheme Mustang             "This theme actually works in 256, ir_black doesn't
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparencY
