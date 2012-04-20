@@ -51,13 +51,20 @@ noremap <silent> <Leader>y :TagbarToggle<CR>
 
 "------  Buffers  ------
 " Ctrl Left & Right move between buffers
-" (need to find out how to disable this within nerdtree buffer)
 noremap <silent> <C-left> :bprev<CR>
 noremap <silent> <C-h> :bprev<CR>
 noremap <silent> <C-right> :bnext<CR>
 noremap <silent> <C-l> :bnext<CR>
+"
+" These prevent accidentally loading files while in the NERDTree panel
+autocmd FileType nerdtree noremap <buffer> <c-left> <nop>
+autocmd FileType nerdtree noremap <buffer> <c-h> <nop>
+autocmd FileType nerdtree noremap <buffer> <c-right> <nop>
+autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
+
 " Closes the current buffer
 nnoremap <silent> <Leader>q :Bclose<CR>
+
 " Closes the current window
 nnoremap <silent> <Leader>Q <C-w>c
 
