@@ -155,6 +155,9 @@ else
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparencY
+    "set guifont=Mensch\ for\ Powerline:h12
+    let g:Powerline_symbols = 'fancy'
+
     set transparency=15
     set guifont=Monaco:h10
     set noantialias " I like my Monaco this way ;D
