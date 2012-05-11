@@ -124,10 +124,12 @@ map <Leader>T :%s/\s\+$//<CR>
 map <Leader>U :g/^$/d<CR>
 " ,R = Converts tabs to spaces in document
 map <Leader>R :retab<CR>
-" .p = Runs PHP lint checker on current file
+" ,p = Runs PHP lint checker on current file
 map <Leader>p :! php -l %<CR>
-" .P = Runs PHP and executes the current file
+" ,P = Runs PHP and executes the current file
 map <Leader>P :! php -q %<CR>
+" ,L = Toggle line numbers
+map <Leader>L :set invnumber<CR>
 
 " Deletes trailing space in file upon write
 " autocmd BufWritePre * :%s/\s\+$//e
