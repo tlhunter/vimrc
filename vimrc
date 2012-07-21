@@ -5,10 +5,9 @@ set viminfo='1000,f1,:1000,/1000
 set history=500
 
 au FileType php set omnifunc=phpcomplete#CompletePHP
-au BufWritePost *.coffee silent CoffeeMake!
 
 "------  Visual Options  ------
-set guioptions-=T           "remove toolbar
+set guioptions=egmt         "remove toolbar, scrollbars
 syntax on                   "Enables syntax highlighting
 set nu                      "Enable Line Numbers
 set nowrap                  "Disable word wrap
@@ -27,6 +26,11 @@ set expandtab               "Use spaces instead of tabs
 "Ignore these files when completing names
 set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 
+"------  Special Coffee Behavior ------
+au BufNewFile,BufReadPost *.coffee set shiftwidth=2 softtabstop=2 expandtab
+autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+au BufWritePost *.coffee silent CoffeeMake!
+
 "------  Searching  ------
 set incsearch               "Search while typing
 set ignorecase              "Case Insensitive Searching
@@ -37,6 +41,11 @@ nnoremap <leader>b :nohlsearch<CR>
 " http://www.vim.org/scripts/script.php?script_id=2572
 noremap <leader>a :Ack 
 let g:ackprg="ack -H --nocolor --nogroup --column --type-add php=.tpl"
+
+"------  Replacing ------
+"type S, then type what you're looking for, a /, and what to replace it with
+nmap S :%s//g<LEFT><LEFT>
+vmap S :s//g<LEFT><LEFT>
 
 "------  NERDTree Options  ------
 let NERDTreeIgnore=['CVS']
@@ -156,10 +165,10 @@ else
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparencY
-    "set guifont=Mensch\ for\ Powerline:h12
+    set guifont=Mensch\ for\ Powerline:h12
     let g:Powerline_symbols = 'fancy'
 
-    set transparency=15
+    set transparency=30
     set guifont=Monaco:h10
     set noantialias " I like my Monaco this way ;D
     " Swipe to move between bufers :D
