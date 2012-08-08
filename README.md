@@ -46,6 +46,29 @@ Tag Browser (Tag List)
 ---
 * Use _s_ to reorder the items by alpha or occurance
 
+Zen Coding (Code Completion)
+---
+
+Edit an html document, go into insert mode, and type the following:
+
+    div>p#foo$*3>a
+
+Once you've done that, while still in insert mode, type Ctrl + Y then Comma. You'll now see:
+
+    <div>
+        <p id="foo1">
+            <a href=""></a>
+        </p>
+        <p id="foo2">
+            <a href=""></a>
+        </p>
+        <p id="foo3">
+            <a href=""></a>
+        </p>
+    </div>
+
+For more info, check out this: https://raw.github.com/mattn/zencoding-vim/master/TUTORIAL
+
 Installation
 ---
 Run these commands in your terminal to fully install this vim setup. There is another step to compile command-t
