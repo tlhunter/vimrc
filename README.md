@@ -46,7 +46,7 @@ Tag Browser (Tag List)
 ---
 * Use _s_ to reorder the items by alpha or occurance
 
-Zen Coding (Code Completion)
+Code Completion (Zen Coding)
 ---
 
 Edit an html document, go into insert mode, and type the following:
