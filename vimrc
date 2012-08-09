@@ -168,7 +168,7 @@ if has("gui_macvim") "Use Experimental Renderer option must be enabled for trans
     "set guifont=Mensch\ for\ Powerline:h12
     "let g:Powerline_symbols = 'fancy'
 
-    set transparency=30
+    set transparency=15
     set guifont=Monaco:h10
     set noantialias " I like my Monaco this way ;D
     " Swipe to move between bufers :D
