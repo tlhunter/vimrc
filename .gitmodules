@@ -15,4 +15,4 @@
 	url = git://github.com/Lokaltog/vim-powerline.git
 [submodule "bundle/colorschemes"]
 	path = bundle/colorschemes
-	url = git@github.com:flazz/vim-colorschemes.git
+	url = git@github.com/flazz/vim-colorschemes.git
