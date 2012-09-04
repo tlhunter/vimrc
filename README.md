@@ -75,7 +75,7 @@ Run these commands in your terminal to fully install this vim setup. There is an
 (instructions coming soon!).
 
     cd ~
-    git clone git@github.com:tlhunter/Vim-PHP-IDE.git .vim
+    git clone git://github.com/tlhunter/Vim-PHP-IDE.git .vim
     ln -s ~/.vim/vimrc ~/.vimrc
     cd ~/.vim
     git submodule init
