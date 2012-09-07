@@ -97,4 +97,4 @@ Requirements
 
 Screenshots
 ---
-![Screenshot](http://thomashunter.name/wp-content/uploads/2011/08/nerdtree-tagbar.png "Screenshot of Configuration")
+![Screenshot](http://thomashunter.name/wp-content/uploads/20120907-MacVim.png "Screenshot of Configuration")
