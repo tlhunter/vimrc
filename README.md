@@ -32,7 +32,7 @@ Windows
 * Use _,Q_ to close the current window (which doesn't happen often)
 * Use _,n_ to show and hide the file browser
 * Use _,y_ to show and hide the tag browser
-* Use _,t_ to perform a recursive fuzzy filename search
+* Use _,t_ or Cmd+T to perform a recursive fuzzy filename search
 
 File Browser (NERDTree)
 ---
