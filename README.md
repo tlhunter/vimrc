@@ -33,6 +33,7 @@ Windows
 * Use _,n_ to show and hide the file browser
 * Use _,y_ to show and hide the tag browser
 * Use _,t_ or Cmd+T to perform a recursive fuzzy filename search
+* Use _,a_ and type a phrase to search to perform an Ack search
 
 File Browser (NERDTree)
 ---
