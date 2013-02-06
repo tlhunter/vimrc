@@ -22,7 +22,7 @@ set hidden                  "Switch between unsaved buffers w/o needing to save,
 filetype indent on          "Syntax Highlight
 filetype plugin on          "Needed for snipMate
 set autoindent              "Autoindent
-set expandtab               "Use spaces instead of tabs
+"set expandtab               "Use spaces instead of tabs
 "Ignore these files when completing names
 set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 
@@ -149,8 +149,9 @@ map <Leader>? :Helptags<CR>
 if has("gui_running")
     set cursorline                  "Highlight background of current line
     autocmd VimEnter * NERDTree     "run nerdtree
-    autocmd VimEnter * TagbarOpen
-    colorscheme proton
+    "autocmd VimEnter * TagbarOpen
+    "colorscheme solarized
+	colorscheme ir_black
 
     " Show tabs and newline characters with ,s
     nmap <Leader>s :set list!<CR>
@@ -164,7 +165,10 @@ else
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparency
-    set guifont=Monaco:h12
+    "set guifont=Monaco:h12
+    set guifont=Monaco:h10
+	set noantialias
+	set transparency=5
     " Swipe to move between bufers :D
     map <SwipeLeft> :bprev<CR>
     map <SwipeRight> :bnext<CR>

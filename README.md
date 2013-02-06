@@ -77,6 +77,7 @@ Run these commands in your terminal to fully install this vim setup. There is an
     cd ~
     git clone git://github.com/tlhunter/Vim-PHP-IDE.git .vim
     ln -s ~/.vim/vimrc ~/.vimrc
+    ln -s ~/.vim/gvimrc ~/.gvimrc
     cd ~/.vim
     git submodule init
     git submodule update
@@ -97,4 +98,4 @@ Requirements
 
 Screenshots
 ---
-![Screenshot](http://thomashunter.name/wp-content/uploads/20120907-MacVim.png "Screenshot of Configuration")
+![Screenshot](http://thomashunter.name/pictures/macvim.png "Screenshot of MacVIM")
