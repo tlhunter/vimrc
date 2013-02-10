@@ -151,7 +151,8 @@ if has("gui_running")
     autocmd VimEnter * NERDTree     "run nerdtree
     "autocmd VimEnter * TagbarOpen
     "colorscheme solarized
-	colorscheme ir_black
+	"colorscheme ir_black
+	colorscheme Mustang
 
     " Show tabs and newline characters with ,s
     nmap <Leader>s :set list!<CR>
