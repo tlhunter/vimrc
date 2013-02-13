@@ -24,24 +24,28 @@ below. Feel free to open as many buffers as you want!
 Buffer Movement
 ---
 * Use _,q_ to close the current buffer (a different buffer will replace it)
-* Use _Ctrl h Ctrl l_ to move between open buffers (or _Ctrl Left Ctrl Right_)
+* Use _Ctrl h Ctrl l_ to move between open buffers
+ * _Ctrl Left Ctrl Right_ also works for switching between buffers
+ * While in MacVim, you can swipe left and right to switch between buffers
 
 Windows
 ---
 * Use _,h ,j ,k ,l_ to move around between windows
 * Use _,Q_ to close the current window (which doesn't happen often)
-* Use _,n_ to show and hide the file browser
-* Use _,y_ to show and hide the tag browser
-* Use _,t_ or Cmd+T to perform a recursive fuzzy filename search
-* Use _,a_ and type a phrase to search to perform an Ack search
+* Use _,n_ to toggle the file browser
+* Use _,y_ to toggle the tag browser
+* Use _,t_ or _Cmd+T_ to perform a recursive fuzzy filename search
+* Use _,a_ and type a phrase to search to perform an Ack search (quote if needed)
+ * Use _,Q_ to close the results window when you're done
 
 File Browser (NERDTree)
 ---
 * Use standard movement keys to move around
-* Use _Ctrl j_ and _Ctrl k_ to move between siblings
+* Use _Ctrl j_ and _Ctrl k_ to move between siblings (aka expanded folders)
 * Use _C_ to make a node the current working directory
 * Use _:Bookmark BookmarkName_ to bookmark the current selection
 * Use _B_ to toggle the bookmark menu
+* Use _?_ if you'd like some NERDTree documentation
 
 Tag Browser (Tag List)
 ---
