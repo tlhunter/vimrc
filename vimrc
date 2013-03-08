@@ -14,6 +14,8 @@ set nowrap                  "Disable word wrap
 set vb                      "Visual bell instead of beeps
 set ruler                   "Displays cursor position on bottom right of screen
 set statusline=%<%f\ %h%m%r%=%{fugitive#statusline()}\ \ %-14.(%l,%c%V%)\ %P
+let g:buftabs_only_basename=1
+let g:buftabs_marker_modified = "+"
 
 "------  Behavior  ------
 set tabstop=4               "tab = 4 spaces
@@ -40,6 +42,7 @@ set hlsearch                "Highlight all search results
 nnoremap <leader>b :nohlsearch<CR>
 " http://www.vim.org/scripts/script.php?script_id=2572
 noremap <leader>a :Ack 
+noremap <leader>A <C-w>j<C-w>c<C-w>l
 let g:ackprg="ack -H --nocolor --nogroup --column --type-add php=.tpl"
 
 "------  Replacing ------
