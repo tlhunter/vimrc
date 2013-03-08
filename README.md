@@ -37,7 +37,6 @@ Windows
 * Use _,t_ or _Cmd+T_ to perform a recursive fuzzy filename search
 * Use _,a_ and type a phrase to search to perform an Ack search (quote if needed)
 * Use _,A_ to close the open ack search results at the bottom of the screen (same going down, closing, going right _,j ,Q ,l_)
- * Use _,Q_ to close the results window when you're done
 
 File Browser (NERDTree)
 ---
