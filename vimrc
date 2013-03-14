@@ -54,6 +54,11 @@ vmap S :s//g<LEFT><LEFT>
 let NERDTreeIgnore=['CVS']
 let NERDTreeChDirMode=2     "setting root dir in NT also sets VIM's cd
 noremap <silent> <Leader>n :NERDTreeToggle<CR>
+" These prevent accidentally loading files while in the NERDTree panel
+autocmd FileType nerdtree noremap <buffer> <c-left> <nop>
+autocmd FileType nerdtree noremap <buffer> <c-h> <nop>
+autocmd FileType nerdtree noremap <buffer> <c-right> <nop>
+autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
 
 "------  Tagbar Options  ------
 " http://adamyoung.net/Exuberant-Ctags-OS-X
@@ -68,15 +73,11 @@ noremap <silent> <C-left> :bprev<CR>
 noremap <silent> <C-h> :bprev<CR>
 noremap <silent> <C-right> :bnext<CR>
 noremap <silent> <C-l> :bnext<CR>
-"
-" These prevent accidentally loading files while in the NERDTree panel
-autocmd FileType nerdtree noremap <buffer> <c-left> <nop>
-autocmd FileType nerdtree noremap <buffer> <c-h> <nop>
-autocmd FileType nerdtree noremap <buffer> <c-right> <nop>
-autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
-
 " Closes the current buffer
 nnoremap <silent> <Leader>q :Bclose<CR>
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! %!sudo tee > /dev/null %
 
 " Closes the current window
 nnoremap <silent> <Leader>Q <C-w>c
