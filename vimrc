@@ -167,12 +167,13 @@ if has("gui_running")
 else
     set t_Co=256
     colorscheme Mustang             "This theme actually works in 256, ir_black doesn't
+	set mouse=a						"This allows mouse scrolling in terminal, and selection of text
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparency
-    "set guifont=Monaco:h12
-    set guifont=Monaco:h10
-	set noantialias
+	set guifont=Monaco:h14
+    "set guifont=Monaco:h10
+	"set noantialias
 	set transparency=5
     " Swipe to move between bufers :D
     map <SwipeLeft> :bprev<CR>
