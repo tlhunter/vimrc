@@ -51,7 +51,7 @@ nmap S :%s//g<LEFT><LEFT>
 vmap S :s//g<LEFT><LEFT>
 
 "------  NERDTree Options  ------
-let NERDTreeIgnore=['CVS']
+let NERDTreeIgnore=['CVS','\.dSYM$']
 let NERDTreeChDirMode=2     "setting root dir in NT also sets VIM's cd
 noremap <silent> <Leader>n :NERDTreeToggle<CR>
 " These prevent accidentally loading files while in the NERDTree panel
