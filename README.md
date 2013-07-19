@@ -60,30 +60,6 @@ below. Feel free to open as many buffers as you want, as if this were a normal I
 * Use _y_ to toggle the tag browser viewport
 * Use _s_ to reorder the items by alpha or occurance
 
-### Code Completion (Zen Coding)
-
-Edit an HTML document, go into insert mode, and type the following:
-
-    div>p#foo$*3>a
-
-Once you've done that, while still in insert mode, type _Ctrl+Y ,_ and it will change to:
-
-    <div>
-        <p id="foo1">
-            <a href=""></a>
-        </p>
-        <p id="foo2">
-            <a href=""></a>
-        </p>
-        <p id="foo3">
-            <a href=""></a>
-        </p>
-    </div>
-
-I honestly don't use this tool all that much, but if you would like more information about it, visit this site:
-
-https://raw.github.com/mattn/zencoding-vim/master/TUTORIAL
-
 ## Requirements
 
 * Install ctags and configure on your Mac: http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/

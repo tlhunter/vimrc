@@ -115,12 +115,6 @@ map <Leader>et :tabe <C-R>=expand("%:p:h") . "/" <CR>
 nmap <silent> <Leader>ev :e $MYVIMRC<CR>
 nmap <silent> <Leader>es :so $MYVIMRC<CR>
 
-"http://www.vim.org/scripts/script.php?script_id=3150
-map <Leader>os :OpenSession 
-map <Leader>so :OpenSession 
-map <Leader>ss :SaveSession 
-:let g:session_autosave = 'no'
-
 " When pressing <leader>cd switch to the directory of the open buffer
 "map <Leader>cd :cd %:p:h<CR>
 " ,ct = Builds ctags
@@ -154,9 +148,7 @@ if has("gui_running")
     set cursorline                  "Highlight background of current line
     autocmd VimEnter * NERDTree     "run nerdtree
     "autocmd VimEnter * TagbarOpen
-    "colorscheme solarized
-	"colorscheme ir_black
-	colorscheme Mustang
+	colorscheme ir_black
 
     " Show tabs and newline characters with ,s
     nmap <Leader>s :set list!<CR>
@@ -171,10 +163,10 @@ else
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparency
-	set guifont=Monaco:h14
-    "set guifont=Monaco:h10
-	"set noantialias
-	set transparency=5
+	"set guifont=Monaco:h14
+	set guifont=Monaco:h10
+	set noantialias
+	set transparency=15
     " Swipe to move between bufers :D
     map <SwipeLeft> :bprev<CR>
     map <SwipeRight> :bnext<CR>
