@@ -73,9 +73,6 @@ tweaking to get it working under Linux.
     git clone git://github.com/tlhunter/Vim-PHP-IDE.git .vim
     ln -s ~/.vim/vimrc ~/.vimrc
     ln -s ~/.vim/gvimrc ~/.gvimrc
-    cd ~/.vim
-    git submodule init
-    git submodule update
 
 ## Screenshots
 
