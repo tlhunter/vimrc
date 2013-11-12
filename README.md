@@ -15,7 +15,7 @@ will be the list of tags in the current file. On the bottom you will see a list 
 files (buffers) when switching between them, otherwise it will show status items. You will also see the name of the
 current Git branch in parenthesis (if you are in one).
 
-When you want to edit a file, you can browse to it on the left side of the screen, or use _,t_ or _Cmd+T_
+When you want to edit a file, you can browse to it on the left side of the screen, or use _Ctrl p_
 to open up a quick/fuzzy search. If you want to edit another file, just browse to it and
 open it just like before. When you want to move between open files, use the buffer movement keys mentioned
 below. Feel free to open as many buffers as you want, as if this were a normal IDE.
@@ -63,7 +63,6 @@ below. Feel free to open as many buffers as you want, as if this were a normal I
 ## Requirements
 
 * Install ctags and configure on your Mac: http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/
-* Ruby (to compile command-t)
 
 ## Installation
 
@@ -77,8 +76,6 @@ tweaking to get it working under Linux.
     cd ~/.vim
     git submodule init
     git submodule update
-    cd ~/.vim/bundle/command-t/
-    rake make
 
 ## Screenshots
 
