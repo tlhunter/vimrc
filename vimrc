@@ -64,7 +64,6 @@ autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
 "------  Tagbar Options  ------
 " http://adamyoung.net/Exuberant-Ctags-OS-X
 " http://www.vim.org/scripts/script.php?script_id=273
-let g:tagbar_ctags_bin='/usr/local/bin/ctags'
 let g:tagbar_width=26
 noremap <silent> <Leader>y :TagbarToggle<CR>
 
@@ -171,6 +170,8 @@ if has("gui_macvim") "Use Experimental Renderer option must be enabled for trans
     " Swipe to move between bufers :D
     map <SwipeLeft> :bprev<CR>
     map <SwipeRight> :bnext<CR>
+	" OS X probably has ctags in a weird place
+	let g:tagbar_ctags_bin='/usr/local/bin/ctags'
 endif
 
 if filereadable($HOME.'/.vimrc_local')
