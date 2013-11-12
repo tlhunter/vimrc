@@ -31,7 +31,8 @@ set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.
 "------  Special Coffee Behavior ------
 au BufNewFile,BufReadPost *.coffee set shiftwidth=2 softtabstop=2 expandtab
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
-au BufWritePost *.coffee silent CoffeeMake!
+au BufWritePost *.coffee silent make!
+autocmd QuickFixCmdPost * nested cwindow | redraw!
 
 "------  Searching  ------
 set incsearch               "Search while typing
