@@ -120,10 +120,6 @@ nmap <silent> <Leader>es :so $MYVIMRC<CR>
 " ,ct = Builds ctags
 map <Leader>ct :! /usr/local/bin/ctags -R *<CR>
 
-" ,v = Paste
-map <Leader>v "+gP
-" ,c = Copy
-map <Leader>c "+y
 " F2 = Paste Toggle (in insert mode, pasting indented text behavior changes)
 set pastetoggle=<F2>
 " ,T = Delete all Trailing space in file
@@ -156,10 +152,18 @@ if has("gui_running")
     "Invisible character colors
     highlight NonText guifg=#4a4a59
     highlight SpecialKey guifg=#4a4a59
+
+	" Ctrl + Shift + C and Ctrl + Shift + V for copying and pasting OS Buffer
+	map <C-C> "+y
+	map <C-V> "+gp
 else
     set t_Co=256
     colorscheme Mustang             "This theme actually works in 256, ir_black doesn't
 	set mouse=a						"This allows mouse scrolling in terminal, and selection of text
+	" ,v = Paste
+	map <Leader>v "+gP
+	" ,c = Copy
+	map <Leader>c "+y
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparency
