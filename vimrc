@@ -134,6 +134,10 @@ map <Leader>p :! php -l %<CR>
 map <Leader>P :! php -q %<CR>
 " ,L = Toggle line numbers
 map <Leader>L :set invnumber<CR>
+" ,v = Paste
+map <Leader>v "+gP
+" ,c = Copy
+map <Leader>c "+y
 
 " Deletes trailing space in file upon write
 " autocmd BufWritePre * :%s/\s\+$//e
@@ -154,16 +158,14 @@ if has("gui_running")
     highlight SpecialKey guifg=#4a4a59
 
 	" Ctrl + Shift + C and Ctrl + Shift + V for copying and pasting OS Buffer
-	map <C-C> "+y
-	map <C-V> "+gp
+	" Vim can't do Ctrl + Shift :'(
+	" which means C-V overwrites visual select (C-v)
+	"map <C-C> "+y
+	"map <C-V> "+gp
 else
     set t_Co=256
     colorscheme Mustang             "This theme actually works in 256, ir_black doesn't
 	set mouse=a						"This allows mouse scrolling in terminal, and selection of text
-	" ,v = Paste
-	map <Leader>v "+gP
-	" ,c = Copy
-	map <Leader>c "+y
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparency

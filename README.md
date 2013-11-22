@@ -41,7 +41,7 @@ below. Feel free to open as many buffers as you want, as if this were a normal I
 * Use _,Q_ to close the current window (you probably won't ever need to do this)
 * Use _,n_ to toggle the file browser
 * Use _,y_ to toggle the tag browser
-* Use _,t_ or _Cmd+T_ to perform a recursive fuzzy filename search
+* Use _Ctrl+P_ to perform a recursive fuzzy filename search
 * Use _,a_ and type a phrase to search to search based on content within your files (quote and escape if needed)
 * Use _,A_ to close the open ack search results at the bottom of the screen (same going down, closing, going right, e.g. _,j ,Q ,l_)
 
@@ -59,6 +59,11 @@ below. Feel free to open as many buffers as you want, as if this were a normal I
 
 * Use _y_ to toggle the tag browser viewport
 * Use _s_ to reorder the items by alpha or occurance
+
+### Copying and Pasting between OS
+
+* Use _,c_ to copy the highlighted text into the OS clipboard
+* Use _,v_ to paste the OS clipboard into the document
 
 ## Requirements
 
