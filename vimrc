@@ -148,7 +148,8 @@ if has("gui_running")
     set cursorline                  "Highlight background of current line
     autocmd VimEnter * NERDTree     "run nerdtree
     "autocmd VimEnter * TagbarOpen
-	colorscheme ir_black
+	colorscheme solarized
+	set background=dark
 
     " Show tabs and newline characters with ,s
     nmap <Leader>s :set list!<CR>
