@@ -40,7 +40,7 @@ function! s:guess(lines) abort
       continue
     endif
 
-    let softtab = repeat(' ', 8)
+    let softtab = repeat(' ', 4)
     if line =~# '^\t'
       let heuristics.hard += 1
     elseif line =~# '^' . softtab
@@ -61,7 +61,7 @@ function! s:guess(lines) abort
   elseif heuristics.soft != heuristics.hard
     let options.expandtab = heuristics.soft > heuristics.hard
     if heuristics.hard
-      let options.tabstop = 8
+      let options.tabstop = 4
     endif
   endif
 
