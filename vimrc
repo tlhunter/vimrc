@@ -60,6 +60,7 @@ autocmd FileType nerdtree noremap <buffer> <c-left> <nop>
 autocmd FileType nerdtree noremap <buffer> <c-h> <nop>
 autocmd FileType nerdtree noremap <buffer> <c-right> <nop>
 autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
+autocmd vimenter * if !argc() | NERDTree | endif " Open NERDTree if we're simply launching vim
 
 "------  Tagbar Options  ------
 " http://adamyoung.net/Exuberant-Ctags-OS-X
@@ -146,10 +147,9 @@ map <Leader>? :Helptags<CR>
 
 if has("gui_running")
     set cursorline                  "Highlight background of current line
-    autocmd VimEnter * NERDTree     "run nerdtree
     "autocmd VimEnter * TagbarOpen
-	colorscheme solarized
-	set background=dark
+	colorscheme github
+	"set background=light
 
     " Show tabs and newline characters with ,s
     nmap <Leader>s :set list!<CR>
@@ -165,18 +165,18 @@ if has("gui_running")
 	"map <C-V> "+gp
 else
     set t_Co=256
-    colorscheme Mustang             "This theme actually works in 256, ir_black doesn't
+    colorscheme Mustang             "This theme works great in 256 colors
 	set mouse=a						"This allows mouse scrolling in terminal, and selection of text
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparency
 	"set guifont=Monaco:h14
-	set guifont=Monaco:h10
-	set noantialias
-	set transparency=15
+	set guifont=Monaco:h12
+	"set noantialias
+	"set transparency=15
     " Swipe to move between bufers :D
-    map <SwipeLeft> :bprev<CR>
-    map <SwipeRight> :bnext<CR>
+    map <silent> <SwipeLeft> :bprev<CR>
+    map <silent> <SwipeRight> :bnext<CR>
 	" OS X probably has ctags in a weird place
 	let g:tagbar_ctags_bin='/usr/local/bin/ctags'
 endif
