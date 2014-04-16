@@ -13,9 +13,9 @@ set nu                      "Enable Line Numbers
 set nowrap                  "Disable word wrap
 set vb                      "Visual bell instead of beeps
 set ruler                   "Displays cursor position on bottom right of screen
-set statusline=%<%f\ %h%m%r%=%{fugitive#statusline()}\ \ %-14.(%l,%c%V%)\ %P
-let g:buftabs_only_basename=1
-let g:buftabs_marker_modified = "+"
+"set statusline=%<%f\ %h%m%r%=%{fugitive#statusline()}\ \ %-14.(%l,%c%V%)\ %P
+"let g:buftabs_only_basename=1
+"let g:buftabs_marker_modified = "+"
 
 "------  Behavior  ------
 set tabstop=4               "tab = 4 spaces
@@ -84,15 +84,15 @@ nnoremap <silent> <Leader>Q <C-w>c
 
 "------  Fugitive  ------ 
 "https://github.com/tpope/vim-fugitive
-nnoremap <Leader>gs :Gstatus<CR>
-nnoremap <Leader>gr :Gremove<CR>
-nnoremap <Leader>gl :Glog<CR>
-nnoremap <Leader>gb :Gblame<CR>
-nnoremap <Leader>gm :Gmove 
-nnoremap <Leader>gp :Ggrep 
-nnoremap <Leader>gR :Gread<CR>
-nnoremap <Leader>gg :Git 
-nnoremap <Leader>gd :Gdiff<CR>
+"nnoremap <Leader>gs :Gstatus<CR>
+"nnoremap <Leader>gr :Gremove<CR>
+"nnoremap <Leader>gl :Glog<CR>
+"nnoremap <Leader>gb :Gblame<CR>
+"nnoremap <Leader>gm :Gmove 
+"nnoremap <Leader>gp :Ggrep 
+"nnoremap <Leader>gR :Gread<CR>
+"nnoremap <Leader>gg :Git 
+"nnoremap <Leader>gd :Gdiff<CR>
 
 "------  Moving Between Windows  ------
 nnoremap <Leader>h <C-w>h
@@ -170,10 +170,12 @@ else
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparency
-	"set guifont=Monaco:h14
-	set guifont=Monaco:h10
-	set noantialias
-	set transparency=15
+	set guifont=Monaco:h12
+	"set guifont=Monaco:h10
+	"set noantialias
+	"set transparency=0
+	colorscheme github
+	set background=light
     " Swipe to move between bufers :D
     map <SwipeLeft> :bprev<CR>
     map <SwipeRight> :bnext<CR>
