@@ -28,6 +28,10 @@ set autoindent              "Autoindent
 "Ignore these files when completing names
 set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif,node_modules/*
 
+"------ JSON magic ------
+au BufRead,BufNewFile *.json set filetype=json
+let g:vim_json_syntax_conceal = 0
+
 "------  Special Coffee Behavior ------
 au BufNewFile,BufReadPost *.coffee set shiftwidth=2 softtabstop=2 expandtab
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
