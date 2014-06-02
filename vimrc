@@ -87,6 +87,9 @@ cmap w!! %!sudo tee > /dev/null %
 " Closes the current window
 nnoremap <silent> <Leader>Q <C-w>c
 
+" CtrlP will load from the CWD, makes it easier with all these nested repos
+let g:ctrlp_working_path_mode = ''
+
 "------  Fugitive  ------ 
 "https://github.com/tpope/vim-fugitive
 nnoremap <Leader>gs :Gstatus<CR>
