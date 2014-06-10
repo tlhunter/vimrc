@@ -44,7 +44,7 @@ set ignorecase              "Case Insensitive Searching
 set smartcase               "Lowercase = case insensitive, any uppercase = case sensitive
 set hlsearch                "Highlight all search results
 "Following line clears the search highlights when pressing Lb
-nnoremap <leader>b :nohlsearch<CR>
+nnoremap <silent> <leader>b :nohlsearch<CR>
 " http://www.vim.org/scripts/script.php?script_id=2572
 noremap <leader>a :Ack 
 noremap <leader>A <C-w>j<C-w>c<C-w>l
@@ -150,6 +150,9 @@ map <Leader>c "+y
 
 " Deletes trailing space in file upon write
 " autocmd BufWritePre * :%s/\s\+$//e
+
+" Accidentally pressing Shift K will no longer open stupid man entry
+noremap K <nop>
 
 map <Leader>? :Helptags<CR>
 
