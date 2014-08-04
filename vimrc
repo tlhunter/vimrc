@@ -147,6 +147,12 @@ map <Leader>L :set invnumber<CR>
 map <Leader>v "+gP
 " ,c = Copy
 map <Leader>c "+y
+" Keep the cursor in place while joining lines
+nnoremap J mzJ`z
+" H = Home, L = End
+noremap H ^
+noremap L $
+vnoremap L g_
 
 " Deletes trailing space in file upon write
 " autocmd BufWritePre * :%s/\s\+$//e
