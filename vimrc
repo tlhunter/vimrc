@@ -43,12 +43,25 @@ set incsearch               "Search while typing
 set ignorecase              "Case Insensitive Searching
 set smartcase               "Lowercase = case insensitive, any uppercase = case sensitive
 set hlsearch                "Highlight all search results
+
 "Following line clears the search highlights when pressing Lb
 nnoremap <silent> <leader>b :nohlsearch<CR>
+
 " http://www.vim.org/scripts/script.php?script_id=2572
+" ,a will open a prmompt for a term to search for
 noremap <leader>a :Ack 
+
+" ,A will close the new window created for that ack search
 noremap <leader>A <C-w>j<C-w>c<C-w>l
 let g:ackprg="ack -H --nocolor --nogroup --column --type-add php=.tpl"
+
+" WHen searching for words with * and navigating with N/n, keep line centered vertically
+:nnoremap n nzz
+:nnoremap N Nzz
+:nnoremap * *zz
+:nnoremap # #zz
+:nnoremap g* g*zz
+:nnoremap g# g#zz
 
 "------  Replacing ------
 "type S, then type what you're looking for, a /, and what to replace it with
