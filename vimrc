@@ -167,6 +167,8 @@ nnoremap J mzJ`z
 noremap H ^
 noremap L $
 vnoremap L g_
+" Prevent cursor from moving to beginning of line when switching buffers
+:se nostartofline
 
 " Deletes trailing space in file upon write
 " autocmd BufWritePre * :%s/\s\+$//e
