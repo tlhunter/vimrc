@@ -200,6 +200,7 @@ else
     set t_Co=256
     colorscheme Mustang             "This theme works great in 256 colors
 	set mouse=a						"This allows mouse scrolling in terminal, and selection of text
+	set backspace=indent,eol,start	"Delete existing characters in insert mode (MacVim defaut)
 endif
 
 if has("gui_macvim") "Use Experimental Renderer option must be enabled for transparency
@@ -210,6 +211,10 @@ if has("gui_macvim") "Use Experimental Renderer option must be enabled for trans
     " Swipe to move between bufers :D
     map <silent> <SwipeLeft> :bprev<CR>
     map <silent> <SwipeRight> :bnext<CR>
+
+	" Cmd+Shift+N = new buffer
+	map <silent> <D-N> :enew<CR>
+
 	" OS X probably has ctags in a weird place
 	let g:tagbar_ctags_bin='/usr/local/bin/ctags'
 endif
