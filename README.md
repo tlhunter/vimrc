@@ -76,7 +76,7 @@ tweaking to get it working under Linux.
 
     cd ~
     git clone git://github.com/tlhunter/vimrc.git .vim
-    ln -s ~/.vim/vimrc ~/.vimrc && ln -s ~/.vim/gvimrc ~/.gvimrc
+    ln -s ~/.vim/vimrc ~/.vimrc
 
 ## Screenshots
 

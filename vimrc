@@ -215,6 +215,20 @@ if has("gui_macvim") "Use Experimental Renderer option must be enabled for trans
 	" Cmd+Shift+N = new buffer
 	map <silent> <D-N> :enew<CR>
 
+	" Cmd+t = new tab
+	nnoremap <silent> <D-t> :tabnew<CR>
+
+	" Cmd+1...9 = go to that tab
+	map <silent> <D-1> 1gt
+	map <silent> <D-2> 2gt
+	map <silent> <D-3> 3gt
+	map <silent> <D-4> 4gt
+	map <silent> <D-5> 5gt
+	map <silent> <D-6> 6gt
+	map <silent> <D-7> 7gt
+	map <silent> <D-8> 8gt
+	map <silent> <D-9> 9gt
+
 	" OS X probably has ctags in a weird place
 	let g:tagbar_ctags_bin='/usr/local/bin/ctags'
 endif
