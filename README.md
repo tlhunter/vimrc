@@ -1,6 +1,6 @@
 # tlhunter's .vimrc
 
-![Screenshot](https://thomashunter.name/pictures/vimrc-screenshot.png "Screenshot of this .vimrc in action")
+![Screenshot](./screenshot.png "Screenshot of this .vimrc in action")
 
 This Vim configuration is meant to make Vim feel more like an IDE than a simple console-based text editor. I use it mostly under GVIM (both MacVIM as well as Linux GVim) though I occasionally run it directly in a terminal (the experience is slightly diminished). First and foremost this is the configuration I use on my home and work machines, so I make no guarantee that `master` makes perfect sense.
 
