@@ -4,6 +4,16 @@
 
 This Vim configuration is meant to make Vim feel more like an IDE than a simple console-based text editor. I use it mostly under GVIM (both MacVIM as well as Linux GVim) though I occasionally run it directly in a terminal (the experience is slightly diminished). First and foremost this is the configuration I use on my home and work machines, so I make no guarantee that `master` makes perfect sense.
 
+## Installation
+
+Run these commands to get this Vim configuration working on your OS X or Linux machine:
+
+```bash
+cd ~
+git clone git://github.com/tlhunter/vimrc.git .vim
+ln -s ~/.vim/vimrc ~/.vimrc
+```
+
 ## Overview
 
 This configuration is primarily intended to be run with GVim editing multiple files at the same time. On the left side of the screen will be the file browser, and on the right will be the list of tags in the current file. On the bottom you will see a list of the currently opened files (buffers) when switching between them, otherwise it will show status items. You will also see the name of the current Git branch in parenthesis (if you are in one).
@@ -17,6 +27,8 @@ When you want to edit a file, you can browse to it the file browser on the left,
 * Move between files in center screen
 * View status of the current GIT repo, if applicable
 * Additional features when running under MacVIM
+
+## Keyboard Shortcuts
 
 ### Switching between files (Buffers)
 
@@ -59,21 +71,12 @@ When you want to edit a file, you can browse to it the file browser on the left,
 * Use _y_ to toggle the tag browser viewport
 * Use _s_ to reorder the items by alpha or occurance
 
+#### Pre-Requisites
+
+* Install ctags and [configure on your Mac](http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/).
+* NB: Tag List is currently not functioning
+
 ### Copying and Pasting between OS
 
 * Use _,c_ to copy the highlighted text into the OS clipboard
 * Use _,v_ to paste the OS clipboard into the document
-
-## Pre-Requisites
-
-* Install ctags and [configure on your Mac](http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/).
-
-## Installation
-
-Run these commands in your terminal to fully install this vim setup within OS X. It will probably require some tweaking to get it working under Linux.
-
-```bash
-    cd ~
-    git clone git://github.com/tlhunter/vimrc.git .vim
-    ln -s ~/.vim/vimrc ~/.vimrc
-```
