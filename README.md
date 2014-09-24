@@ -1,4 +1,4 @@
-# tlhunter's .vimrc
+# /home/tlhunter/.vim/vimrc
 
 ![Screenshot](./screenshot.png "Screenshot of this .vimrc in action")
 
