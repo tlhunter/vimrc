@@ -2,7 +2,8 @@
 
 ![Screenshot](./screenshot.png "Screenshot of this .vimrc in action")
 
-This Vim configuration is meant to make Vim feel more like an IDE than a simple console-based text editor. I use it mostly under GVIM (both MacVIM as well as Linux GVim) though I occasionally run it directly in a terminal (the experience is slightly diminished). First and foremost this is the configuration I use on my home and work machines, so I make no guarantee that `master` makes perfect sense.
+This Vim configuration is meant to make Vim feel more like an IDE than a simple console-based text editor.
+I use it mostly under with MacVIM and Linux GVim though I occasionally run it directly in a terminal.
 
 ## Installation
 
@@ -14,28 +15,22 @@ git clone git://github.com/tlhunter/vimrc.git .vim
 ln -s ~/.vim/vimrc ~/.vimrc
 ```
 
-## Overview
-
-This configuration is primarily intended to be run with GVim editing multiple files at the same time. On the left side of the screen will be the file browser, and on the right will be the list of tags in the current file. On the bottom you will see a list of the currently opened files (buffers) when switching between them, otherwise it will show status items. You will also see the name of the current Git branch in parenthesis (if you are in one).
-
-When you want to edit a file, you can browse to it the file browser on the left, or use _Ctrl p_ to open up a quick/fuzzy search. If you want to edit yet another file, browse to it and open it just like before. When you want to move between open files, use the buffer movement keys mentioned below. Feel free to open as many simultaneous files as you want as if this were any other IDE.
-
 ## Features
 
+* Edit many files at the same time
 * File Browser on left side of screen
 * Functions, Variables, Classes on right
 * Move between files in center screen
 * View status of the current GIT repo, if applicable
 * Additional features when running under MacVIM
-
-## Keyboard Shortcuts
+* Quickly navigate to files using a fuzzy finder
 
 ### Switching between files (Buffers)
 
 * Use _,q_ to close the current file (a different file will appear in its place)
 * Use _Ctrl h Ctrl l_ to move between open files
  * _Ctrl Left Ctrl Right_ also works for switching between files
- * While in MacVim, you can swipe left and right to switch between open files
+ * While in MacVIM, you can swipe left and right to switch between open files
 * Use _Cmd Shift N_ (or _Alt n_ in Linux GVim) to open a new empty buffer
 
 ### Viewports (Windows/Splits)
@@ -74,7 +69,7 @@ When you want to edit a file, you can browse to it the file browser on the left,
 #### Pre-Requisites
 
 * Install ctags and [configure on your Mac](http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/).
-* NB: Tag List is currently not functioning
+* _NB: Tag List is currently not functioning_
 
 ### Copying and Pasting between OS
 
