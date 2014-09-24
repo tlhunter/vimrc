@@ -58,6 +58,8 @@ nmap <silent> <Leader>es :so $MYVIMRC<CR>
 " When pressing ,cd switch to the directory of the open buffer
 map ,cd :cd %:p:h<CR>
 
+" Wtf is Ex Mode anyways?
+nnoremap Q <nop>
 
 "------  Text Navigation  ------
 " Prevent cursor from moving to beginning of line when switching buffers
