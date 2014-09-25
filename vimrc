@@ -232,6 +232,7 @@ if has("gui_running")
 
 		"set noantialias
 		"set transparency=15
+		colorscheme babymate256
 
 		" Swipe to move between bufers :D
 		map <silent> <SwipeLeft> :bprev<CR>
