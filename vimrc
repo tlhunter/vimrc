@@ -192,7 +192,7 @@ map <Leader>R :retab<CR>
 "------  JSON Filetype Settings  ------
 au BufRead,BufNewFile *.json set filetype=json
 let g:vim_json_syntax_conceal = 0
-nmap <silent> =j :%!python -m json.tool<CR>
+nmap <silent> =j :%!python -m json.tool<CR>:setfiletype json<CR>
 
 
 "------  CoffeeScript Filetype Settings  ------
