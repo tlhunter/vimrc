@@ -219,6 +219,7 @@ if has("gui_running")
 
 	" Highlights the current line background
 	set cursorline
+	colorscheme Tomorrow-Night
 
 	"autocmd VimEnter * TagbarOpen
 
@@ -229,10 +230,8 @@ if has("gui_running")
 	if has("gui_macvim") " OS X
 		"set guifont=Monaco:h14
 		set guifont=Monaco:h12
-
 		"set noantialias
 		"set transparency=15
-		colorscheme babymate256
 
 		" Swipe to move between bufers :D
 		map <silent> <SwipeLeft> :bprev<CR>
@@ -262,8 +261,7 @@ if has("gui_running")
 		let g:tagbar_ctags_bin='/usr/local/bin/ctags'
 
 	elseif has("gui_gtk2") " Linux
-		colorscheme ir_black
-		set guifont=monospace\ 10
+		set guifont=monospace\ 9
 
 		" Alt+n = new buffer
 		map <silent> <A-n> :enew<CR>
