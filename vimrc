@@ -115,12 +115,12 @@ noremap <leader>A <C-w>j<C-w>c<C-w>l
 let g:ackprg="ack -H --nocolor --nogroup --column --type-add php=.tpl"
 
 " When searching for words with * and navigating with N/n, keep line centered vertically
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap * *zz
-nnoremap # #zz
-nnoremap g* g*zz
-nnoremap g# g#zz
+"nnoremap n nzz
+"nnoremap N Nzz
+"nnoremap * *zz
+"nnoremap # #zz
+"nnoremap g* g*zz
+"nnoremap g# g#zz
 
 " CtrlP will load from the CWD, makes it easier with all these nested repos
 let g:ctrlp_working_path_mode = ''
