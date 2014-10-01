@@ -149,7 +149,7 @@ autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
 autocmd vimenter * if !argc() | NERDTree | endif
 
 " Close if only NERDTree open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 
 "------  Tagbar Plugin Options  ------
