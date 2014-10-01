@@ -66,6 +66,12 @@ ln -s ~/.vim/vimrc ~/.vimrc
 * Use _y_ to toggle the tag browser viewport
 * Use _s_ to reorder the items by alpha or occurance
 
+### Themes (ColorSchemes)
+
+There is a very large collection of colorschemes in this repository.
+Many of them can be seen [here](http://cocopon.me/app/vim-color-gallery/).
+Set the scheme using `:colorscheme NAME`.
+
 #### Pre-Requisites
 
 * Install ctags and [configure on your Mac](http://thomashunter.name/blog/installing-vim-taglist-with-macvim-in-os-x/).
