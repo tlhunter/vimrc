@@ -151,6 +151,8 @@ autocmd vimenter * if !argc() | NERDTree | endif
 " Close if only NERDTree open
 "autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
+" Hides "Press ? for help"
+let NERDTreeMinimalUI=1
 
 "------  Tagbar Plugin Options  ------
 " http://adamyoung.net/Exuberant-Ctags-OS-X
