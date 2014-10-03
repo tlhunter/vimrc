@@ -69,7 +69,7 @@ ln -s ~/.vim/vimrc ~/.vimrc
 ### Themes (ColorSchemes)
 
 There is a very large collection of colorschemes in this repository.
-Many of them can be seen [here](http://cocopon.me/app/vim-color-gallery/).
+Many of them can be seen [here](http://vimcolors.com/).
 Set the scheme using `:colorscheme NAME`.
 
 #### Pre-Requisites
