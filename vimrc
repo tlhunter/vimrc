@@ -22,6 +22,10 @@ set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×,eol:¬
 " ,L = Toggle line numbers
 map <Leader>L :set invnumber<CR>
 
+" New splits open to right and bottom
+set splitbelow
+set splitright
+
 
 "------  Generic Behavior  ------
 set tabstop=4
