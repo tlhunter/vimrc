@@ -208,6 +208,10 @@ au BufWritePost *.coffee silent make!
 autocmd QuickFixCmdPost * nested cwindow | redraw!
 
 
+"------  JSX Filetype Settings ------
+autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
+
+
 "------  PHP Filetype Settings  ------
 " ,p = Runs PHP lint checker on current file
 map <Leader>p :! php -l %<CR>
