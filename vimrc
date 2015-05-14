@@ -46,6 +46,9 @@ cmap w!! %!sudo tee > /dev/null %
 " F2 = Paste Toggle (in insert mode, pasting indented text behavior changes)
 set pastetoggle=<F2>
 
+" The search for the perfect color scheme...
+map <silent> <Leader>x :RandomColorScheme<CR>
+
 " ,v = Paste
 map <Leader>v "+gP
 
