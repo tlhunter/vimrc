@@ -1,0 +1,206 @@
+/* @media tests*/
+@media screen {
+  * { font-family: sans-serif }
+}
+
+
+@import url(color.css) screen and (color);
+
+@media all and (min-width:500px) {}
+@media (min-width:500px) {}
+
+@media (orientation: portrait) {}
+@media all and (orientation: portrait) {}
+
+@media screen and (color), projection and (color) {}
+
+@media all {}
+@media {}
+
+@import url(example.css) screen and (color), projection and (color);
+@import "example.css" screen and (color), projection and (color);
+
+@media screen and (color), projection and (color) {}
+@media aural and (device-aspect-ratio: 16/9) {}
+@media speech and (min-device-width: 800px) {}
+
+@media all { body { background:lime } }
+@media print and (min-width: 25cm) {}
+@media screen and (min-width: 400px) and (max-width: 700px) {}
+@media handheld and (min-width: 20em), /*new line*/
+screen and (min-width: 20em) {}
+
+@media screen and (device-width: 800px) {}
+@media all and (orientation:portrait) {}
+@media all and (orientation:landscape) {}
+
+@media screen and (device-aspect-ratio: 16/9) {}
+
+@media all and (color) {}
+@media all and (min-color: 1) {}
+@media all and (color-index) {}
+@media all and (min-color-index: 1) {}
+@media all and (monochrome) {}
+@media all and (min-monochrome: 1) {}
+@media print and (min-resolution: 300dpi) {}
+@media print and (min-resolution: 118dpcm) {}
+@media tv and (scan: progressive) {}
+@media handheld and (grid) and (max-width: 15em) {}
+@media handheld and (grid) and (max-device-height: 7em) {}
+
+
+/* @keyframes tests */
+.div {
+    animation-name: diagonal-slide;
+    animation-duration: 5s;
+    animation-iteration-count: 10;
+    animation-fill-mode: 10;
+    animation-play-state: 12;
+    animation-timing-function:10;
+    animation-delay:10;
+}
+
+@-webkit-keyframes diagonal-slide {
+    from {
+        left: 0;
+        top: 0;
+    }
+
+    to {
+        left: 100px;
+        top: 100px;
+    }
+}
+
+@keyframes bounce {
+
+  from {
+    top: 100px;
+    animation-timing-function: ease-out;
+  }
+
+  25% {
+    top: 50px;
+    animation-timing-function: ease-in;
+  }
+  50% {
+    top: 100px;
+    animation-timing-function: ease-out;
+  }
+
+  75% {
+    top: 75px;
+    animation-timing-function: ease-in;
+  }
+
+  to {
+    top: 100px;
+  }
+}
+
+
+@namespace "http://www.w3.org/1999/xhtml";
+@namespace svg "http://www.w3.org/2000/svg";
+@charset "ISO-8859-1";
+
+
+@page { ... }
+@page :left { ... }
+@page :right { ... }
+@page LandscapeTable { ... }
+@page CompanyLetterHead:first { ... } /*  identifier and pseudo page. */
+@page:first { ... }
+@page toc, index { ... }
+@page :blank:first { ... }
+
+@page :first {
+  color: green;
+  size: 8.5in 11in;
+
+  @top-left {
+    content: "foo";
+    color: blue;
+  }
+  @top-right {
+    content: "bar";
+  }
+}
+
+@page { color: red;
+  @top-center {
+    content: "Page " counter(page);
+  }
+}
+
+/* issue #35 */
+@media embossed, print, aural {
+    .noprint {
+        display: none;
+    }
+}
+
+/* issue #35 */
+@media screen
+and (orientation:portrait)
+and (min-device-width:768px)
+and (max-device-width:1024px)
+,print and (max-width: 15em) {
+    body, div {
+        display:block;
+    }
+}
+
+/* issue 39 */
+.breadcrumb:before {
+    content: "\\";
+}
+
+/* issue 40 */
+#example1 {
+    column-width: 1px;
+    column-span: inherit;
+
+    break-before: avoid;
+    break-after: avoid-column;
+    break-inside: avoid-page;
+
+    column-gap: inherit;
+    column-rule-width: inherit;
+    column-rule-color: inherit;
+    column-rule: inherit;
+    column-count: inherit;
+    columns: inherit;
+
+    page-break-before: avoid;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+}
+
+/* issue 41 */
+#example2 {
+    /* with a test comment */
+    background-repeat: repeat;
+    background-repeat: repeat-x;
+    background-repeat: repeat-y;
+}
+
+
+/* issue 42 */
+.issue42 {
+    background-image: url('{!URLFOR($Resource.images)}/background.png');
+    background-image: url('{!URLFOR($Resource.images)}/background.png'), url('{!URLFOR($Resource.images)}/background.png')
+}
+
+/* @font-face test */
+@font-face
+{
+    /* with a test comment */
+    font-family: myFirstFont, serif;
+    src: url(ideal-sans-serif.woff) format("woff"),
+         url(basic-sans-serif.ttf) format("opentype");
+    src: local(STIXGeneral), url(/stixfonts/STIXGeneral.otf);
+    unicode-range: U+000-49F, U+2000-27FF, U+2900-2BFF, U+1D400-1D7FF, U+4??;
+    font-weight:bold;
+    /* negative example */
+    font-size: normal;
+}
