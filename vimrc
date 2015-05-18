@@ -132,6 +132,9 @@ let g:ackprg="ack -H --nocolor --nogroup --column --type-add php=.tpl"
 " CtrlP will load from the CWD, makes it easier with all these nested repos
 let g:ctrlp_working_path_mode = ''
 
+" CtrlP won't show results from node_modules
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
+
 "type S, then type what you're looking for, a /, and what to replace it with
 nmap S :%s//g<LEFT><LEFT>
 vmap S :s//g<LEFT><LEFT>
