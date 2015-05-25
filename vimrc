@@ -119,7 +119,7 @@ noremap <leader>a :Ack
 " ,A will close the new window created for that ack search
 noremap <leader>A <C-w>j<C-w>c<C-w>l
 
-let g:ackprg="ack -H --nocolor --nogroup --column --type-add php=.tpl"
+let g:ackprg="ack -H --nocolor --nogroup --column"
 
 " When searching for words with * and navigating with N/n, keep line centered vertically
 "nnoremap n nzz
@@ -216,16 +216,6 @@ autocmd QuickFixCmdPost * nested cwindow | redraw!
 
 "------  JSX Filetype Settings ------
 autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
-
-
-"------  PHP Filetype Settings  ------
-" ,p = Runs PHP lint checker on current file
-map <Leader>p :! php -l %<CR>
-
-" ,P = Runs PHP and executes the current file
-map <Leader>P :! php -q %<CR>
-
-au FileType php set omnifunc=phpcomplete#CompletePHP
 
 
 "------  GUI Options  ------
