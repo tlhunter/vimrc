@@ -1,5 +1,6 @@
 call pathogen#infect()
-let mapleader=","
+"let mapleader=","
+let mapleader = "\<Space>" " experimenting
 set nocompatible
 set viminfo='1000,f1,:1000,/1000
 set history=1000
@@ -67,6 +68,9 @@ map ,cd :cd %:p:h<CR>
 
 " Wtf is Ex Mode anyways?
 nnoremap Q <nop>
+
+" Annoying window
+map q: :q
 
 "------  Text Navigation  ------
 " Prevent cursor from moving to beginning of line when switching buffers
