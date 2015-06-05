@@ -250,6 +250,11 @@ if has("gui_running")
 		" Cmd+Shift+N = new buffer
 		map <silent> <D-N> :enew<CR>
 
+		" Cmd+P = CtrlP
+		" TODO: This doesn't actually work, still opens Print dialog
+		macmenu File.Print key=<nop>
+		nnoremap <silent> <D-p> :CtrlP<CR>
+
 		" Cmd+t = new tab
 		nnoremap <silent> <D-t> :tabnew<CR>
 
