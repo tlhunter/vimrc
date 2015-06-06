@@ -20,7 +20,7 @@ let g:buftabs_marker_modified = "+"
 nmap <Leader>s :set list!<CR>
 set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×,eol:¬
 
-" ,L = Toggle line numbers
+" <Leader>L = Toggle line numbers
 map <Leader>L :set invnumber<CR>
 
 " New splits open to right and bottom
@@ -50,10 +50,10 @@ set pastetoggle=<F2>
 " The search for the perfect color scheme...
 map <silent> <Leader>x :RandomColorScheme<CR>
 
-" ,v = Paste
+" <Leader>v = Paste
 map <Leader>v "+gP
 
-" ,c = Copy
+" <Leader>c = Copy
 map <Leader>c "+y
 
 " Accidentally pressing Shift K will no longer open stupid man entry
@@ -63,7 +63,7 @@ noremap K <nop>
 nmap <silent> <Leader>ev :e $MYVIMRC<CR>
 nmap <silent> <Leader>es :so $MYVIMRC<CR>
 
-" When pressing ,cd switch to the directory of the open buffer
+" When pressing <Leader>cd switch to the directory of the open buffer
 map ,cd :cd %:p:h<CR>
 
 " Wtf is Ex Mode anyways?
@@ -86,7 +86,7 @@ vnoremap L g_
 
 
 "------  Window Navigation  ------
-" ,hljk = Move between windows
+" <Leader>hljk = Move between windows
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>l <C-w>l
 nnoremap <Leader>j <C-w>j
@@ -100,10 +100,10 @@ noremap <silent> <C-h> :bprev<CR>
 noremap <silent> <C-right> :bnext<CR>
 noremap <silent> <C-l> :bnext<CR>
 
-" ,q Closes the current buffer
+" <Leader>q Closes the current buffer
 nnoremap <silent> <Leader>q :Bclose<CR>
 
-" ,Q Closes the current window
+" <Leader>Q Closes the current window
 nnoremap <silent> <Leader>Q <C-w>c
 
 
@@ -113,14 +113,14 @@ set ignorecase
 set smartcase
 set hlsearch
 
-" Clear search highlights when pressing ,b
+" Clear search highlights when pressing <Leader>b
 nnoremap <silent> <leader>b :nohlsearch<CR>
 
 " http://www.vim.org/scripts/script.php?script_id=2572
-" ,a will open a prmompt for a term to search for
+" <Leader>a will open a prmompt for a term to search for
 noremap <leader>a :Ack 
 
-" ,A will close the new window created for that ack search
+" <Leader>A will close the new window created for that ack search
 noremap <leader>A <C-w>j<C-w>c<C-w>l
 
 let g:ackprg="ack -H --nocolor --nogroup --column"
@@ -150,7 +150,7 @@ let NERDTreeIgnore=['CVS','\.dSYM$']
 "setting root dir in NT also sets VIM's cd
 let NERDTreeChDirMode=2
 
-" Toggle visibility using ,n
+" Toggle visibility using <Leader>n
 noremap <silent> <Leader>n :NERDTreeToggle<CR>
 
 " These prevent accidentally loading files while focused on NERDTree
@@ -183,13 +183,13 @@ nnoremap <Leader>gd :Gdiff<CR>
 
 
 "------  Text Editing Utilities  ------
-" ,T = Delete all Trailing space in file
+" <Leader>T = Delete all Trailing space in file
 map <Leader>T :%s/\s\+$//<CR>
 
-" ,U = Deletes Unwanted empty lines
+" <Leader>U = Deletes Unwanted empty lines
 map <Leader>U :g/^$/d<CR>
 
-" ,R = Converts tabs to spaces in document
+" <Leader>R = Converts tabs to spaces in document
 map <Leader>R :retab<CR>
 
 " Deletes trailing space in file upon write
