@@ -168,15 +168,6 @@ autocmd vimenter * if !argc() | NERDTree | endif
 " Hides "Press ? for help"
 let NERDTreeMinimalUI=1
 
-"------  Tagbar Plugin Options  ------
-" http://adamyoung.net/Exuberant-Ctags-OS-X
-" http://www.vim.org/scripts/script.php?script_id=273
-let g:tagbar_width=26
-noremap <silent> <Leader>y :TagbarToggle<CR>
-
-" ,ct = Builds ctags
-"map <Leader>ct :! /usr/local/bin/ctags -R *<CR>
-
 
 "------  Fugitive Plugin Options  ------
 "https://github.com/tpope/vim-fugitive
