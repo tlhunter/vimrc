@@ -53,7 +53,6 @@ As of `v0.2.0`, the Leader key is now bound to `Space` (used to be `Comma`)
 * Use `<Leader>h` `<Leader>j` `<Leader>k` `<Leader>l` to navigate between viewports
 * Use `<Leader>Q` to close the current window (you probably won't ever need to do this)
 * Use `<Leader>n` to toggle the file browser
-* Use `<Leader>y` to toggle the tag browser
 * Use `Ctrl P` to perform a recursive fuzzy filename search
 * Use `<Leader>a` and type a phrase to search to search based on content within your files (quote and escape if needed)
 * Use `<Leader>A` to close the open ack search results at the bottom of the screen
