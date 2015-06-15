@@ -213,6 +213,10 @@ autocmd QuickFixCmdPost * nested cwindow | redraw!
 autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
 
 
+"------  EJS Filetype Settings  ------
+au BufNewFile,BufRead *.ejs set filetype=html
+
+
 "------  GUI Options  ------
 if has("gui_running")
 	" Hides toolbar and scrollbars and File menu
