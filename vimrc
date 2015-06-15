@@ -228,6 +228,9 @@ if has("gui_running")
 	highlight NonText guifg=#4a4a59
 	highlight SpecialKey guifg=#4a4a59
 
+	" Open VIM in fullscreen window
+	set lines=200 columns=500
+
 	if has("gui_macvim") " OS X
 		"set guifont=Monaco:h14
 		set guifont=Monaco:h12
