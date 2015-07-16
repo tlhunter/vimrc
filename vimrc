@@ -216,6 +216,11 @@ autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
 au BufNewFile,BufRead *.ejs set filetype=html
 
 
+"------  Airline Settings ------
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+
+
 "------  GUI Options  ------
 if has("gui_running")
 	" Hides toolbar and scrollbars and File menu
@@ -223,7 +228,7 @@ if has("gui_running")
 
 	" Highlights the current line background
 	set cursorline
-	colorscheme Tomorrow-Night
+	colorscheme gotham
 
 	"autocmd VimEnter * TagbarOpen
 
@@ -236,8 +241,8 @@ if has("gui_running")
 
 	if has("gui_macvim") " OS X
 		"set guifont=Monaco:h14
-		set guifont=Monaco:h12
-		"set noantialias
+		set guifont=Monaco:h10
+		set noantialias
 		"set transparency=15
 
 		" Swipe to move between bufers :D
