@@ -239,6 +239,9 @@ if has("gui_running")
 	" Open VIM in fullscreen window
 	set lines=200 columns=500
 
+	" Build all help tags (slower launch, but I run GUI vim like once per day)
+	call pathogen#helptags()
+
 	if has("gui_macvim") " OS X
 		"set guifont=Monaco:h14
 		set guifont=Monaco:h10
