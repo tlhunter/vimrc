@@ -18,6 +18,7 @@ let g:buftabs_marker_modified = "+"
 " Toggle whitespace visibility with ,s
 nmap <Leader>s :set list!<CR>
 set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×,eol:¬
+:set list " Enable by default
 
 " <Leader>L = Toggle line numbers
 map <Leader>L :set invnumber<CR>
