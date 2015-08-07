@@ -17,7 +17,7 @@ let g:buftabs_marker_modified = "+"
 
 " Toggle whitespace visibility with ,s
 nmap <Leader>s :set list!<CR>
-set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×,eol:¬
+set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×
 :set list " Enable by default
 
 " <Leader>L = Toggle line numbers
@@ -235,10 +235,6 @@ if has("gui_running")
 	colorscheme gotham
 
 	"autocmd VimEnter * TagbarOpen
-
-	"Invisible character colors
-	highlight NonText guifg=#4a4a59
-	highlight SpecialKey guifg=#4a4a59
 
 	" Open VIM in fullscreen window
 	set lines=200 columns=500
