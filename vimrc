@@ -106,6 +106,9 @@ nnoremap <silent> <Leader>q :Bclose<CR>
 " <Leader>Q Closes the current window
 nnoremap <silent> <Leader>Q <C-w>c
 
+" <Leader>Ctrl+q Force Closes the current buffer
+nnoremap <silent> <Leader><C-q> :Bclose!<CR>
+
 
 "------  Searching  ------
 set incsearch
