@@ -4,6 +4,9 @@ set nocompatible
 set viminfo='1000,f1,:1000,/1000
 set history=1000
 
+"------  Charset Init  ------
+scriptencoding utf-8
+set encoding=utf-8
 
 "------  Visual Options  ------
 syntax on
