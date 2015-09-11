@@ -155,6 +155,8 @@ let NERDTreeChDirMode=2
 
 " Toggle visibility using <Leader>n
 noremap <silent> <Leader>n :NERDTreeToggle<CR>
+" Focus on NERDTree using <Leader>m
+noremap <silent> <Leader>m :NERDTreeFocus<CR>
 
 " These prevent accidentally loading files while focused on NERDTree
 autocmd FileType nerdtree noremap <buffer> <c-left> <nop>
