@@ -225,6 +225,10 @@ autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
 au BufNewFile,BufRead *.ejs set filetype=html
 
 
+"------  SCSS Filetype Settings  ------
+autocmd FileType scss set iskeyword+=-
+
+
 "------  Airline Settings ------
 let g:airline_left_sep=''
 let g:airline_right_sep=''
