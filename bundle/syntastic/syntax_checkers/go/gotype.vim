@@ -10,7 +10,7 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_go_gotype_checker")
+if exists('g:loaded_syntastic_go_gotype_checker')
     finish
 endif
 let g:loaded_syntastic_go_gotype_checker = 1
@@ -19,7 +19,9 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_go_gotype_GetLocList() dict
-    let makeprg = self.getExecEscaped() . ' .'
+    let makeprg = self.makeprgBuild({
+        \ 'args': (expand('%', 1) =~# '\m_test\.go$' ? '-a' : ''),
+        \ 'fname': '.' })
 
     let errorformat =
         \ '%f:%l:%c: %m,' .

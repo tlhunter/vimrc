@@ -1,7 +1,7 @@
 "============================================================================
-"File:        shellcheck.vim
+"File:        jade_lint.vim
 "Description: Syntax checking plugin for syntastic.vim
-"Maintainer:  LCD 47 <lcd047 at gmail dot com>
+"Maintainer:  Ben Parnell <benjaminparnell.94@gmail.com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
 "             it and/or modify it under the terms of the Do What The Fuck You
@@ -10,16 +10,31 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_zsh_shellcheck_checker")
+if exists('g:loaded_syntastic_jade_jade_lint_checker')
     finish
 endif
-let g:loaded_syntastic_zsh_shellcheck_checker = 1
+let g:loaded_syntastic_jade_jade_lint_checker = 1
 
-runtime! syntax_checkers/sh/*.vim
+let s:save_cpo = &cpo
+set cpo&vim
+
+function! SyntaxCheckers_jade_jade_lint_GetLocList() dict
+    let makeprg = self.makeprgBuild({ 'args_after': '-r inline' })
+
+    let errorformat = '%f:%l:%c %m'
+
+    return SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'returns': [0, 2] })
+endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
-    \ 'filetype': 'zsh',
-    \ 'name': 'shellcheck',
-    \ 'redirect': 'sh/shellcheck'})
+    \ 'filetype': 'jade',
+    \ 'name': 'jade_lint',
+    \ 'exec': 'jade-lint' })
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
 " vim: set sw=4 sts=4 et fdm=marker:

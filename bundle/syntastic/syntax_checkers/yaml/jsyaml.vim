@@ -10,7 +10,7 @@
 "
 "============================================================================
 
-if exists("g:loaded_syntastic_yaml_jsyaml_checker")
+if exists('g:loaded_syntastic_yaml_jsyaml_checker')
     finish
 endif
 let g:loaded_syntastic_yaml_jsyaml_checker = 1
@@ -20,9 +20,7 @@ set cpo&vim
 
 function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
     if !exists('s:js_yaml_new')
-        let ver = syntastic#util#getVersion(self.getExecEscaped() . ' --version')
-        call self.log(self.getExec() . ' version =', ver)
-        let s:js_yaml_new = syntastic#util#versionIsAtLeast(ver, [2])
+        let s:js_yaml_new = syntastic#util#versionIsAtLeast(self.getVersion(), [2])
     endif
 
     let makeprg = self.makeprgBuild({ 'args_after': (s:js_yaml_new ? '' : '--compact') })
@@ -30,12 +28,13 @@ function! SyntaxCheckers_yaml_jsyaml_GetLocList() dict
     let errorformat =
         \ 'Error on line %l\, col %c:%m,' .
         \ 'JS-YAML: %m at line %l\, column %c:,' .
+        \ 'YAMLException: %m at line %l\, column %c:,' .
         \ '%-G%.%#'
 
     return SyntasticMake({
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
-        \ 'defaults': {'bufnr': bufnr("")} })
+        \ 'defaults': {'bufnr': bufnr('')} })
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
