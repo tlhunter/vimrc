@@ -252,6 +252,9 @@ if has("gui_running")
 	" Open VIM in fullscreen window
 	set lines=200 columns=500
 
+	" Toggle fullscreen
+	map <silent> <leader>w :set lines=200 columns=500<CR>
+
 	" Build all help tags (slower launch, but I run GUI vim like once per day)
 	call pathogen#helptags()
 
