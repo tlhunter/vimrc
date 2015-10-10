@@ -218,7 +218,8 @@ autocmd QuickFixCmdPost * nested cwindow | redraw!
 
 
 "------  JSX Filetype Settings ------
-autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['jsxhint']
+autocmd! BufEnter  *.jsx  let b:syntastic_checkers=['eslint']
+autocmd! BufEnter  *.js  let b:syntastic_checkers=['eslint']
 
 
 "------  EJS Filetype Settings  ------
