@@ -37,8 +37,6 @@ set hidden
 filetype indent on
 filetype plugin on
 set autoindent
-"set expandtab
-set wildignore=.svn,CVS,.git,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif,node_modules/*
 
 "allow deletion of previously entered data in insert mode
 set backspace=indent,eol,start
@@ -130,19 +128,11 @@ noremap <leader>A <C-w>j<C-w>c<C-w>l
 
 let g:ackprg="ack -H --nocolor --nogroup --column"
 
-" When searching for words with * and navigating with N/n, keep line centered vertically
-"nnoremap n nzz
-"nnoremap N Nzz
-"nnoremap * *zz
-"nnoremap # #zz
-"nnoremap g* g*zz
-"nnoremap g# g#zz
-
 " CtrlP will load from the CWD, makes it easier with all these nested repos
 let g:ctrlp_working_path_mode = ''
 
 " CtrlP won't show results from node_modules
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|coverage|target|dist)|(\.(swp|ico|git|svn))$'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|coverage|target|dist)|(\.(swp|ico|git|svn|png|jpg|gif|ttf))$'
 
 "type S, then type what you're looking for, a /, and what to replace it with
 nmap S :%s//g<LEFT><LEFT>
@@ -150,7 +140,7 @@ vmap S :s//g<LEFT><LEFT>
 
 
 "------  NERDTree Options  ------
-let NERDTreeIgnore=['CVS','\.dSYM$']
+let NERDTreeIgnore=['CVS','\.dSYM$', '.git', '.DS_Store', '*.swp', '*.swo', '*.swo']
 
 "setting root dir in NT also sets VIM's cd
 let NERDTreeChDirMode=2
@@ -168,9 +158,6 @@ autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
 
 " Open NERDTree if we're executing vim without specifying a file to open
 autocmd vimenter * if !argc() | NERDTree | endif
-
-" Close if only NERDTree open
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " Hides "Press ? for help"
 let NERDTreeMinimalUI=1
@@ -201,9 +188,6 @@ map <Leader>U :g/^$/d<CR>
 
 " <Leader>R = Converts tabs to spaces in document
 map <Leader>R :retab<CR>
-
-" Deletes trailing space in file upon write
-" autocmd BufWritePre * :%s/\s\+$//e
 
 
 "------  JSON Filetype Settings  ------
