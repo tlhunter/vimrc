@@ -143,7 +143,7 @@ vmap S :s//g<LEFT><LEFT>
 
 
 "------  NERDTree Options  ------
-let NERDTreeIgnore=['CVS','\.dSYM$', '.git', '.DS_Store', '*.swp', '*.swo', '*.swo']
+let NERDTreeIgnore=['CVS','\.dSYM$', '.git', '.DS_Store', '\.swp$', '\.swo$']
 
 "setting root dir in NT also sets VIM's cd
 let NERDTreeChDirMode=2
