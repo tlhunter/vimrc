@@ -287,6 +287,17 @@ if has("gui_running")
 		" OS X probably has ctags in a weird place
 		let g:tagbar_ctags_bin='/usr/local/bin/ctags'
 
+		" Damn you scrollwheel paste
+		nnoremap <MiddleMouse> <Nop>
+		nnoremap <2-MiddleMouse> <Nop>
+		nnoremap <3-MiddleMouse> <Nop>
+		nnoremap <4-MiddleMouse> <Nop>
+
+		inoremap <MiddleMouse> <Nop>
+		inoremap <2-MiddleMouse> <Nop>
+		inoremap <3-MiddleMouse> <Nop>
+		inoremap <4-MiddleMouse> <Nop>
+
 		" Pair Program mode, so that my coworkers can read my screen ;)
 		nnoremap <leader>p :call PairProgramMode()<cr>
 		function! PairProgramMode()
