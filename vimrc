@@ -7,6 +7,10 @@ set history=1000
 
 let pair_program_mode = 0
 
+"------  Charset Init  ------
+scriptencoding utf-8
+set encoding=utf-8
+
 "------  Visual Options  ------
 syntax on
 set number
