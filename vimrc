@@ -5,8 +5,6 @@ set nomodeline
 set viminfo='1000,f1,:1000,/1000
 set history=1000
 
-cd ~/Projects
-
 let pair_program_mode = 0
 
 "------  Visual Options  ------
@@ -248,6 +246,8 @@ if has("gui_running")
 
 	" Build all help tags (slower launch, but I run GUI vim like once per day)
 	call pathogen#helptags()
+
+	silent! cd $HOME/Projects
 
 	if has("gui_macvim") " OS X
 		"set guifont=Monaco:h14
