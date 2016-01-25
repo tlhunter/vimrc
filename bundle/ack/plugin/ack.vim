@@ -1,50 +1,79 @@
-" NOTE: You must, of course, install the ack script
-"       in your path.
-" On Ubuntu:
-"   sudo apt-get install ack-grep
-"   ln -s /usr/bin/ack-grep /usr/bin/ack
-" With MacPorts:
-"   sudo port install p5-app-ack
+if exists('g:loaded_ack')
+  finish
+endif
 
-let g:ackprg="ack\\ -H\\ --nocolor\\ --nogroup"
+if !exists("g:ack_default_options")
+  let g:ack_default_options = " -s -H --nocolor --nogroup --column"
+endif
 
-function! Ack(args)
-    let grepprg_bak=&grepprg
-    exec "set grepprg=" . g:ackprg
-    execute "silent! grep " . a:args
-    botright copen
-    let &grepprg=grepprg_bak
-    exec "redraw!"
-endfunction
+" Location of the ack utility
+if !exists("g:ackprg")
+  if executable('ack')
+    let g:ackprg = "ack"
+  elseif executable('ack-grep')
+    let g:ackprg = "ack-grep"
+  else
+    finish
+  endif
+  let g:ackprg .= g:ack_default_options
+endif
 
-function! AckAdd(args)
-    let grepprg_bak=&grepprg
-    exec "set grepprg=" . g:ackprg
-    execute "silent! grepadd " . a:args
-    botright copen
-    let &grepprg=grepprg_bak
-    exec "redraw!"
-endfunction
+if !exists("g:ack_apply_qmappings")
+  let g:ack_apply_qmappings = !exists("g:ack_qhandler")
+endif
 
-function! LAck(args)
-    let grepprg_bak=&grepprg
-    exec "set grepprg=" . g:ackprg
-    execute "silent! lgrep " . a:args
-    botright lopen
-    let &grepprg=grepprg_bak
-    exec "redraw!"
-endfunction
+if !exists("g:ack_apply_lmappings")
+  let g:ack_apply_lmappings = !exists("g:ack_lhandler")
+endif
 
-function! LAckAdd(args)
-    let grepprg_bak=&grepprg
-    exec "set grepprg=" . g:ackprg
-    execute "silent! lgrepadd " . a:args
-    botright lopen
-    let &grepprg=grepprg_bak
-    exec "redraw!"
-endfunction
+let s:ack_mappings = {
+      \ "t": "<C-W><CR><C-W>T",
+      \ "T": "<C-W><CR><C-W>TgT<C-W>j",
+      \ "o": "<CR>",
+      \ "O": "<CR><C-W>p<C-W>c",
+      \ "go": "<CR><C-W>p",
+      \ "h": "<C-W><CR><C-W>K",
+      \ "H": "<C-W><CR><C-W>K<C-W>b",
+      \ "v": "<C-W><CR><C-W>H<C-W>b<C-W>J<C-W>t",
+      \ "gv": "<C-W><CR><C-W>H<C-W>b<C-W>J" }
 
-command! -nargs=* -complete=file Ack call Ack(<q-args>)
-command! -nargs=* -complete=file AckAdd call AckAdd(<q-args>)
-command! -nargs=* -complete=file LAck call LAck(<q-args>)
-command! -nargs=* -complete=file LAckAdd call LAckAdd(<q-args>)
+if exists("g:ack_mappings")
+  let g:ack_mappings = extend(s:ack_mappings, g:ack_mappings)
+else
+  let g:ack_mappings = s:ack_mappings
+endif
+
+if !exists("g:ack_qhandler")
+  let g:ack_qhandler = "botright copen"
+endif
+
+if !exists("g:ack_lhandler")
+  let g:ack_lhandler = "botright lopen"
+endif
+
+if !exists("g:ackhighlight")
+  let g:ackhighlight = 0
+endif
+
+if !exists("g:ack_autoclose")
+  let g:ack_autoclose = 0
+endif
+
+if !exists("g:ack_autofold_results")
+  let g:ack_autofold_results = 0
+endif
+
+command! -bang -nargs=* -complete=file Ack           call ack#Ack('grep<bang>', <q-args>)
+command! -bang -nargs=* -complete=file AckAdd        call ack#Ack('grepadd<bang>', <q-args>)
+command! -bang -nargs=* -complete=file AckFromSearch call ack#AckFromSearch('grep<bang>', <q-args>)
+command! -bang -nargs=* -complete=file LAck          call ack#Ack('lgrep<bang>', <q-args>)
+command! -bang -nargs=* -complete=file LAckAdd       call ack#Ack('lgrepadd<bang>', <q-args>)
+command! -bang -nargs=* -complete=file AckFile       call ack#Ack('grep<bang> -g', <q-args>)
+command! -bang -nargs=* -complete=help AckHelp       call ack#AckHelp('grep<bang>', <q-args>)
+command! -bang -nargs=* -complete=help LAckHelp      call ack#AckHelp('lgrep<bang>', <q-args>)
+command! -bang -nargs=*                AckWindow     call ack#AckWindow('grep<bang>', <q-args>)
+command! -bang -nargs=*                LAckWindow    call ack#AckWindow('lgrep<bang>', <q-args>)
+
+let g:loaded_ack = 1
+
+" vim:set et sw=2 ts=2 tw=78 fdm=marker
