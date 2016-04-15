@@ -156,6 +156,8 @@ let NERDTreeChDirMode=2
 noremap <silent> <Leader>n :NERDTreeToggle<CR>
 " Focus on NERDTree using <Leader>m
 noremap <silent> <Leader>m :NERDTreeFocus<CR>
+" Focus on NERDTree with the currently opened file with <Leader>M
+noremap <silent> <Leader>M :NERDTreeFind<CR>
 
 " These prevent accidentally loading files while focused on NERDTree
 autocmd FileType nerdtree noremap <buffer> <c-left> <nop>
