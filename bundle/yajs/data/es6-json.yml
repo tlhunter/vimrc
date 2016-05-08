@@ -1,0 +1,6 @@
+javascriptGlobal:
+  - JSON
+
+javascriptJSONStaticMethod:
+  - parse
+  - stringify

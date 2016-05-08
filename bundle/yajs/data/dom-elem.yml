@@ -1,0 +1,55 @@
+javascriptDOMElemProp:
+    - accessKey
+    - clientHeight
+    - clientLeft
+    - clientTop
+    - clientWidth
+    - id
+    - innerHTML
+    - length
+    - onafterscriptexecute
+    - onbeforescriptexecute
+    - oncopy
+    - oncut
+    - onpaste
+    - onwheel
+    - scrollHeight
+    - scrollLeft
+    - scrollTop
+    - scrollWidth
+    - tagName
+    - classList
+    - className
+    - name
+    - outerHTML
+    - style
+
+javascriptDOMElemMethod:
+    - getAttributeNS
+    - getAttributeNode
+    - getAttributeNodeNS
+    - getBoundingClientRect
+    - getClientRects
+    - getElementsByClassName
+    - getElementsByTagName
+    - getElementsByTagNameNS
+    - hasAttribute
+    - hasAttributeNS
+    - insertAdjacentHTML
+    - matches
+    - querySelector
+    - querySelectorAll
+    - removeAttribute
+    - removeAttributeNS
+    - removeAttributeNode
+    - requestFullscreen
+    - requestPointerLock
+    - scrollIntoView
+    - setAttribute
+    - setAttributeNS
+    - setAttributeNode
+    - setAttributeNodeNS
+    - setCapture
+    - supports
+    - getAttribute
+

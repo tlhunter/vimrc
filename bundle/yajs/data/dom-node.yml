@@ -1,0 +1,54 @@
+javascriptDOMNodeProp:
+    - attributes
+    - baseURI
+    - baseURIObject
+    - childNodes
+    - firstChild
+    - lastChild
+    - localName
+    - namespaceURI
+    - nextSibling
+    - nodeName
+    - nodePrincipal
+    - nodeType
+    - nodeValue
+    - ownerDocument
+    - parentElement
+    - parentNode
+    - prefix
+    - previousSibling
+    - textContent
+
+javascriptDOMNodeMethod:
+    - appendChild
+    - cloneNode
+    - compareDocumentPosition
+    - contains
+    - getUserData
+    - hasAttributes
+    - hasChildNodes
+    - insertBefore
+    - isDefaultNamespace
+    - isEqualNode
+    - isSameNode
+    - isSupported
+    - lookupNamespaceURI
+    - lookupPrefix
+    - normalize
+    - removeChild
+    - replaceChild
+    - setUserData
+
+javascriptDOMNodeType:
+    - ELEMENT_NODE
+    - ATTRIBUTE_NODE
+    - TEXT_NODE
+    - CDATA_SECTION_NODEN_NODE
+    - ENTITY_REFERENCE_NODE
+    - ENTITY_NODE
+    - PROCESSING_INSTRUCTION_NODEN_NODE
+    - COMMENT_NODE
+    - DOCUMENT_NODE
+    - DOCUMENT_TYPE_NODE
+    - DOCUMENT_FRAGMENT_NODE
+    - NOTATION_NODE

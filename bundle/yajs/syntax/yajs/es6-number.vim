@@ -1,0 +1,16 @@
+syntax keyword javascriptGlobal Number nextgroup=javascriptGlobalNumberDot,javascriptFuncCallArg
+syntax match   javascriptGlobalNumberDot /\./ contained nextgroup=javascriptNumberStaticProp,javascriptNumberStaticMethod,javascriptProp,javascriptMethod
+syntax keyword javascriptNumberStaticProp contained EPSILON MAX_SAFE_INTEGER MAX_VALUE
+syntax keyword javascriptNumberStaticProp contained MIN_SAFE_INTEGER MIN_VALUE NEGATIVE_INFINITY
+syntax keyword javascriptNumberStaticProp contained NaN POSITIVE_INFINITY
+if exists("did_javascript_hilink") | HiLink javascriptNumberStaticProp Keyword
+endif
+syntax keyword javascriptNumberStaticMethod contained isFinite isInteger isNaN isSafeInteger nextgroup=javascriptFuncCallArg
+syntax keyword javascriptNumberStaticMethod contained parseFloat parseInt nextgroup=javascriptFuncCallArg
+if exists("did_javascript_hilink") | HiLink javascriptNumberStaticMethod Keyword
+endif
+syntax keyword javascriptNumberMethod contained toExponential toFixed toLocaleString nextgroup=javascriptFuncCallArg
+syntax keyword javascriptNumberMethod contained toPrecision toSource toString valueOf nextgroup=javascriptFuncCallArg
+syntax cluster props add=javascriptNumberMethod
+if exists("did_javascript_hilink") | HiLink javascriptNumberMethod Keyword
+endif

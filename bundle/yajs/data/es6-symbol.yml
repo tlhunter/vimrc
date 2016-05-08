@@ -1,0 +1,16 @@
+javascriptGlobal:
+  - Symbol
+
+javascriptSymbolStaticProp:
+  - create
+  - hasInstance
+  - isConcatSpreadable
+  - isRegExp
+  - iterator
+  - toPrimitive
+  - toStringTag
+  - unscopables
+
+javascriptSymbolStaticMethod:
+  - for
+  - keyFor
