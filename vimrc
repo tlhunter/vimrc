@@ -228,6 +228,10 @@ au BufNewFile,BufRead *.ejs set filetype=html
 autocmd FileType scss set iskeyword+=-
 
 
+"------  Markdown Settings  ------
+let g:vim_markdown_folding_disabled = 1
+
+
 "------  Airline Settings ------
 let g:airline_left_sep=''
 let g:airline_right_sep=''
