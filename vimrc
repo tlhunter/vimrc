@@ -133,7 +133,7 @@ noremap <leader>a :Ack
 " <Leader>A will close the new window created for that ack search
 noremap <leader>A <C-w>j<C-w>c<C-w>l
 
-let g:ackprg="ack -H --nocolor --nogroup --column"
+let g:ackprg="ag --vimgrep --column"
 
 " CtrlP will load from the CWD, makes it easier with all these nested repos
 let g:ctrlp_working_path_mode = ''
