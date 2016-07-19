@@ -30,7 +30,6 @@ wget https://github.com/tlhunter/vimrc/archive/master.zip
 
 * Edit many files at the same time
 * File Browser on left side of screen
-* Functions, Variables, Classes on right
 * Move between files in center screen
 * View status of the current GIT repo, if applicable
 * Additional features when running under MacVIM
