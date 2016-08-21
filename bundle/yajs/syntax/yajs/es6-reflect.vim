@@ -1,0 +1,8 @@
+syntax keyword javascriptGlobal Reflect nextgroup=@javascriptAfterIdentifier
+syntax keyword javascriptReflectMethod contained apply construct defineProperty deleteProperty nextgroup=javascriptFuncCallArg
+syntax keyword javascriptReflectMethod contained enumerate get getOwnPropertyDescriptor nextgroup=javascriptFuncCallArg
+syntax keyword javascriptReflectMethod contained getPrototypeOf has isExtensible ownKeys nextgroup=javascriptFuncCallArg
+syntax keyword javascriptReflectMethod contained preventExtensions set setPrototypeOf nextgroup=javascriptFuncCallArg
+syntax cluster props add=javascriptReflectMethod
+if exists("did_javascript_hilink") | HiLink javascriptReflectMethod Keyword
+endif
