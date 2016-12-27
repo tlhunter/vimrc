@@ -240,6 +240,15 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = ' '
 
 
+"------  Text File Settings  ------
+:autocmd! BufNewFile,BufRead *.txt,*.md,*.tex set wrap
+
+
+"------  Jenkins Settings  ------
+au BufReadPost Jenkinsfile set syntax=groovy
+au BufReadPost Jenkinsfile set filetype=groovy
+
+
 "------  GUI Options  ------
 if has("gui_running")
 	" Hides toolbar and scrollbars and File menu
