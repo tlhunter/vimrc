@@ -188,6 +188,10 @@ nnoremap <Leader>gg :Git
 nnoremap <Leader>gd :Gdiff<CR>
 
 
+"------  Git Gutter Options ------
+"Disable <Leader>h* commands as they show down movement
+let g:gitgutter_map_keys = 0
+
 "------  Text Editing Utilities  ------
 " <Leader>T = Delete all Trailing space in file
 map <Leader>T :%s/\s\+$//<CR>
@@ -337,7 +341,7 @@ if has("gui_running")
 		endfunction
 
 	elseif has("gui_gtk2") " Linux
-		set guifont=monospace\ 9
+		set guifont=monospace\ 10
 
 		" Alt+n = new buffer
 		map <silent> <A-n> :enew<CR>
