@@ -76,6 +76,12 @@ nnoremap Q <nop>
 " Annoying window
 map q: :q
 
+" Copy filename
+:nmap yY :let @" = expand("%")<CR>
+
+" Copy file path
+:nmap yZ :let @" = expand("%:p")<CR>
+
 "------  Text Navigation  ------
 " Prevent cursor from moving to beginning of line when switching buffers
 set nostartofline
