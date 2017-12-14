@@ -237,6 +237,11 @@ autocmd! BufEnter *.js let b:syntastic_checkers=['eslint']
 au BufNewFile,BufRead *.ejs set filetype=html
 
 
+"------  Flow Filetype Settings  ------
+let g:javascript_plugin_flow = 1
+au BufNewFile,BufRead *.flow set filetype=javascript
+
+
 "------  SCSS Filetype Settings  ------
 autocmd FileType scss set iskeyword+=-
 
