@@ -289,6 +289,7 @@ if has("gui_running")
 	call pathogen#helptags()
 
 	silent! cd $HOME/Projects
+	silent! cd $HOME/projects
 
 	if has("gui_macvim") " OS X
 		"set guifont=Monaco:h14
