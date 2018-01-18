@@ -277,6 +277,12 @@ if has("gui_running")
 	set cursorline
 	colorscheme hybrid
 
+	let g:werewolf_change_automatically = 1
+	let g:werewolf_day_start = 9
+	let g:werewolf_day_end = 15
+	let g:werewolf_day_themes = ['pyte']
+	let g:werewolf_night_themes = ['hybrid']
+
 	"autocmd VimEnter * TagbarOpen
 
 	" Open VIM in fullscreen window
@@ -386,6 +392,7 @@ else
 	set t_Co=256
 	colorscheme Mustang
 	set mouse=a
+	let g:werewolf_change_automatically = 0
 endif
 
 
