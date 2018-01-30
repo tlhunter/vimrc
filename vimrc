@@ -271,7 +271,7 @@ au BufReadPost Jenkinsfile set filetype=groovy
 "------  GUI Options  ------
 if has("gui_running")
 	" Hides toolbar and scrollbars and File menu
-	set guioptions=egt
+	set guioptions=gt
 
 	" Highlights the current line background
 	set cursorline
