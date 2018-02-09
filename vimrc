@@ -393,3 +393,13 @@ endif
 if filereadable($HOME.'/.vimrc_local')
 	source $HOME/.vimrc_local
 endif
+
+
+" 设置高亮
+set cursorline
+set cursorcolumn
+hi CursorLine   cterm=NONE ctermbg=236 ctermfg=NONE guibg=NONE guifg=NONE
+hi CursorColumn cterm=NONE ctermbg=235 ctermfg=NONE guibg=NONE guifg=NONE
+
+" 记住上次打开位置
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
