@@ -25,9 +25,9 @@ let g:buftabs_marker_modified = "+"
 autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
 
 " Toggle whitespace visibility with ,s
-nmap <Leader>s :set list!<CR>
-set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×
-:set list " Enable by default
+" nmap <Leader>s :set list!<CR>
+" set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×
+" :set list " Enable by default
 
 " <Leader>L = Toggle line numbers
 map <Leader>L :set invnumber<CR>
@@ -40,6 +40,8 @@ set splitright
 "------  Generic Behavior  ------
 set tabstop=4
 set shiftwidth=4
+:set expandtab
+:%retab!
 set hidden
 filetype indent on
 filetype plugin on
