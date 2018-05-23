@@ -21,9 +21,6 @@ set statusline=%<%f\ %h%m%r%=%{fugitive#statusline()}\ \ %-14.(%l,%c%V%)\ %P
 let g:buftabs_only_basename=1
 let g:buftabs_marker_modified = "+"
 
-" Automatically highlights words beneath cursor
-autocmd CursorMoved * exe printf('match IncSearch /\V\<%s\>/', escape(expand('<cword>'), '/\'))
-
 " Toggle whitespace visibility with ,s
 nmap <Leader>s :set list!<CR>
 set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×
@@ -226,29 +223,9 @@ autocmd BufNewFile,BufRead *.jshintrc set filetype=json
 autocmd BufNewFile,BufRead *.eslintrc set filetype=json
 
 
-"------  CoffeeScript Filetype Settings  ------
-au BufNewFile,BufReadPost *.coffee set shiftwidth=2 softtabstop=2 expandtab
-autocmd BufNewFile,BufRead *.coffee set filetype=coffee
-"au BufWritePost *.coffee silent make!
-autocmd QuickFixCmdPost * nested cwindow | redraw!
-
-
-"------  JSX Filetype Settings ------
-autocmd! BufEnter *.jsx let b:syntastic_checkers=['eslint']
-autocmd! BufEnter *.js let b:syntastic_checkers=['eslint']
-
-
-"------  EJS Filetype Settings  ------
-au BufNewFile,BufRead *.ejs set filetype=html
-
-
 "------  Flow Filetype Settings  ------
 let g:javascript_plugin_flow = 1
 au BufNewFile,BufRead *.flow set filetype=javascript
-
-
-"------  SCSS Filetype Settings  ------
-autocmd FileType scss set iskeyword+=-
 
 
 "------  Markdown Settings  ------
@@ -268,11 +245,6 @@ let g:airline#extensions#tabline#left_alt_sep = ' '
 :autocmd! BufNewFile,BufRead *.txt,*.md,*.tex set wrap
 
 
-"------  Jenkins Settings  ------
-au BufReadPost Jenkinsfile set syntax=groovy
-au BufReadPost Jenkinsfile set filetype=groovy
-
-
 "------  GUI Options  ------
 if has("gui_running")
 	" Hides toolbar and scrollbars and File menu
@@ -282,13 +254,13 @@ if has("gui_running")
 	set cursorline
 	colorscheme hybrid
 
-	"autocmd VimEnter * TagbarOpen
-
 	" Open VIM in fullscreen window
-	set lines=200 columns=500
+	" ...Unless you have dualscreens, then it's bigger than a screen...
+	"set lines=200 columns=500
+	set lines=60 columns=200
 
 	" Toggle fullscreen
-	map <silent> <leader>w :set lines=200 columns=500<CR>
+	"map <silent> <leader>w :set lines=200 columns=500<CR>
 
 	" Build all help tags (slower launch, but I run GUI vim like once per day)
 	call pathogen#helptags()
@@ -362,7 +334,7 @@ if has("gui_running")
 		endfunction
 
 	elseif has("gui_gtk2") " Linux
-		set guifont=monospace\ 10
+		set guifont=monospace\ 9
 
 		" Alt+n = new buffer
 		map <silent> <A-n> :enew<CR>
