@@ -184,6 +184,11 @@ let NERDTreeMinimalUI=1
 let g:NERDTreeShowHidden=1
 
 
+"------ NERDCommenter Options ------
+let g:NERDSpaceDelims = 1
+let g:NERDDefaultAlign = 'left'
+
+
 "------  Fugitive Plugin Options  ------
 "https://github.com/tpope/vim-fugitive
 nnoremap <Leader>gs :Gstatus<CR>
