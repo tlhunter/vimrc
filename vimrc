@@ -350,6 +350,6 @@ endif
 
 
 "------  Local Overrides  ------
-if filereadable($HOME.'/.vimrc_local')
-	source $HOME/.vimrc_local
+if filereadable($HOME.'/.vim/local.vimrc')
+	source $HOME/.vim/local.vimrc
 endif
