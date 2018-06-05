@@ -315,9 +315,9 @@ if has("gui_running")
 		inoremap <2-MiddleMouse> <Nop>
 		inoremap <3-MiddleMouse> <Nop>
 		inoremap <4-MiddleMouse> <Nop>
-
-	elseif has("gui_gtk2") " Linux
-		set guifont=monospace\ 9
+	elseif has("gui_gtk") " Linux
+		" set guifont=monospace\ 9
+		set guifont=ProggyCleanTT\ 12
 
 		" Alt+n = new buffer
 		map <silent> <A-n> :enew<CR>
