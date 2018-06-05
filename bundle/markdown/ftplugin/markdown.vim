@@ -351,7 +351,7 @@ function! s:Toc(...)
                 endif
             endif
             " keep track of the longest header size (heading level + title)
-            let l:total_len = stridx(l:line, ' ') + len(l:line)
+            let l:total_len = stridx(l:line, ' ') + strdisplaywidth(l:line)
             if l:total_len > l:header_max_len
                 let l:header_max_len = l:total_len
             endif
@@ -578,15 +578,46 @@ endfunction
 
 " We need a definition guard because we invoke 'edit' which will reload this
 " script while this function is running. We must not replace it.
-if !exists("*s:EditUrlUnderCursor")
-  function s:EditUrlUnderCursor()
-      let l:url = s:Markdown_GetUrlForPosition(line('.'), col('.'))
-      if l:url != ''
-          execute 'edit' l:url
-      else
-          echomsg 'The cursor is not on a link.'
-      endif
-  endfunction
+if !exists('*s:EditUrlUnderCursor')
+    function s:EditUrlUnderCursor()
+        let l:url = s:Markdown_GetUrlForPosition(line('.'), col('.'))
+        if l:url != ''
+            if get(g:, 'vim_markdown_autowrite', 0)
+                write
+            endif
+            let l:anchor = ''
+            if get(g:, 'vim_markdown_follow_anchor', 0)
+                let l:parts = split(l:url, '#', 1)
+                if len(l:parts) == 2
+                    let [l:url, l:anchor] = parts
+                    let l:anchorexpr = get(g:, 'vim_markdown_anchorexpr', '')
+                    if l:anchorexpr != ''
+                        let l:anchor = eval(substitute(
+                            \ l:anchorexpr, 'v:anchor',
+                            \ escape('"'.l:anchor.'"', '"'), ''))
+                    endif
+                endif
+            endif
+            if l:url != ''
+                let l:ext = ''
+                if get(g:, 'vim_markdown_no_extensions_in_markdown', 0)
+                    " use another file extension if preferred
+                    if exists('g:vim_markdown_auto_extension_ext')
+                        let l:ext = '.'.g:vim_markdown_auto_extension_ext
+                    else
+                        let l:ext = '.md'
+                    endif
+                endif
+                let l:url = fnameescape(fnamemodify(expand('%:h').'/'.l:url.l:ext, ':.'))
+                execute 'edit' l:url
+            endif
+            if l:anchor != ''
+                silent! execute '/'.l:anchor
+            endif
+        else
+            echomsg 'The cursor is not on a link.'
+        endif
+    endfunction
 endif
 
 function! s:VersionAwareNetrwBrowseX(url)
@@ -733,10 +764,10 @@ function! s:MarkdownClearSyntaxVariables()
 endfunction
 
 augroup Mkd
-    autocmd!
-    au BufWinEnter * call s:MarkdownRefreshSyntax(1)
-    au BufUnload * call s:MarkdownClearSyntaxVariables()
-    au BufWritePost * call s:MarkdownRefreshSyntax(0)
-    au InsertEnter,InsertLeave * call s:MarkdownRefreshSyntax(0)
-    au CursorHold,CursorHoldI * call s:MarkdownRefreshSyntax(0)
+    autocmd! * <buffer>
+    autocmd BufWinEnter <buffer> call s:MarkdownRefreshSyntax(1)
+    autocmd BufUnload <buffer> call s:MarkdownClearSyntaxVariables()
+    autocmd BufWritePost <buffer> call s:MarkdownRefreshSyntax(0)
+    autocmd InsertEnter,InsertLeave <buffer> call s:MarkdownRefreshSyntax(0)
+    autocmd CursorHold,CursorHoldI <buffer> call s:MarkdownRefreshSyntax(0)
 augroup END
