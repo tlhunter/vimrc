@@ -5,7 +5,6 @@ set nomodeline
 set viminfo='1000,f1,:1000,/1000
 set history=1000
 
-let pair_program_mode = 0
 
 "------  Charset Init  ------
 scriptencoding utf-8
@@ -316,22 +315,6 @@ if has("gui_running")
 		inoremap <2-MiddleMouse> <Nop>
 		inoremap <3-MiddleMouse> <Nop>
 		inoremap <4-MiddleMouse> <Nop>
-
-		" Pair Program mode, so that my coworkers can read my screen ;)
-		nnoremap <leader>p :call PairProgramMode()<cr>
-		function! PairProgramMode()
-			if g:pair_program_mode
-				let g:pair_program_mode = 0
-				set guifont=Monaco:h10
-				set noantialias
-				set lines=200 columns=500
-			else
-				set guifont=Monaco:h15
-				set antialias
-				set lines=200 columns=500
-				let g:pair_program_mode = 1
-			endif
-		endfunction
 
 	elseif has("gui_gtk2") " Linux
 		set guifont=monospace\ 9
