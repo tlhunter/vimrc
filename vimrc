@@ -22,7 +22,7 @@ let g:buftabs_marker_modified = "+"
 
 " Toggle whitespace visibility with ,s
 nmap <Leader>s :set list!<CR>
-set listchars=tab:▸\ ,trail:·,extends:❯,precedes:❮,nbsp:×
+set listchars=tab:>\ ,trail:·,extends:»,precedes:«,nbsp:×
 :set list " Enable by default
 
 " <Leader>L = Toggle line numbers
@@ -318,6 +318,19 @@ if has("gui_running")
 	elseif has("gui_gtk") " Linux
 		" set guifont=monospace\ 9
 		set guifont=ProggyCleanTT\ 12
+
+		let g:NERDTreeIndicatorMapCustom = {
+			\ 'Modified'  : '!',
+			\ 'Staged'    : '+',
+			\ 'Untracked' : '?',
+			\ 'Renamed'   : 'r',
+			\ 'Unmerged'  : '=',
+			\ 'Deleted'   : '×',
+			\ 'Dirty'     : '·',
+			\ 'Clean'     : '^',
+			\ 'Ignored'   : 'i',
+			\ 'Unknown'   : '?'
+			\ }
 
 		" Alt+n = new buffer
 		map <silent> <A-n> :enew<CR>
