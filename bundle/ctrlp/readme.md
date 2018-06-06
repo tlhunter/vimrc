@@ -64,6 +64,10 @@ Use `:diffthis` when opening multiple files to run `:diffthis` on the first 4 fi
 
     If more than one mode is specified, they will be tried in order until a directory is located.
 
+* If a file is already open, open it again in a new pane instead of switching to the existing pane
+
+    `let g:ctrlp_switch_buffer = 'et'`
+
 * Exclude files and directories using Vim's `wildignore` and CtrlP's own `g:ctrlp_custom_ignore`. If a custom listing command is being used, exclusions are ignored:
 
     ```vim
@@ -83,6 +87,12 @@ Use `:diffthis` when opening multiple files to run `:diffthis` on the first 4 fi
     ```vim
     let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
     let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    ```
+
+* Ignore files in `.gitignore`
+    
+    ```vim
+      let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
     ```
 
 Check `:help ctrlp-options` for other options.
