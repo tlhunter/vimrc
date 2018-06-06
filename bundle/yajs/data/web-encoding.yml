@@ -1,0 +1,12 @@
+javascriptEncodingGlobal:
+  - TextEncoder
+  - TextDecoder
+
+javascriptEncodingProp:
+  - encoding 
+  - fatal
+  - ignoreBOM 
+
+javascriptEncodingMethod:
+  - encode
+  - decode

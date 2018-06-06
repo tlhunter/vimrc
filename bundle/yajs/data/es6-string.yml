@@ -4,6 +4,7 @@ javascriptGlobal:
 javascriptStringStaticMethod:
   - fromCharCode
   - fromCodePoint
+  - raw
 
 javascriptStringMethod:
   - anchor
@@ -28,6 +29,8 @@ javascriptStringMethod:
   - match
   - normalize
   # - quote
+  - padStart
+  - padEnd
   - repeat
   - replace
   - search

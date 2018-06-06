@@ -1,8 +1,9 @@
 syntax keyword javascriptGlobal Symbol nextgroup=javascriptGlobalSymbolDot,javascriptFuncCallArg
 syntax match   javascriptGlobalSymbolDot /\./ contained nextgroup=javascriptSymbolStaticProp,javascriptSymbolStaticMethod,javascriptProp,javascriptMethod
-syntax keyword javascriptSymbolStaticProp contained create hasInstance isConcatSpreadable
-syntax keyword javascriptSymbolStaticProp contained isRegExp iterator toPrimitive
-syntax keyword javascriptSymbolStaticProp contained toStringTag unscopables
+syntax keyword javascriptSymbolStaticProp contained length iterator match replace
+syntax keyword javascriptSymbolStaticProp contained search split hasInstance isConcatSpreadable
+syntax keyword javascriptSymbolStaticProp contained unscopables species toPrimitive
+syntax keyword javascriptSymbolStaticProp contained toStringTag
 if exists("did_javascript_hilink") | HiLink javascriptSymbolStaticProp Keyword
 endif
 syntax keyword javascriptSymbolStaticMethod contained for keyFor nextgroup=javascriptFuncCallArg

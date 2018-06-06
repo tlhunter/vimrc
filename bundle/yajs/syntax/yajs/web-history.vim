@@ -1,4 +1,5 @@
 syntax keyword javascriptBOMHistoryProp contained length current next previous state
+syntax keyword javascriptBOMHistoryProp contained scrollRestoration
 syntax cluster props add=javascriptBOMHistoryProp
 if exists("did_javascript_hilink") | HiLink javascriptBOMHistoryProp Keyword
 endif

@@ -1,0 +1,16 @@
+javascriptDOMFormProp:
+    - acceptCharset
+    - action
+    - elements
+    - encoding
+    - enctype
+    - length
+    - method
+    - name
+    - target
+
+javascriptDOMFormMethod:
+    - reportValidity
+    - reset
+    - submit
+

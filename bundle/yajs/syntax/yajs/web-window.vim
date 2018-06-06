@@ -6,7 +6,8 @@ syntax keyword javascriptBOMWindowProp name navigator opener outerHeight outerWi
 syntax keyword javascriptBOMWindowProp pageXOffset pageYOffset parent performance
 syntax keyword javascriptBOMWindowProp personalbar returnValue screen screenX screenY
 syntax keyword javascriptBOMWindowProp scrollbars scrollMaxX scrollMaxY scrollX scrollY
-syntax keyword javascriptBOMWindowProp self sidebar status statusbar toolbar top window
+syntax keyword javascriptBOMWindowProp self sidebar status statusbar toolbar top visualViewport
+syntax keyword javascriptBOMWindowProp window
 syntax cluster props add=javascriptBOMWindowProp
 if exists("did_javascript_hilink") | HiLink javascriptBOMWindowProp Structure
 endif

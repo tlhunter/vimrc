@@ -1,0 +1,6 @@
+syntax keyword javascriptGlobal Geolocation nextgroup=@javascriptAfterIdentifier
+syntax keyword javascriptGeolocationMethod contained getCurrentPosition watchPosition nextgroup=javascriptFuncCallArg
+syntax keyword javascriptGeolocationMethod contained clearWatch nextgroup=javascriptFuncCallArg
+syntax cluster props add=javascriptGeolocationMethod
+if exists("did_javascript_hilink") | HiLink javascriptGeolocationMethod Keyword
+endif

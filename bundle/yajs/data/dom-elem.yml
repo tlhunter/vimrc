@@ -1,4 +1,4 @@
-javascriptDOMElemProp:
+javascriptDOMElemAttrs:
     - accessKey
     - clientHeight
     - clientLeft
@@ -24,7 +24,9 @@ javascriptDOMElemProp:
     - outerHTML
     - style
 
-javascriptDOMElemMethod:
+javascriptDOMElemFuncs:
+    - animate
+    - closest
     - getAttributeNS
     - getAttributeNode
     - getAttributeNodeNS

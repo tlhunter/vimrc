@@ -1,0 +1,33 @@
+syntax keyword javascriptGlobal PaymentRequest nextgroup=@javascriptAfterIdentifier
+syntax keyword javascriptPaymentMethod contained show abort canMakePayment nextgroup=javascriptFuncCallArg
+syntax cluster props add=javascriptPaymentMethod
+if exists("did_javascript_hilink") | HiLink javascriptPaymentMethod Keyword
+endif
+syntax keyword javascriptPaymentProp contained shippingAddress shippingOption result
+syntax cluster props add=javascriptPaymentProp
+if exists("did_javascript_hilink") | HiLink javascriptPaymentProp Keyword
+endif
+syntax keyword javascriptPaymentEvent contained onshippingaddresschange onshippingoptionchange
+if exists("did_javascript_hilink") | HiLink javascriptPaymentEvent Keyword
+endif
+syntax keyword javascriptPaymentResponseMethod contained complete nextgroup=javascriptFuncCallArg
+syntax cluster props add=javascriptPaymentResponseMethod
+if exists("did_javascript_hilink") | HiLink javascriptPaymentResponseMethod Keyword
+endif
+syntax keyword javascriptPaymentResponseProp contained details methodName payerEmail
+syntax keyword javascriptPaymentResponseProp contained payerPhone shippingAddress
+syntax keyword javascriptPaymentResponseProp contained shippingOption
+syntax cluster props add=javascriptPaymentResponseProp
+if exists("did_javascript_hilink") | HiLink javascriptPaymentResponseProp Keyword
+endif
+syntax keyword javascriptPaymentAddressProp contained addressLine careOf city country
+syntax keyword javascriptPaymentAddressProp contained country dependentLocality languageCode
+syntax keyword javascriptPaymentAddressProp contained organization phone postalCode
+syntax keyword javascriptPaymentAddressProp contained recipient region sortingCode
+syntax cluster props add=javascriptPaymentAddressProp
+if exists("did_javascript_hilink") | HiLink javascriptPaymentAddressProp Keyword
+endif
+syntax keyword javascriptPaymentShippingOptionProp contained id label amount selected
+syntax cluster props add=javascriptPaymentShippingOptionProp
+if exists("did_javascript_hilink") | HiLink javascriptPaymentShippingOptionProp Keyword
+endif

@@ -1,6 +1,7 @@
 javascriptBOMNavigatorProp:
     - battery
     - buildID
+    - connection
     - cookieEnabled
     - doNotTrack
     - maxTouchPoints
@@ -29,6 +30,7 @@ javascriptBOMNavigatorProp:
 
 javascriptBOMNavigatorMethod:
     - addIdleObserver
+    - geolocation
     - getDeviceStorage
     - getDeviceStorages
     - getGamepads
@@ -40,6 +42,7 @@ javascriptBOMNavigatorMethod:
     - registerContentHandler
     - removeIdleObserver
     - requestWakeLock
+    - share
     - vibrate
     # - id.get
     # - id.getVerifiedEmail

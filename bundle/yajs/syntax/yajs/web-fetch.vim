@@ -17,6 +17,7 @@ syntax cluster props add=javascriptRequestMethod
 if exists("did_javascript_hilink") | HiLink javascriptRequestMethod Keyword
 endif
 syntax keyword javascriptResponseProp contained type url status statusText headers
+syntax keyword javascriptResponseProp contained redirected
 syntax cluster props add=javascriptResponseProp
 if exists("did_javascript_hilink") | HiLink javascriptResponseProp Keyword
 endif

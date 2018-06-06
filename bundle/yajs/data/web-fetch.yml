@@ -33,6 +33,7 @@ javascriptResponseProp:
     - status
     - statusText
     - headers
+    - redirected
 
 javascriptResponseMethod:
     - clone

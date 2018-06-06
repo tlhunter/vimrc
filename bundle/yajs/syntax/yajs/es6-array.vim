@@ -5,10 +5,10 @@ if exists("did_javascript_hilink") | HiLink javascriptArrayStaticMethod Keyword
 endif
 syntax keyword javascriptArrayMethod contained concat copyWithin entries every fill nextgroup=javascriptFuncCallArg
 syntax keyword javascriptArrayMethod contained filter find findIndex forEach indexOf nextgroup=javascriptFuncCallArg
-syntax keyword javascriptArrayMethod contained join keys lastIndexOf map pop push nextgroup=javascriptFuncCallArg
-syntax keyword javascriptArrayMethod contained reduce reduceRight reverse shift slice nextgroup=javascriptFuncCallArg
-syntax keyword javascriptArrayMethod contained some sort splice toLocaleString toSource nextgroup=javascriptFuncCallArg
-syntax keyword javascriptArrayMethod contained toString unshift nextgroup=javascriptFuncCallArg
+syntax keyword javascriptArrayMethod contained includes join keys lastIndexOf map nextgroup=javascriptFuncCallArg
+syntax keyword javascriptArrayMethod contained pop push reduce reduceRight reverse nextgroup=javascriptFuncCallArg
+syntax keyword javascriptArrayMethod contained shift slice some sort splice toLocaleString nextgroup=javascriptFuncCallArg
+syntax keyword javascriptArrayMethod contained toSource toString unshift nextgroup=javascriptFuncCallArg
 syntax cluster props add=javascriptArrayMethod
 if exists("did_javascript_hilink") | HiLink javascriptArrayMethod Keyword
 endif

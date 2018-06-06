@@ -1,0 +1,8 @@
+javascriptGlobal:
+    - Geolocation
+
+javascriptGeolocationMethod:
+    - getCurrentPosition
+    - watchPosition
+    - clearWatch
+

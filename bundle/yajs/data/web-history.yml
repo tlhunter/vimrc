@@ -4,6 +4,7 @@ javascriptBOMHistoryProp:
   - next
   - previous
   - state
+  - scrollRestoration
 
 javascriptBOMHistoryMethod:
   - back

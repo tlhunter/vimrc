@@ -10,3 +10,4 @@ javascriptPromiseStaticMethod:
 javascriptPromiseMethod:
   - then
   - catch
+  - finally

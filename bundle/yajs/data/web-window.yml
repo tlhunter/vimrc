@@ -55,6 +55,7 @@ javascriptBOMWindowProp:
     - statusbar
     - toolbar
     - top
+    - visualViewport
     - window
 
 javascriptBOMWindowMethod:
