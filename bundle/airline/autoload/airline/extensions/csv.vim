@@ -1,5 +1,7 @@
-" MIT License. Copyright (c) 2013-2014 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
+
+scriptencoding utf-8
 
 if !get(g:, 'loaded_csv', 0) && !exists(':Table')
   finish
@@ -28,4 +30,3 @@ endfunction
 function! airline#extensions#csv#init(ext)
   call a:ext.add_statusline_func('airline#extensions#csv#apply')
 endfunction
-

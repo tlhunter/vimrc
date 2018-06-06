@@ -1,5 +1,7 @@
-" MIT License. Copyright (c) 2013-2014 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
+
+scriptencoding utf-8
 
 if !get(g:, 'loaded_ctrlp', 0)
   finish
@@ -77,4 +79,3 @@ function! airline#extensions#ctrlp#init(ext)
   call a:ext.add_statusline_func('airline#extensions#ctrlp#apply')
   call a:ext.add_theme_func('airline#extensions#ctrlp#load_theme')
 endfunction
-

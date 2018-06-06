@@ -1,5 +1,7 @@
-" MIT License. Copyright (c) 2013-2014 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
+
+scriptencoding utf-8
 
 let s:parts = {}
 
@@ -51,11 +53,29 @@ endfunction
 " }}}
 
 function! airline#parts#mode()
-  return get(w:, 'airline_current_mode', '')
+  return airline#util#shorten(get(w:, 'airline_current_mode', ''), 79, 1)
+endfunction
+
+function! airline#parts#crypt()
+  return g:airline_detect_crypt && exists("+key") && !empty(&key) ? g:airline_symbols.crypt : ''
 endfunction
 
 function! airline#parts#paste()
   return g:airline_detect_paste && &paste ? g:airline_symbols.paste : ''
+endfunction
+
+function! airline#parts#spell()
+  let spelllang = g:airline_detect_spelllang ? printf(" [%s]", toupper(substitute(&spelllang, ',', '/', 'g'))) : ''
+  if g:airline_detect_spell && &spell
+    if winwidth(0) >= 90
+      return g:airline_symbols.spell . spelllang
+    elseif winwidth(0) >= 70
+      return g:airline_symbols.spell
+    else
+      return split(g:airline_symbols.spell, '\zs')[0]
+    endif
+  endif
+  return ''
 endfunction
 
 function! airline#parts#iminsert()
@@ -66,14 +86,29 @@ function! airline#parts#iminsert()
 endfunction
 
 function! airline#parts#readonly()
-  return &readonly ? g:airline_symbols.readonly : ''
+  " only consider regular buffers (e.g. ones that represent actual files, 
+  " but not special ones like e.g. NERDTree)
+  if !empty(&buftype) || airline#util#ignore_buf(bufname('%'))
+    return ''
+  endif
+  if &readonly && !filereadable(bufname('%'))
+    return '[noperm]'
+  else
+    return &readonly ? g:airline_symbols.readonly : ''
+  endif
 endfunction
 
 function! airline#parts#filetype()
-  return &filetype
+  return winwidth(0) < 90 && strlen(&filetype) > 3 ? matchstr(&filetype, '...'). (&encoding is? 'utf-8' ? '…' : '>') : &filetype
 endfunction
 
 function! airline#parts#ffenc()
-  return printf('%s%s', &fenc, strlen(&ff) > 0 ? '['.&ff.']' : '')
+  let expected = get(g:, 'airline#parts#ffenc#skip_expected_string', '')
+  let bomb     = &l:bomb ? '[BOM]' : ''
+  let ff       = strlen(&ff) ? '['.&ff.']' : ''
+  if expected is# &fenc.bomb.ff
+    return ''
+  else
+    return &fenc.bomb.ff
+  endif
 endfunction
-

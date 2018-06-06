@@ -1,5 +1,7 @@
-" MIT License. Copyright (c) 2013-2014 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
+
+scriptencoding utf-8
 
 if !exists('*bufferline#get_status_string')
   finish
@@ -18,6 +20,10 @@ function! airline#extensions#bufferline#init(ext)
     let g:bufferline_separator = g:airline_symbols.space
   endif
 
-  call airline#parts#define_raw('file', '%{bufferline#refresh_status()}'.bufferline#get_status_string())
+  if exists("+autochdir") && &autochdir == 1
+    " if 'acd' is set, vim-airline uses the path section, so we need ot redefine this here as well
+    call airline#parts#define_raw('path', '%{bufferline#refresh_status()}'.bufferline#get_status_string())
+  else
+    call airline#parts#define_raw('file', '%{bufferline#refresh_status()}'.bufferline#get_status_string())
+  endif
 endfunction
-

@@ -1,5 +1,7 @@
-" MIT License. Copyright (c) 2013-2014 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
+
+scriptencoding utf-8
 
 " we don't actually want this loaded :P
 finish
@@ -51,4 +53,3 @@ function! airline#extensions#example#get_cats()
   endfor
   return cats
 endfunction
-

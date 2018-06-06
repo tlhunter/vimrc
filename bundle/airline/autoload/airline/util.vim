@@ -1,8 +1,27 @@
-" MIT License. Copyright (c) 2013-2014 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
+
+" TODO: Try to cache winwidth(0) function
+" e.g. store winwidth per window and access that, only update it, if the size
+" actually changed.
+scriptencoding utf-8
 
 call airline#init#bootstrap()
 let s:spc = g:airline_symbols.space
+
+function! airline#util#shorten(text, winwidth, minwidth, ...)
+  if winwidth(0) < a:winwidth && len(split(a:text, '\zs')) > a:minwidth
+    if get(a:000, 0, 0)
+      " shorten from tail
+      return '…'.matchstr(a:text, '.\{'.a:minwidth.'}$')
+    else
+      " shorten from beginning of string
+      return matchstr(a:text, '^.\{'.a:minwidth.'}').'…'
+    endif
+  else
+    return a:text
+  endif
+endfunction
 
 function! airline#util#wrap(text, minwidth)
   if a:minwidth > 0 && winwidth(0) < a:minwidth
@@ -17,6 +36,12 @@ function! airline#util#append(text, minwidth)
   endif
   let prefix = s:spc == "\ua0" ? s:spc : s:spc.s:spc
   return empty(a:text) ? '' : prefix.g:airline_left_alt_sep.s:spc.a:text
+endfunction
+
+function! airline#util#warning(msg)
+  echohl WarningMsg
+  echomsg "airline: ".a:msg
+  echohl Normal
 endfunction
 
 function! airline#util#prepend(text, minwidth)
@@ -62,3 +87,35 @@ else
   endfunction
 endif
 
+" Compatibility wrapper for strchars, in case this vim version does not
+" have it natively
+function! airline#util#strchars(str)
+  if exists('*strchars')
+    return strchars(a:str)
+  else
+    return strlen(substitute(a:str, '.', 'a', 'g'))
+  endif
+endfunction
+
+function! airline#util#ignore_buf(name)
+  let pat = '\c\v'. get(g:, 'airline#ignore_bufadd_pat', '').
+        \ get(g:, 'airline#extensions#tabline#ignore_bufadd_pat', 
+        \ 'gundo|undotree|vimfiler|tagbar|nerd_tree|startify')
+  return match(a:name, pat) > -1
+endfunction
+
+function! airline#util#has_fugitive()
+  return exists('*fugitive#head') || exists('*FugitiveHead')
+endfunction
+
+function! airline#util#has_lawrencium()
+  return exists('*lawrencium#statusline')
+endfunction
+
+function! airline#util#has_vcscommand()
+  return get(g:, 'airline#extensions#branch#use_vcscommand', 0) && exists('*VCSCommandGetStatusLine')
+endfunction
+
+function! airline#util#has_custom_scm()
+  return !empty(get(g:, 'airline#extensions#branch#custom_head', ''))
+endfunction

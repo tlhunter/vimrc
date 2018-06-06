@@ -1,5 +1,7 @@
-" MIT License. Copyright (c) 2013-2014 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
+
+scriptencoding utf-8
 
 if !exists(':ProjectCreate')
   finish
@@ -16,7 +18,13 @@ function! airline#extensions#eclim#creat_line(...)
 endfunction
 
 function! airline#extensions#eclim#get_warnings()
+  " Cache vavlues, so that it isn't called too often
+  if exists("s:eclim_errors") &&
+    \  get(b:,  'airline_changenr', 0) == changenr()
+    return s:eclim_errors
+  endif
   let eclimList = eclim#display#signs#GetExisting()
+  let s:eclim_errors = ''
 
   if !empty(eclimList)
     " Remove any non-eclim signs (see eclim#display#signs#Update)
@@ -39,15 +47,15 @@ function! airline#extensions#eclim#get_warnings()
       let errorsNumber = len(eclimList)
       let errors = "[Eclim:" . type . " line:".string(errorsLine)." (".string(errorsNumber).")]"
       if !exists(':SyntasticCheck') || SyntasticStatuslineFlag() == ''
-        return errors.(g:airline_symbols.space)
+        let s:eclim_errors = errors.(g:airline_symbols.space)
       endif
     endif
   endif
-  return ''
+  let b:airline_changenr = changenr()
+  return s:eclim_errors
 endfunction
 
 function! airline#extensions#eclim#init(ext)
   call airline#parts#define_function('eclim', 'airline#extensions#eclim#get_warnings')
   call a:ext.add_statusline_func('airline#extensions#eclim#creat_line')
 endfunction
-

@@ -1,5 +1,7 @@
-" MIT License. Copyright (c) 2013-2014 Bailey Ling.
+" MIT License. Copyright (c) 2013-2018 Bailey Ling et al.
 " vim: et ts=2 sts=2 sw=2
+
+scriptencoding utf-8
 
 if !exists(':Tmuxline')
   finish
@@ -23,4 +25,3 @@ function! airline#extensions#tmuxline#set_tmux_colors(palette)
     call tmuxline#api#snapshot(s:tmuxline_snapshot_file)
   endif
 endfunction
-
