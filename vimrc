@@ -323,14 +323,17 @@ if has("gui_running")
 			\ 'Modified'  : '!',
 			\ 'Staged'    : '+',
 			\ 'Untracked' : '?',
-			\ 'Renamed'   : 'r',
+			\ 'Renamed'   : '_',
 			\ 'Unmerged'  : '=',
 			\ 'Deleted'   : '×',
 			\ 'Dirty'     : '·',
 			\ 'Clean'     : '^',
-			\ 'Ignored'   : 'i',
+			\ 'Ignored'   : '*',
 			\ 'Unknown'   : '?'
 			\ }
+
+		let g:NERDTreeDirArrowExpandable = '+'
+		let g:NERDTreeDirArrowCollapsible = '~'
 
 		" Alt+n = new buffer
 		map <silent> <A-n> :enew<CR>
