@@ -355,6 +355,10 @@ if has("gui_running")
 		map <silent> <A-8> 8gt
 		map <silent> <A-9> 9gt
 
+		" Shift+Insert will paste text instead of inserting '<S-Insert>'
+		map <silent> <S-Insert> "+p
+		imap <silent> <S-Insert> <Esc>"+pa
+
 	elseif has("gui_win32") " Windows
 		" WHAT ARE YOU DOING WITH YOUR LIFE?!
 	endif
