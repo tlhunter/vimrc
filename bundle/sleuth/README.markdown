@@ -14,12 +14,13 @@ indenting related configuration from your vimrc.
 
 ## Installation
 
-If you don't have a preferred installation method, I recommend
-installing [pathogen.vim](https://github.com/tpope/vim-pathogen), and
-then simply copy and paste:
+Install using your favorite package manager, or use Vim's built-in package
+support:
 
-    cd ~/.vim/bundle
-    git clone git://github.com/tpope/vim-sleuth.git
+    mkdir -p ~/.vim/pack/tpope/start
+    cd ~/.vim/pack/tpope/start
+    git clone https://tpope.io/vim/sleuth.git
+    vim -u NONE -c "helptags sleuth/doc" -c q
 
 ## Notes
 
@@ -27,16 +28,11 @@ then simply copy and paste:
   hierarchy until a match is found. This means, for example, the indent for
   the first file in a brand new Ruby project might very well be derived from
   your `.irbrc`.  I consider this a feature.
-* If your file is consistently indented hard tabs, `'shiftwidth'` will be set
-  to your `'tabstop'`  Otherwise, a `'tabstop'` of 8 is enforced.
+* If your file is consistently indented with hard tabs, `'shiftwidth'` will be
+  set to your `'tabstop'`.  Otherwise, a `'tabstop'` of 8 is enforced.
 * The algorithm is rolled from scratch, fairly simplistic, and only lightly
   battle tested.  It's probably not (yet) as good as [DetectIndent][].
   Let me know what it fails on for you.
-
-## Contributing
-
-See the contribution guidelines for
-[pathogen.vim](https://github.com/tpope/vim-pathogen#readme).
 
 ## Self-Promotion
 
