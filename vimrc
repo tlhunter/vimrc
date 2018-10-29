@@ -249,6 +249,16 @@ if has("gui_running")
 	" Hides toolbar and scrollbars and File menu
 	set guioptions=gt
 
+	" Ctrl+A select all
+	map <C-a> ggVG
+
+	" Ctrl+C OS clipboard copy
+	vmap <C-c> "+y
+
+	" Ctrl+B OS Clipboard paste
+	map <C-b> "*p
+	imap <C-b> "*p
+
 	" Highlights the current line background
 	set cursorline
 	colorscheme hybrid
