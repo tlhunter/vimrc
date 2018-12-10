@@ -1,6 +1,6 @@
 "============================================================================
 "File:        drafter.vim
-"Description: Syntax checking plugin for syntastic.vim
+"Description: Syntax checking plugin for syntastic
 "Maintainer:  LCD 47 <lcd047 at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -34,7 +34,7 @@ function! SyntaxCheckers_apiblueprint_drafter_GetLocList() dict
         \ 'makeprg': makeprg,
         \ 'errorformat': errorformat,
         \ 'defaults': {'bufnr': bufnr('')},
-        \ 'returns': [0, 2] })
+        \ 'returns': [0, 2, 3, 4] })
 
     for e in loclist
         let matches = matchlist(e['text'], '\v^(.+); line (\d+), column (\d+) - line (\d+), column (\d+)$')

@@ -1,6 +1,6 @@
 "============================================================================
 "File:        cppcheck.vim
-"Description: Syntax checking plugin for syntastic.vim using cppcheck.pl
+"Description: Syntax checking plugin for syntastic using cppcheck.pl
 "Maintainer:  LCD 47 <lcd047 at gmail dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -14,16 +14,14 @@ if exists('g:loaded_syntastic_c_cppcheck_checker')
 endif
 let g:loaded_syntastic_c_cppcheck_checker = 1
 
-if !exists('g:syntastic_cppcheck_config_file')
-    let g:syntastic_cppcheck_config_file = '.syntastic_cppcheck_config'
-endif
-
 let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_c_cppcheck_GetLocList() dict
+    let buf = bufnr('')
+
     let makeprg = self.makeprgBuild({
-        \ 'args': syntastic#c#ReadConfig(g:syntastic_cppcheck_config_file),
+        \ 'args': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'cppcheck_config_file')),
         \ 'args_after': '-q --enable=style' })
 
     let errorformat =

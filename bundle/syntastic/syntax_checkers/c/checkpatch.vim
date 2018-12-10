@@ -1,6 +1,6 @@
 "============================================================================
 "File:        checkpatch.vim
-"Description: Syntax checking plugin for syntastic.vim using checkpatch.pl
+"Description: Syntax checking plugin for syntastic using checkpatch.pl
 "Maintainer:  Daniel Walker <dwalker at fifo99 dot com>
 "License:     This program is free software. It comes without any warranty,
 "             to the extent permitted by applicable law. You can redistribute
@@ -39,6 +39,7 @@ function! SyntaxCheckers_c_checkpatch_GetLocList() dict
     let makeprg = self.makeprgBuild({ 'args_after': '--no-summary --no-tree --terse --file' })
 
     let errorformat =
+        \ '%W%f:%l: CHECK: %m,' .
         \ '%f:%l: %tARNING: %m,' .
         \ '%f:%l: %tRROR: %m'
 

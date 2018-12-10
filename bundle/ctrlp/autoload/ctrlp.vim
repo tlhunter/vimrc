@@ -1151,6 +1151,7 @@ fu! ctrlp#acceptfile(...)
 			\ md == 't' || s:splitwin == 1 ? ( useb ? 'tab sb' : 'tabe' ) :
 			\ md == 'h' || s:splitwin == 2 ? ( useb ? 'sb' : 'new' ) :
 			\ md == 'v' || s:splitwin == 3 ? ( useb ? 'vert sb' : 'vne' ) :
+			\ &bt == 'help' ? 'b' :
 			\ call('ctrlp#normcmd', useb ? ['b', 'bo vert sb'] : ['e'])
 		" Reset &switchbuf option
 		let [swb, &swb] = [&swb, '']
@@ -1590,7 +1591,7 @@ fu! s:formatline(str)
 		let bufnr = s:bufnrfilpath(str)[0]
 		let parts = s:bufparts(bufnr)
 		let str = printf('%'.s:bufnr_width.'s', bufnr)
-		if s:has_conceal
+		if s:has_conceal && has('syntax_items')
 			let str .= printf(' %-13s %s%-36s',
 				\ '<bi>'.parts[0].'</bi>',
 				\ '<bn>'.parts[1], '{'.parts[2].'}</bn>')
@@ -2014,7 +2015,7 @@ fu! s:bufnrfilpath(line)
 		let filpath = s:dyncwd.s:lash().a:line
 	en
 	let filpath = fnamemodify(filpath, ':p')
-	let bufnr = bufnr('^'.filpath.'$')
+	let bufnr = bufnr('^'.fnameescape(filpath).'$')
 	if (!filereadable(filpath) && bufnr < 1)
 		if (a:line =~ '[\/]\?\[\d\+\*No Name\]$')
 			let bufnr = str2nr(matchstr(a:line, '[\/]\?\[\zs\d\+\ze\*No Name\]$'))
@@ -2566,15 +2567,24 @@ fu! ctrlp#getvar(var)
 endf
 "}}}1
 " * Initialization {{{1
-fu! ctrlp#setlines(...)
+fu! s:setlines_pre(...)
 	if a:0 | let s:itemtype = a:1 | en
 	cal s:modevar()
+	let g:ctrlp_lines = []
+endf
+
+fu! s:setlines_post()
 	let inits = {'fil': 'ctrlp#files()', 'buf': 'ctrlp#buffers()', 'mru': 'ctrlp#mrufiles#list()'}
 	let types = map(copy(g:ctrlp_types), 'inits[v:val]')
 	if !empty(g:ctrlp_ext_vars)
 		cal map(copy(g:ctrlp_ext_vars), 'add(types, v:val["init"])')
 	en
 	let g:ctrlp_lines = eval(types[s:itemtype])
+endf
+
+fu! ctrlp#setlines(...)
+	cal call('s:setlines_pre', a:000)
+	cal s:setlines_post()
 endf
 
 " Returns [lname, sname]
@@ -2593,6 +2603,20 @@ fu! s:ExitIfSingleCandidate()
 		return 1
 	en
 	return 0
+endfu
+
+fu! s:IsBuiltin()
+	let builtins = ['tag', 'dir', 'bft', 'rts', 'bkd', 'lns', 'chs', 'mix', 'udo', 'qfx']
+	let curtype = s:getextvar('sname')
+	return s:itemtype < len(s:coretypes) || index(builtins, curtype) > -1
+endfu
+
+fu! s:DetectFileType(type, ft)
+	if s:IsBuiltin() || empty(a:ft) || a:ft ==# 'ctrlp'
+		retu 'ctrlp'
+	el
+		retu 'ctrlp.' . a:ft
+	en
 endfu
 
 fu! ctrlp#init(type, ...)
@@ -2617,7 +2641,16 @@ fu! ctrlp#init(type, ...)
 			retu
 		en
 	en
-	cal ctrlp#setlines(s:settype(type))
+	" Fixed issue ctrlpvim/ctrlp.vim#463 : Opening 'ctrlp' in certain modes
+	" (':CtrlPBufTag', ':CtrlPLine') seems to trigger a partially deffective
+	" intialisation (for example, syntax highlighting not working as expected).
+	" Fix: ctrlp#setlines() split in two, as the second part (now in
+	" s:setlines_post()) seems to need '&filetype', and s:DetectFileType() seems
+	" to need the first part of the old ctrlp#setlines() (now in
+	" s:setlines_pre()).
+	cal s:setlines_pre(s:settype(type))
+	let &filetype = s:DetectFileType(type, &filetype)
+	cal s:setlines_post()
 	cal ctrlp#syntax()
 	cal s:SetDefTxt()
 	let curName = s:CurTypeName()

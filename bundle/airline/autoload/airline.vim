@@ -7,6 +7,11 @@ let g:airline_statusline_funcrefs = get(g:, 'airline_statusline_funcrefs', [])
 
 let s:sections = ['a','b','c','gutter','x','y','z', 'error', 'warning']
 let s:inactive_funcrefs = []
+let s:contexts = {}
+let s:core_funcrefs = [
+      \ function('airline#extensions#apply'),
+      \ function('airline#extensions#default#apply') ]
+
 
 function! airline#add_statusline_func(name)
   call airline#add_statusline_funcref(function(a:name))
@@ -14,9 +19,7 @@ endfunction
 
 function! airline#add_statusline_funcref(function)
   if index(g:airline_statusline_funcrefs, a:function) >= 0
-    echohl WarningMsg
-    echo 'The airline statusline funcref '.string(a:function).' has already been added.'
-    echohl NONE
+    call airline#util#warning(printf('The airline statusline funcref "%s" has already been added.', string(a:function)))
     return
   endif
   call add(g:airline_statusline_funcrefs, a:function)
@@ -52,42 +55,63 @@ function! airline#load_theme()
   call airline#update_statusline()
 endfunction
 
-function! airline#switch_theme(name)
+" Load an airline theme
+function! airline#switch_theme(name, ...)
+  let silent = get(a:000, '0', 0)
+  " get all available themes
+  let themes = airline#util#themes('')
+  let err = 0
   try
-    let palette = g:airline#themes#{a:name}#palette "also lazy loads the theme
-    let g:airline_theme = a:name
-  catch
-    echohl WarningMsg | echo 'The specified theme cannot be found.' | echohl NONE
+    if index(themes, a:name) == -1
+      " Theme not available
+      if !silent
+        call airline#util#warning(printf('The specified theme "%s" cannot be found.', a:name))
+      endif
+      throw "not-found"
+      let err = 1
+    else
+      exe "ru autoload/airline/themes/". a:name. ".vim"
+      let g:airline_theme = a:name
+    endif
+  catch /^Vim/
+    " catch only Vim errors, not "not-found"
+    call airline#util#warning(printf('There is an error in theme "%s".', a:name))
+    if &vbs
+      call airline#util#warning(v:exception)
+    endif
+    let err = 1
+  endtry
+
+  if err
     if exists('g:airline_theme')
       return
     else
       let g:airline_theme = 'dark'
     endif
-  endtry
+  endif
 
-  let w:airline_lastmode = ''
+  unlet! w:airline_lastmode
   call airline#load_theme()
 
-  silent doautocmd User AirlineAfterTheme
+  call airline#util#doautocmd('AirlineAfterTheme')
 
   " this is required to prevent clobbering the startup info message, i don't know why...
   call airline#check_mode(winnr())
 endfunction
 
+" Try to load the right theme for the current colorscheme
 function! airline#switch_matching_theme()
   if exists('g:colors_name')
     let existing = g:airline_theme
-    let theme = substitute(tolower(g:colors_name), '-', '_', 'g')
+    let theme = tr(tolower(g:colors_name), '-', '_')
     try
-      let palette = g:airline#themes#{theme}#palette
-      call airline#switch_theme(theme)
+      call airline#switch_theme(theme, 1)
       return 1
     catch
       for map in items(g:airline_theme_map)
         if match(g:colors_name, map[0]) > -1
           try
-            let palette = g:airline#themes#{map[1]}#palette
-            call airline#switch_theme(map[1])
+            call airline#switch_theme(map[1], 1)
           catch
             call airline#switch_theme(existing)
           endtry
@@ -99,31 +123,57 @@ function! airline#switch_matching_theme()
   return 0
 endfunction
 
+" Update the statusline
 function! airline#update_statusline()
   if airline#util#getwinvar(winnr(), 'airline_disabled', 0)
     return
   endif
-  for nr in filter(range(1, winnr('$')), 'v:val != winnr()')
-    if airline#util#getwinvar(nr, 'airline_disabled', 0)
-      continue
-    endif
-    call setwinvar(nr, 'airline_active', 0)
-    let context = { 'winnr': nr, 'active': 0, 'bufnr': winbufnr(nr) }
-    call s:invoke_funcrefs(context, s:inactive_funcrefs)
-  endfor
+  let range = filter(range(1, winnr('$')), 'v:val != winnr()')
+  " create inactive statusline
+  call airline#update_statusline_inactive(range)
 
   unlet! w:airline_render_left w:airline_render_right
   exe 'unlet! ' 'w:airline_section_'. join(s:sections, ' w:airline_section_')
 
+  " Now create the active statusline
   let w:airline_active = 1
   let context = { 'winnr': winnr(), 'active': 1, 'bufnr': winbufnr(winnr()) }
   call s:invoke_funcrefs(context, g:airline_statusline_funcrefs)
 endfunction
 
-let s:contexts = {}
-let s:core_funcrefs = [
-      \ function('airline#extensions#apply'),
-      \ function('airline#extensions#default#apply') ]
+" Function to be called to make all statuslines inactive
+" Triggered on FocusLost autocommand
+function! airline#update_statusline_focuslost()
+  if get(g:, 'airline_focuslost_inactive', 0)
+    let bufnr=bufnr('%')
+    call airline#highlighter#highlight_modified_inactive(bufnr)
+    call airline#highlighter#highlight(['inactive'], bufnr)
+    call airline#update_statusline_inactive(range(1, winnr('$')))
+  endif
+endfunction
+
+" Function to draw inactive statuslines for inactive windows
+function! airline#update_statusline_inactive(range)
+  if airline#util#getwinvar(winnr(), 'airline_disabled', 0)
+    return
+  endif
+  for nr in a:range
+    if airline#util#getwinvar(nr, 'airline_disabled', 0)
+      continue
+    endif
+    call setwinvar(nr, 'airline_active', 0)
+    let context = { 'winnr': nr, 'active': 0, 'bufnr': winbufnr(nr) }
+    if get(g:, 'airline_inactive_alt_sep', 0)
+      call extend(context, {
+            \ 'left_sep': g:airline_left_alt_sep,
+            \ 'right_sep': g:airline_right_alt_sep }, 'keep')
+    endif
+    call s:invoke_funcrefs(context, s:inactive_funcrefs)
+  endfor
+endfunction
+
+" Gather output from all funcrefs which will later be returned by the
+" airline#statusline() function
 function! s:invoke_funcrefs(context, funcrefs)
   let builder = airline#builder#new(a:context)
   let err = airline#util#exec_funcrefs(a:funcrefs + s:core_funcrefs, builder, a:context)
@@ -134,6 +184,8 @@ function! s:invoke_funcrefs(context, funcrefs)
   endif
 endfunction
 
+" Main statusline function per window
+" will be set to the statusline option
 function! airline#statusline(winnr)
   if has_key(s:contexts, a:winnr)
     return '%{airline#check_mode('.a:winnr.')}'.s:contexts[a:winnr].line
@@ -143,21 +195,39 @@ function! airline#statusline(winnr)
   return ''
 endfunction
 
+" Check if mode as changed
 function! airline#check_mode(winnr)
+  if !has_key(s:contexts, a:winnr)
+    return ''
+  endif
   let context = s:contexts[a:winnr]
 
   if get(w:, 'airline_active', 1)
-    let l:m = mode()
+    let l:m = mode(1)
     if l:m ==# "i"
       let l:mode = ['insert']
-    elseif l:m ==# "R"
+    elseif l:m[0] ==# "i"
+      let l:mode = ['insert']
+    elseif l:m ==# "Rv"
+      let l:mode =['replace']
+    elseif l:m[0] ==# "R"
       let l:mode = ['replace']
-    elseif l:m =~# '\v(v|V||s|S|)'
+    elseif l:m[0] =~# '\v(v|V||s|S|)'
       let l:mode = ['visual']
     elseif l:m ==# "t"
       let l:mode = ['terminal']
+    elseif l:m[0] ==# "c"
+      let l:mode = ['commandline']
+    elseif l:m ==# "no"   " does not work, most likely, Vim does not refresh the statusline in OP mode
+      let l:mode = ['normal']
+    elseif l:m[0:1] ==# 'ni'
+      let l:mode = ['normal']
+      let l:m = 'ni'
     else
       let l:mode = ['normal']
+    endif
+    if index(['Rv', 'no', 'ni', 'ix', 'ic'], l:m) == -1
+      let l:m = l:m[0]
     endif
     let w:airline_current_mode = get(g:airline_mode_map, l:m, l:m)
   else
@@ -189,6 +259,7 @@ function! airline#check_mode(winnr)
   if get(w:, 'airline_lastmode', '') != mode_string
     call airline#highlighter#highlight_modified_inactive(context.bufnr)
     call airline#highlighter#highlight(l:mode, context.bufnr)
+    call airline#util#doautocmd('AirlineModeChanged')
     let w:airline_lastmode = mode_string
   endif
 

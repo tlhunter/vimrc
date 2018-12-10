@@ -37,7 +37,7 @@ endfunction
 
 function! s:po_output(buf, file)
   if !empty(a:buf)
-    let b:airline_po_stats = printf("[%s]", a:buf)
+    let b:airline_po_stats = printf("%s", a:buf)
   else
     let b:airline_po_stats = ''
   endif
@@ -123,7 +123,7 @@ if v:version >= 800 && has("job")
     let s:po_jobs[a:file] = id
   endfunction
 
-  function airline#async#vim_vcs_untracked(config, file)
+  function! airline#async#vim_vcs_untracked(config, file)
     if g:airline#init#is_windows && &shell =~ 'cmd'
       let cmd = a:config['cmd'] . shellescape(a:file)
     else

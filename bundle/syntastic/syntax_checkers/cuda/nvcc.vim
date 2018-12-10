@@ -1,7 +1,6 @@
 "============================================================================
 "File:        cuda.vim
-"Description: Syntax checking plugin for syntastic.vim
-"
+"Description: Syntax checking plugin for syntastic
 "Author:      Hannes Schulz <schulz at ais dot uni-bonn dot de>
 "
 "============================================================================
@@ -15,15 +14,34 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
-    if exists('g:syntastic_cuda_arch')
-        let arch_flag = '-arch=' . g:syntastic_cuda_arch
-    else
-        let arch_flag = ''
+    let buf = bufnr('')
+    let arch_flag = syntastic#util#bufVar(buf, 'cuda_arch')
+    if arch_flag !=# ''
+        let arch_flag = '-arch=' . arch_flag
+        call syntastic#log#oneTimeWarn('variable g:syntastic_cuda_arch is deprecated, ' .
+            \ 'please add ' . string(arch_flag) . ' to g:syntastic_cuda_nvcc_args instead')
     endif
-    let makeprg =
-        \ self.getExecEscaped() . ' ' . arch_flag .
-        \ ' --cuda -O0 -I . -Xcompiler -fsyntax-only ' .
-        \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
+
+    let build_opts = {}
+    let dummy = ''
+    if index(['h', 'hpp', 'cuh'], fnamemodify(bufname(buf), ':e'), 0, 1) >= 0
+        if syntastic#util#bufVar(buf, 'cuda_check_header', 0)
+            let dummy = fnamemodify(bufname(buf), ':p:h') . syntastic#util#Slash() . '.syntastic_dummy.cu'
+            let build_opts = {
+                \ 'exe_before': 'echo > ' . syntastic#util#shescape(dummy) . ' ;',
+                \ 'fname_before': '.syntastic_dummy.cu -include' }
+        else
+            return []
+        endif
+    endif
+
+    call extend(build_opts, {
+        \ 'args_before': arch_flag . ' --cuda -O0 -I .',
+        \ 'args': syntastic#c#ReadConfig(syntastic#util#bufVar(buf, 'cuda_config_file')),
+        \ 'args_after': '-Xcompiler -fsyntax-only',
+        \ 'tail_after': syntastic#c#NullOutput() })
+
+    let makeprg = self.makeprgBuild(build_opts)
 
     let errorformat =
         \ '%*[^"]"%f"%*\D%l: %m,'.
@@ -41,19 +59,24 @@ function! SyntaxCheckers_cuda_nvcc_GetLocList() dict
         \ '%DMaking %*\a in %f,'.
         \ '%f|%l| %m'
 
-    if expand('%', 1) =~? '\m\%(.h\|.hpp\|.cuh\)$'
-        if exists('g:syntastic_cuda_check_header')
-            let makeprg =
-                \ 'echo > .syntastic_dummy.cu ; ' .
-                \ self.getExecEscaped() . ' ' . arch_flag .
-                \ ' --cuda -O0 -I . .syntastic_dummy.cu -Xcompiler -fsyntax-only -include ' .
-                \ syntastic#util#shexpand('%') . ' ' . syntastic#c#NullOutput()
-        else
-            return []
+    let loclist = SyntasticMake({
+        \ 'makeprg': makeprg,
+        \ 'errorformat': errorformat,
+        \ 'defaults': {'type': 'E'} })
+
+    for e in loclist
+        let pat = matchstr(e['text'], '\m\c^\s*warning:\s*\zs.*')
+        if pat !=# ''
+            let e['text'] = pat
+            let e['type'] = 'W'
         endif
+    endfor
+
+    if dummy !=# ''
+        call delete(dummy)
     endif
 
-    return SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
+    return loclist
 endfunction
 
 call g:SyntasticRegistry.CreateAndRegisterChecker({
