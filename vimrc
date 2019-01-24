@@ -252,8 +252,8 @@ let g:airline#extensions#tabline#left_alt_sep = ' '
 
 
 "------  Text File Settings  ------
-:autocmd! BufNewFile,BufRead * set nowrap
-:autocmd! BufNewFile,BufRead *.txt,*.md,*.tex set wrap
+:autocmd! BufNewFile,BufRead * setlocal nowrap
+:autocmd! BufNewFile,BufRead *.txt,*.md,*.tex setlocal wrap
 
 
 "------  GUI Options  ------
