@@ -50,6 +50,17 @@ cmap w!! %!sudo tee > /dev/null %
 " F2 = Paste Toggle (in insert mode, pasting indented text behavior changes)
 set pastetoggle=<F2>
 
+" yyp / yyP will retain column number
+" https://vi.stackexchange.com/questions/18116/p-paste-but-keep-cursor-same-column
+function! Pcol(...) abort
+  let a:above = get(a:, 1, 0)
+  let l:col = virtcol('.')
+  execute 'normal!' a:above ? 'P' : 'p'
+  call cursor('.', l:col)
+endfunction
+nnoremap <silent> p :call Pcol(0)<CR>
+nnoremap <silent> P :call Pcol(1)<CR>
+
 " The search for the perfect color scheme...
 map <silent> <Leader>x :RandomColorScheme<CR>
 
