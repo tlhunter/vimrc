@@ -243,12 +243,16 @@ let g:vim_markdown_folding_disabled = 1
 autocmd FileType markdown setlocal spell " spell check markdown files
 
 
-"------  Airline Settings ------
-let g:airline_left_sep=''
-let g:airline_right_sep=''
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = ' '
+"------  Lightline Settings ------
+let g:lightline = {
+  \ 'active': {
+  \   'left': [ [ 'mode', 'paste' ],
+  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+  \ },
+  \ 'component_function': {
+  \   'gitbranch': 'fugitive#statusline'
+  \ },
+  \ }
 
 
 "------  Text File Settings  ------
