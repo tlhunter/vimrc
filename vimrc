@@ -6,6 +6,11 @@ set viminfo='1000,f1,:1000,/1000
 set history=1000
 
 
+"------  Clipboard  ------
+map <S-Insert> <MiddleMouse>
+map! <S-Insert> <MiddleMouse>
+" set clipboard=unnamedplus
+
 "------  Charset Init  ------
 scriptencoding utf-8
 set encoding=utf-8
@@ -65,10 +70,10 @@ nnoremap <silent> P :call Pcol(1)<CR>
 map <silent> <Leader>x :RandomColorScheme<CR>
 
 " <Leader>v = Paste
-map <Leader>v "+gP
+" map <Leader>v "+gP
 
 " <Leader>c = Copy
-map <Leader>c "+y
+" map <Leader>c "+y
 
 " Accidentally pressing Shift K will no longer open stupid man entry
 noremap K <nop>
