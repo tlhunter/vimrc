@@ -1,6 +1,0 @@
-javascriptGlobal:
-  - BigInt
-
-javascriptES6BigIntStaticMethod:
-  - asUintN
-  - asIntN
