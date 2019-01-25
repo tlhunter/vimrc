@@ -4,6 +4,7 @@ set nocompatible
 set nomodeline
 set viminfo='1000,f1,:1000,/1000
 set history=1000
+set updatetime=100
 
 
 "------  Clipboard  ------
