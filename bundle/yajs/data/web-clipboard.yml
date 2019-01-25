@@ -1,0 +1,8 @@
+javascriptGlobal:
+    - Clipboard
+
+javascriptClipboardMethod:
+    - read
+    - readText
+    - write
+    - writeText

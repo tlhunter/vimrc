@@ -7,7 +7,7 @@ javascriptBOM:
     # - AnimationEvent
     - App
     - Apps
-    - ArrayBuffer
+    # - ArrayBuffer
     - ArrayBufferView
     - Attr
     - AudioBuffer
@@ -139,8 +139,8 @@ javascriptBOM:
     # - FileRequest
     # - FileSystem
     # - FileSystemSync
-    - Float32Array
-    - Float64Array
+    # - Float32Array
+    # - Float64Array
     - FMRadio
     # - FocusEvent
     - FormData
@@ -247,9 +247,9 @@ javascriptBOM:
     - ImageData
     - IndexedDB
     # - InputEvent
-    - Int16Array
-    - Int32Array
-    - Int8Array
+    # - Int16Array
+    # - Int32Array
+    # - Int8Array
     # - K
     # - KeyboardEvent
     # - L
@@ -357,6 +357,7 @@ javascriptBOM:
     - Selection
     - SettingsLock
     - SettingsManager
+    # - SharedArrayBuffer
     - SharedWorker
     # - StorageEvent
     - StyleSheet
@@ -460,10 +461,10 @@ javascriptBOM:
     # - TypeInfo
     # - U
     # - UIEvent
-    - Uint16Array
-    - Uint32Array
-    - Uint8Array
-    - Uint8ClampedArray
+    # - Uint16Array
+    # - Uint32Array
+    # - Uint8Array
+    # - Uint8ClampedArray
     # - URL
     - URLSearchParams
     # - URLUtils

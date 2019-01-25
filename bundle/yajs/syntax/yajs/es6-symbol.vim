@@ -9,3 +9,7 @@ endif
 syntax keyword javascriptSymbolStaticMethod contained for keyFor nextgroup=javascriptFuncCallArg
 if exists("did_javascript_hilink") | HiLink javascriptSymbolStaticMethod Keyword
 endif
+syntax keyword javascriptSymbolProp contained description
+syntax cluster props add=javascriptSymbolProp
+if exists("did_javascript_hilink") | HiLink javascriptSymbolProp Keyword
+endif

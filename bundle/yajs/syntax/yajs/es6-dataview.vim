@@ -1,0 +1,15 @@
+syntax keyword javascriptGlobal DataView nextgroup=@javascriptAfterIdentifier
+syntax keyword javascriptDataViewProp contained buffer byteLength byteOffset
+syntax cluster props add=javascriptDataViewProp
+if exists("did_javascript_hilink") | HiLink javascriptDataViewProp Keyword
+endif
+syntax keyword javascriptTypedArrayStaticMethod contained getBigInt64 getBigUint64 nextgroup=javascriptFuncCallArg
+syntax keyword javascriptTypedArrayStaticMethod contained getFloat32 getFloat64 getInt16 nextgroup=javascriptFuncCallArg
+syntax keyword javascriptTypedArrayStaticMethod contained getInt32 getInt8 getUint16 nextgroup=javascriptFuncCallArg
+syntax keyword javascriptTypedArrayStaticMethod contained getUint32 getUint8 setBigInt64 nextgroup=javascriptFuncCallArg
+syntax keyword javascriptTypedArrayStaticMethod contained setBigUint64 setFloat32 nextgroup=javascriptFuncCallArg
+syntax keyword javascriptTypedArrayStaticMethod contained setFloat64 setInt16 setInt32 nextgroup=javascriptFuncCallArg
+syntax keyword javascriptTypedArrayStaticMethod contained setInt8 setUint16 setUint32 nextgroup=javascriptFuncCallArg
+syntax keyword javascriptTypedArrayStaticMethod contained setUint8 nextgroup=javascriptFuncCallArg
+if exists("did_javascript_hilink") | HiLink javascriptTypedArrayStaticMethod Keyword
+endif

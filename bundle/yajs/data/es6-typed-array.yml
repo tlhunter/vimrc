@@ -1,0 +1,55 @@
+javascriptGlobal:
+  - ArrayBuffer
+  - SharedArrayBuffer
+  - BigInt64Array
+  - BigUint64Array
+  - Float32Array
+  - Float64Array
+  - Int16Array
+  - Int32Array
+  - Int8Array
+  - Uint16Array
+  - Uint32Array
+  - Uint8Array
+  - Uint8ClampedArray
+
+javascriptTypedArrayStaticProp:
+  - BYTES_PER_ELEMENT
+  - length
+  - name
+
+javascriptTypedArrayStaticMethod:
+  - from
+  - of
+
+## Aready have these keywords in array
+#javascriptTypedArrayMethod:
+#  - concat
+#  - copyWithin
+#  - entries
+#  - every
+#  - fill
+#  - filter
+#  - find
+#  - findIndex
+#  - forEach
+#  - indexOf
+#  - includes
+#  - join
+#  - keys
+#  - lastIndexOf
+#  - map
+#  - pop
+#  - push
+#  - reduce
+#  - reduceRight
+#  - reverse
+#  - shift
+#  - slice
+#  - some
+#  - sort
+#  - splice
+#  - toLocaleString
+#  - toSource
+#  - toString
+#  - unshift

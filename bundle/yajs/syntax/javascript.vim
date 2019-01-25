@@ -190,11 +190,12 @@ syntax match   javascriptUnicodeEscapeSequence /\\u[0-9a-fA-F]\{4}/ nextgroup=@j
 syntax match   javascriptUnicodeEscapeSequence /\\u{[0-9a-fA-F]\+}/ nextgroup=@javascriptComments skipwhite skipempty
 
 " Number
-syntax match   javascriptNumber                /\<0[bB][01]\+\>/ nextgroup=@javascriptComments skipwhite skipempty
-syntax match   javascriptNumber                /\<0[oO][0-7]\+\>/ nextgroup=@javascriptComments skipwhite skipempty
-syntax match   javascriptNumber                /\<0[xX][0-9a-fA-F]\+\>/ nextgroup=@javascriptComments skipwhite skipempty
+syntax match   javascriptNumber                /\<0[bB][01]\+n\?\>/ nextgroup=@javascriptComments skipwhite skipempty
+syntax match   javascriptNumber                /\<0[oO][0-7]\+n\?\>/ nextgroup=@javascriptComments skipwhite skipempty
+syntax match   javascriptNumber                /\<0[xX][0-9a-fA-F]\+n\?\>/ nextgroup=@javascriptComments skipwhite skipempty
 syntax match   javascriptNumber                /[+-]\=\%(\d\+\.\d\+\|\d\+\|\.\d\+\)\%([eE][+-]\=\d\+\)\=\>/ nextgroup=@javascriptComments skipwhite skipempty
 syntax match   javascriptNumber                /[+-]\=\d\+\.\%([eE][+-]\=\d\+\)\=/ nextgroup=@javascriptComments skipwhite skipempty
+syntax match   javascriptNumber                /[+-]\=\d\+n\>/ nextgroup=@javascriptComments skipwhite skipempty
 
 syntax cluster javascriptTypes                 contains=javascriptString,javascriptTemplate,javascriptTagRef,javascriptRegexpString,javascriptNumber,javascriptBoolean,javascriptNull,javascriptArray
 syntax cluster javascriptValue                 contains=@javascriptTypes,@javascriptExpression,javascriptFuncKeyword,javascriptClassKeyword,javascriptObjectLiteral,javascriptIdentifier,javascriptIdentifierName,javascriptOperator,javascriptOpSymbols
@@ -298,6 +299,10 @@ runtime syntax/yajs/es6-map.vim
 runtime syntax/yajs/es6-set.vim
 runtime syntax/yajs/es6-proxy.vim
 runtime syntax/yajs/es6-promise.vim
+runtime syntax/yajs/es6-typed-array.vim
+runtime syntax/yajs/es6-dataview.vim
+runtime syntax/yajs/es6-bigint.vim
+runtime syntax/yajs/es6-generator.vim
 runtime syntax/yajs/ecma-402.vim
 runtime syntax/yajs/node.vim
 runtime syntax/yajs/web.vim
@@ -315,6 +320,8 @@ runtime syntax/yajs/web-broadcast.vim
 runtime syntax/yajs/web-payment.vim
 runtime syntax/yajs/web-encoding.vim
 runtime syntax/yajs/web-network.vim
+runtime syntax/yajs/web-geo.vim
+runtime syntax/yajs/web-clipboard.vim
 runtime syntax/yajs/dom-node.vim
 runtime syntax/yajs/dom-elem.vim
 runtime syntax/yajs/dom-form.vim
@@ -335,7 +342,7 @@ else
   syntax region  javascriptBlock                 matchgroup=javascriptBraces start=/\([\^:]\s\*\)\=\zs{/ end=/}/ contains=@htmlJavaScript fold
 endif
 
-syntax match   javascriptObjectMethodName      contained /\k*\ze\_s*(/ nextgroup=javascriptFuncArg skipwhite skipempty
+syntax match   javascriptObjectMethodName      contained /[a-zA-Z0-9_$]\+\ze\_s*(/ nextgroup=javascriptFuncArg skipwhite skipempty
 syntax cluster javascriptObjectMethod          contains=javascriptMethodAccessor,javascriptObjectMethodName
 
 syntax match   javascriptMethodName            contained /\k\+/ nextgroup=javascriptFuncArg skipwhite skipempty
@@ -397,8 +404,8 @@ syntax region  javascriptFuncCallArg           contained matchgroup=javascriptPa
 syntax region  javascriptEventFuncCallArg      contained matchgroup=javascriptParens start=/(/ end=/)/ contains=@javascriptEventExpression,@javascriptComments
 
 
-syntax match   javascriptArrowFuncDef          /(\_[^)]*)\_s*=>/ contains=javascriptArrowFuncArg,javascriptComma,javascriptArrowFunc nextgroup=javascriptOperator,javascriptIdentifierName,javascriptBlock,javascriptArrowFuncDef,javascriptParenObjectLiteral,javascriptClassSuper,javascriptClassKeyword,@afterArrowFunc skipwhite skipempty
-syntax match   javascriptArrowFuncDef          /[a-zA-Z_$]\k*\_s*=>/ contains=javascriptArrowFuncArg,javascriptArrowFunc nextgroup=javascriptOperator,javascriptIdentifierName,javascriptBlock,javascriptArrowFuncDef,javascriptParenObjectLiteral,javascriptClassSuper,javascriptClassKeyword,@afterArrowFunc skipwhite skipempty
+syntax match   javascriptArrowFuncDef          /(\_[^()]*)\_s*=>/ contains=javascriptArrowFuncArg,javascriptComma,javascriptArrowFunc nextgroup=@afterArrowFunc skipwhite skipempty
+syntax match   javascriptArrowFuncDef          /[a-zA-Z_$]\k*\_s*=>/ contains=javascriptArrowFuncArg,javascriptArrowFunc nextgroup=@afterArrowFunc skipwhite skipempty
 syntax match   javascriptArrowFunc             /=>/
 syntax match   javascriptArrowFuncArg          contained /[a-zA-Z_$]\k*/
 syntax region  javascriptArrowFuncArg          contained matchgroup=javascriptParens start=/(/ end=/)/ contains=@javascriptFuncArgElements nextgroup=javascriptArrowFunc skipwhite skipwhite skipempty
@@ -419,7 +426,7 @@ syntax keyword javascriptAsyncFuncKeyword      async nextgroup=javascriptFuncKey
 syntax keyword javascriptAwaitFuncKeyword      await nextgroup=@javascriptExpression skipwhite
 
 syntax cluster javascriptExpression            add=javascriptAsyncFuncKeyword,javascriptAwaitFuncKeyword
-syntax cluster afterArrowFunc                  add=javascriptAsyncFuncKeyword
+syntax cluster afterArrowFunc                  add=javascriptOperator,javascriptIdentifierName,javascriptBlock,javascriptArrowFuncDef,javascriptParenObjectLiteral,javascriptClassSuper,javascriptClassKeyword,javascriptAsyncFuncKeyword,javascriptAwaitFuncKeyword
 
 if exists("did_javascript_hilink")
   HiLink javascriptReserved             Error

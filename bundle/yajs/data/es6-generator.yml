@@ -1,0 +1,4 @@
+javascriptGeneratorMethod:
+  - next
+  - return
+  - throw

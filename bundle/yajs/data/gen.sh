@@ -16,6 +16,10 @@ files='
   es6-set
   es6-proxy
   es6-promise
+  es6-typed-array
+  es6-dataview
+  es6-bigint
+  es6-generator
   ecma-402
   node
   web
@@ -33,6 +37,7 @@ files='
   web-encoding
   web-network
   web-geo
+  web-clipboard
   dom-node
   dom-elem
   dom-form

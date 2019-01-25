@@ -96,6 +96,8 @@ javascriptBOMWindowMethod:
     - prompt
     # - releaseEvents
     - removeEventListener
+    - requestAnimationFrame
+    - requestIdleCallback
     - resizeBy
     - resizeTo
     - restore

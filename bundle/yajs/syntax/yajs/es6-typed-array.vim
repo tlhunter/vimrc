@@ -1,0 +1,9 @@
+syntax keyword javascriptGlobal ArrayBuffer SharedArrayBuffer BigInt64Array BigUint64Array
+syntax keyword javascriptGlobal Float32Array Float64Array Int16Array Int32Array Int8Array
+syntax keyword javascriptGlobal Uint16Array Uint32Array Uint8Array Uint8ClampedArray
+syntax keyword javascriptTypedArrayStaticProp contained BYTES_PER_ELEMENT length name
+if exists("did_javascript_hilink") | HiLink javascriptTypedArrayStaticProp Keyword
+endif
+syntax keyword javascriptTypedArrayStaticMethod contained from of nextgroup=javascriptFuncCallArg
+if exists("did_javascript_hilink") | HiLink javascriptTypedArrayStaticMethod Keyword
+endif

@@ -27,6 +27,7 @@ javascriptStringMethod:
   - link
   - localeCompare
   - match
+  - matchAll
   - normalize
   # - quote
   - padStart
@@ -50,7 +51,9 @@ javascriptStringMethod:
   - toString
   - toUpperCase
   - trim
-  # - trimLeft
-  # - trimRight
+  - trimStart
+  - trimEnd
+  - trimLeft
+  - trimRight
   - valueOf
 

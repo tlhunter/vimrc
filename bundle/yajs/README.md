@@ -24,10 +24,6 @@ Recommend use pathogen or Vundle. Vundle:
 
     Plugin 'othree/yajs.vim'
 
-### 2.0
-
-The major change in 2.0 is the basic object/method data comes from Mozilla's WebIDL. Current master branch is 2.0 beta. If it's not stable for you. You can `git checkout 1.6`.
-
 ### Performance Issue
 
 **yajs.vim** is not good on performance. If you are using a slow computer. You might feel lag while moving the cursor. You can try disable [cursorline](http://vimdoc.sourceforge.net/htmldoc/options.html#%27cursorline%27) and [colorcolumn](http://vimdoc.sourceforge.net/htmldoc/options.html#%27colorcolumn%27), or reduce the number of [synmaxcol](http://vimdoc.sourceforge.net/htmldoc/options.html#%27synmaxcol%27). Another possible solution is change to [neovim](https://neovim.io/)
@@ -59,6 +55,9 @@ Please send issue report to [github](https://github.com/othree/yajs.vim/issues).
 
 Changes
 -------
+
+### Version 2.1
+- Update syntax to support latest specs
 
 ### Version 2.0.1
 - Fix performance issue
