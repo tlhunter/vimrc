@@ -5,16 +5,9 @@ set nomodeline
 set viminfo='1000,f1,:1000,/1000
 set history=1000
 set updatetime=100
-
-
-"------  Clipboard  ------
-map <S-Insert> <MiddleMouse>
-map! <S-Insert> <MiddleMouse>
-" set clipboard=unnamedplus
-
-"------  Charset Init  ------
 scriptencoding utf-8
 set encoding=utf-8
+
 
 "------  Visual Options  ------
 syntax on
@@ -23,8 +16,10 @@ set nowrap
 set vb
 set ruler
 set statusline=%<%f\ %h%m%r%=%{fugitive#statusline()}\ \ %-14.(%l,%c%V%)\ %P
-let g:buftabs_only_basename=1
-let g:buftabs_marker_modified = "+"
+
+" New splits open to right and bottom
+set splitbelow
+set splitright
 
 " Toggle whitespace visibility with ,s
 nmap <Leader>s :set list!<CR>
@@ -34,9 +29,8 @@ set listchars=tab:>\ ,trail:·,extends:»,precedes:«,nbsp:×
 " <Leader>L = Toggle line numbers
 map <Leader>L :set invnumber<CR>
 
-" New splits open to right and bottom
-set splitbelow
-set splitright
+" The search for the perfect color scheme...
+map <silent> <Leader>x :RandomColorScheme<CR>
 
 
 "------  Generic Behavior  ------
@@ -53,32 +47,6 @@ set backspace=indent,eol,start
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
 
-" F2 = Paste Toggle (in insert mode, pasting indented text behavior changes)
-set pastetoggle=<F2>
-
-" yyp / yyP will retain column number
-" https://vi.stackexchange.com/questions/18116/p-paste-but-keep-cursor-same-column
-function! Pcol(...) abort
-  let a:above = get(a:, 1, 0)
-  let l:col = virtcol('.')
-  execute 'normal!' a:above ? 'P' : 'p'
-  call cursor('.', l:col)
-endfunction
-nnoremap <silent> p :call Pcol(0)<CR>
-nnoremap <silent> P :call Pcol(1)<CR>
-
-" The search for the perfect color scheme...
-map <silent> <Leader>x :RandomColorScheme<CR>
-
-" <Leader>v = Paste
-" map <Leader>v "+gP
-
-" <Leader>c = Copy
-" map <Leader>c "+y
-
-" Accidentally pressing Shift K will no longer open stupid man entry
-noremap K <nop>
-
 " Edit and Reload .vimrc files
 nmap <silent> <Leader>ev :e $MYVIMRC<CR>
 nmap <silent> <Leader>es :so $MYVIMRC<CR>
@@ -86,17 +54,34 @@ nmap <silent> <Leader>es :so $MYVIMRC<CR>
 " When pressing <Leader>cd switch to the directory of the open buffer
 map ,cd :cd %:p:h<CR>
 
+
+"------  Disable Annoying Features  ------
 " Wtf is Ex Mode anyways?
 nnoremap Q <nop>
 
 " Annoying window
 map q: :q
 
+" Accidentally pressing Shift K will no longer open stupid man entry
+noremap K <nop>
+
+
+"------  Clipboard  ------
+" Allow Shift+Insert to paste
+map <S-Insert> <MiddleMouse>
+map! <S-Insert> <MiddleMouse>
+" set clipboard=unnamedplus
+
 " Copy filename
 :nmap yY :let @" = expand("%")<CR>
 
 " Copy file path
 :nmap yZ :let @" = expand("%:p")<CR>
+
+" F2 = Paste Toggle (in insert mode, pasting indented text behavior changes)
+set pastetoggle=<F2>
+
+
 
 "------  Text Navigation  ------
 " Prevent cursor from moving to beginning of line when switching buffers
@@ -105,28 +90,34 @@ set nostartofline
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
 
+" yyp / yyP will retain column number
+" https://vi.stackexchange.com/questions/18116/p-paste-but-keep-cursor-same-column
+function! Pcol(...) abort
+	let a:above = get(a:, 1, 0)
+	let l:col = virtcol('.')
+	execute 'normal!' a:above ? 'P' : 'p'
+	call cursor('.', l:col)
+endfunction
+nnoremap <silent> p :call Pcol(0)<CR>
+nnoremap <silent> P :call Pcol(1)<CR>
+
 " H = Home, L = End
 noremap H ^
 noremap L $
 vnoremap L g_
 
 
-"------  Window Navigation  ------
-" <Leader>hljk = Move between windows
+"------  Split Navigation  ------
+" <Leader>hljk = Move between splits
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>l <C-w>l
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
 
-"<Leader>= = Normalize window widths
-nnoremap <Leader>= :wincmd =<CR>
-
 
 "------  Buffer Navigation  ------
-" Ctrl Left/h & Right/l cycle between buffers
-noremap <silent> <C-left> :bprev<CR>
+" Ctrl+h & Ctrl+l cycle between buffers in the current split
 noremap <silent> <C-h> :bprev<CR>
-noremap <silent> <C-right> :bnext<CR>
 noremap <silent> <C-l> :bnext<CR>
 
 " <Leader>q Closes the current buffer
@@ -152,7 +143,7 @@ nnoremap <silent> <leader>b :nohlsearch<CR>
 " <Leader>a will open a prmompt for a term to search for
 noremap <leader>a :Ack 
 
-" <Leader>A will close the new window created for that ack search
+" <Leader>A will close the Ack split
 noremap <leader>A <C-w>j<C-w>c<C-w>l
 
 let g:ackprg="ag --vimgrep --column"
@@ -171,7 +162,7 @@ vmap S :s//g<LEFT><LEFT>
 "------  NERDTree Options  ------
 let NERDTreeIgnore=['CVS','\.dSYM$', '.git', '.DS_Store', '\.swp$', '\.swo$']
 
-"setting root dir in NT also sets VIM's cd
+"setting root dir in NT also sets VIM's cd (useful for switching projects)
 let NERDTreeChDirMode=2
 
 " Toggle visibility using <Leader>n
@@ -182,9 +173,7 @@ noremap <silent> <Leader>m :NERDTreeFocus<CR>
 noremap <silent> <Leader>M :NERDTreeFind<CR>
 
 " These prevent accidentally loading files while focused on NERDTree
-autocmd FileType nerdtree noremap <buffer> <c-left> <nop>
 autocmd FileType nerdtree noremap <buffer> <c-h> <nop>
-autocmd FileType nerdtree noremap <buffer> <c-right> <nop>
 autocmd FileType nerdtree noremap <buffer> <c-l> <nop>
 
 " Open NERDTree if we're executing vim without specifying a file to open
@@ -198,6 +187,7 @@ let g:NERDTreeShowHidden=1
 
 
 "------ NERDCommenter Options ------
+" Visual select text then use 'Leader c Leader' to comment the selection
 let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
 
@@ -214,10 +204,6 @@ nnoremap <Leader>gR :Gread<CR>
 nnoremap <Leader>gg :Git 
 nnoremap <Leader>gd :Gdiff<CR>
 
-
-"------  Git Gutter Options ------
-"Disable <Leader>h* commands as they show down movement
-let g:gitgutter_map_keys = 0
 
 "------  Text Editing Utilities  ------
 " <Leader>T = Delete all Trailing space in file
@@ -251,14 +237,14 @@ autocmd FileType markdown setlocal spell " spell check markdown files
 
 "------  Lightline Settings ------
 let g:lightline = {
-  \ 'active': {
-  \   'left': [ [ 'mode', 'paste' ],
-  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-  \ },
-  \ 'component_function': {
-  \   'gitbranch': 'fugitive#statusline'
-  \ },
-  \ }
+	\ 'active': {
+	\   'left': [ [ 'mode', 'paste' ],
+	\             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+	\ },
+	\ 'component_function': {
+	\   'gitbranch': 'fugitive#statusline'
+	\ },
+	\ }
 
 
 "------  Text File Settings  ------
@@ -266,10 +252,14 @@ let g:lightline = {
 :autocmd! BufNewFile,BufRead *.txt,*.md,*.tex setlocal wrap
 
 
+let g:signify_realtime = 1
+
 "------  GUI Options  ------
 if has("gui_running")
 	" Hides toolbar and scrollbars and File menu
 	set guioptions=gt
+
+	colorscheme hybrid
 
 	" Ctrl+A select all
 	map <C-a> ggVG
@@ -283,59 +273,32 @@ if has("gui_running")
 
 	" Highlights the current line background
 	set cursorline
-	colorscheme hybrid
 
 	" Open VIM in fullscreen window
 	" ...Unless you have dualscreens, then it's bigger than a screen...
 	"set lines=200 columns=500
 	set lines=60 columns=200
 
-	" Toggle fullscreen
-	"map <silent> <leader>w :set lines=200 columns=500<CR>
-
 	" Build all help tags (slower launch, but I run GUI vim like once per day)
 	call pathogen#helptags()
 
+	" Set default starting directory to ~/Projects or ~/projects
 	silent! cd $HOME/Projects
 	silent! cd $HOME/projects
 
 	if has("gui_macvim") " OS X
-		"set guifont=Monaco:h14
 		set guifont=Monaco:h10
 		set noantialias
 		"set transparency=15
 
-		" Swipe to move between bufers :D
+		" Swipe to move between buffers
 		map <silent> <SwipeLeft> :bprev<CR>
 		map <silent> <SwipeRight> :bnext<CR>
-
-		" Cmd+Shift+N = new buffer
-		map <silent> <D-N> :enew<CR>
 
 		" Cmd+P = CtrlP
 		" TODO: This doesn't actually work, still opens Print dialog
 		macmenu File.Print key=<nop>
 		nnoremap <silent> <D-p> :CtrlP<CR>
-
-		" Cmd+t = new tab
-		nnoremap <silent> <D-t> :tabnew<CR>
-
-		" Cmd+w = close tab (this should happen by default)
-		nnoremap <silent> <D-w> :tabclose<CR>
-
-		" Cmd+1...9 = go to that tab
-		map <silent> <D-1> 1gt
-		map <silent> <D-2> 2gt
-		map <silent> <D-3> 3gt
-		map <silent> <D-4> 4gt
-		map <silent> <D-5> 5gt
-		map <silent> <D-6> 6gt
-		map <silent> <D-7> 7gt
-		map <silent> <D-8> 8gt
-		map <silent> <D-9> 9gt
-
-		" OS X probably has ctags in a weird place
-		let g:tagbar_ctags_bin='/usr/local/bin/ctags'
 
 		" Damn you scrollwheel paste
 		nnoremap <MiddleMouse> <Nop>
@@ -351,52 +314,13 @@ if has("gui_running")
 		" set guifont=monospace\ 9
 		set guifont=ProggyCleanTT\ 12
 
-		let g:NERDTreeIndicatorMapCustom = {
-			\ 'Modified'  : '!',
-			\ 'Staged'    : '+',
-			\ 'Untracked' : '?',
-			\ 'Renamed'   : '_',
-			\ 'Unmerged'  : '=',
-			\ 'Deleted'   : '×',
-			\ 'Dirty'     : '·',
-			\ 'Clean'     : '^',
-			\ 'Ignored'   : '*',
-			\ 'Unknown'   : '?'
-			\ }
-
 		let g:NERDTreeDirArrowExpandable = '+'
 		let g:NERDTreeDirArrowCollapsible = '~'
-
-		" Alt+n = new buffer
-		map <silent> <A-n> :enew<CR>
-
-		" Alt+t = new tab
-		nnoremap <silent> <A-t> :tabnew<CR>
-
-		" Alt+w = close tab
-		nnoremap <silent> <A-w> :tabclose<CR>
-
-		" Alt+1...9 = go to that tab
-		map <silent> <A-1> 1gt
-		map <silent> <A-2> 2gt
-		map <silent> <A-3> 3gt
-		map <silent> <A-4> 4gt
-		map <silent> <A-5> 5gt
-		map <silent> <A-6> 6gt
-		map <silent> <A-7> 7gt
-		map <silent> <A-8> 8gt
-		map <silent> <A-9> 9gt
-
-		" Shift+Insert will paste text instead of inserting '<S-Insert>'
-		map <silent> <S-Insert> "+p
-		imap <silent> <S-Insert> <Esc>"+pa
-
-	elseif has("gui_win32") " Windows
-		" WHAT ARE YOU DOING WITH YOUR LIFE?!
 	endif
 else
+	" Inside of a terminal
 	set t_Co=256
-	colorscheme Mustang
+	colorscheme ir_black
 	set mouse=a
 endif
 
