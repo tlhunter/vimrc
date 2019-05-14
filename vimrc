@@ -247,12 +247,29 @@ autocmd FileType markdown setlocal spell " spell check markdown files
 let g:lightline = {
 	\ 'active': {
 	\   'left': [ [ 'mode', 'paste' ],
-	\             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+	\             [ 'gitbranch', 'readonly', 'filename', 'modified', 'wc' ] ]
 	\ },
 	\ 'component_function': {
-	\   'gitbranch': 'fugitive#statusline'
+	\   'gitbranch': 'fugitive#statusline',
+	\   'wc': 'WordCount'
 	\ },
 	\ }
+
+
+"------  Word Count  ------
+function! WordCount()
+  let s:old_status = v:statusmsg
+  let position = getpos(".")
+  exe ":silent normal g\<c-g>"
+  let stat = v:statusmsg
+  let s:word_count = 0
+  if stat != '--No lines in buffer--'
+    let s:word_count = str2nr(split(v:statusmsg)[11])
+    let v:statusmsg = s:old_status
+  end
+  call setpos('.', position)
+  return s:word_count
+endfunction
 
 
 "------  Text File Settings  ------
