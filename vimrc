@@ -133,6 +133,10 @@ nnoremap <silent> <Leader>Q <C-w>c
 " <Leader>Ctrl+q Force Closes the current buffer
 nnoremap <silent> <Leader><C-q> :Bclose!<CR>
 
+" `g f` will open the filepath under the cursor in current split
+" `Ctrl+w f` will open that same filepath in a horizontal split
+" this allows `g F` to open it in a vertical split
+:nnoremap gF :vertical wincmd f<CR>
 
 "------  Searching  ------
 set incsearch
