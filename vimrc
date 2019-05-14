@@ -4,9 +4,10 @@ set nocompatible
 set nomodeline
 set viminfo='1000,f1,:1000,/1000
 set history=1000
-set updatetime=100
+" set updatetime=750
 scriptencoding utf-8
 set encoding=utf-8
+let g:signify_update_on_focusgained = 1
 
 
 "------  Visual Options  ------
