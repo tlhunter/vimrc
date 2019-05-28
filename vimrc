@@ -215,13 +215,16 @@ nnoremap <Leader>gd :Gdiff<CR>
 
 "------  Text Editing Utilities  ------
 " <Leader>T = Delete all Trailing space in file
-map <Leader>T :%s/\s\+$//<CR>
+nmap <Leader>T :%s/\s\+$//<CR>
 
 " <Leader>U = Deletes Unwanted empty lines
-map <Leader>U :g/^$/d<CR>
+nmap <Leader>U :g/^$/d<CR>
 
 " <Leader>R = Converts tabs to spaces in document
-map <Leader>R :retab<CR>
+nmap <Leader>R :retab<CR>
+
+" gq will wrap lines, so gQ will unwrap lines
+nmap gQ VipJ
 
 
 "------  JSON Filetype Settings  ------
