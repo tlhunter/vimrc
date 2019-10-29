@@ -33,9 +33,6 @@ map <Leader>L :set invnumber<CR>
 " The search for the perfect color scheme...
 map <silent> <Leader>x :RandomColorScheme<CR>
 
-" Goyo display only current buffer for distraction-free writing
-map <silent> <Leader>G :Goyo<CR>
-
 
 "------  Generic Behavior  ------
 set tabstop=4
