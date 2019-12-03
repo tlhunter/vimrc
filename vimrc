@@ -343,6 +343,12 @@ if has("gui_running")
 
 		let g:NERDTreeDirArrowExpandable = '+'
 		let g:NERDTreeDirArrowCollapsible = '~'
+
+		" Disable mouse scrolling while in INSERT mode
+		inoremap <ScrollWheelUp> <Nop>
+		inoremap <ScrollWheelDown> <Nop>
+		inoremap <ScrollWheelLeft> <Nop>
+		inoremap <ScrollWheelRight> <Nop>
 	endif
 else
 	" Inside of a terminal
