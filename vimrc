@@ -243,6 +243,7 @@ let g:vim_markdown_folding_disabled = 1
 let g:pencil#wrapModeDefault = 'soft'
 autocmd FileType markdown setlocal spell " spell check markdown files
 autocmd FileType markdown call pencil#init()
+let g:vim_markdown_conceal = 0
 
 
 "------  Lightline Settings ------
