@@ -1,0 +1,44 @@
+<AngleBraketComponent
+  @mustache={{@bla}}
+  @number=123
+  data-test-id="test"
+  class="my-class" as |test|>
+  Some Text
+  <div>{{test.someValue}}</div>
+  <test.component teste="asdfads"></test.component>
+</AngleBraketComponent>
+
+<HelloAngleBrackets @prop={{test}} />
+
+<AngleBrackets::-Components::Nested />
+
+<div class="my-css-class">{{test}}</div>
+
+{{#block-component property=@value  prop-erty=this.value string="testing"
+  onClick=(action "someAction" withParam) as |returnValue|}}
+  {{#each-in foo as |bar, baz|}}
+    {{inline-component foo=bar}}
+  {{else if value}}
+  {{else with foo}}
+    \{{escaped handlebars}}
+  {{else}}
+    {{! comment }}
+    {{!-- block }}
+      TODO: Indentation is broken after that
+      comment --}}
+
+    <a href class="{{if inside 'still highlight'}}"
+      onclick={{action foo}}>
+      {{escaped}}
+      {{{unescaped}}}
+    </a>
+
+    <MyIput type="text" oninput={{action (mut fooBar) value="target.value"}} />
+    <input type="text" oninput={{action (mut fooBar) value="target.value"}}>
+
+    {{helper "string" 123}}
+    {{input value="foo"}}
+
+    {{textarea}}
+  {{/each-in}}
+{{/block-component}}
