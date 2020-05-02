@@ -224,6 +224,11 @@ nmap <Leader>R :retab<CR>
 nmap gQ VipJ
 
 
+"------  Text File Settings  ------
+:autocmd! BufNewFile,BufRead * setlocal nowrap
+:autocmd! BufNewFile,BufRead *.txt,*.md,*.tex,*.asciidoc setlocal wrap
+
+
 "------  JSON Filetype Settings  ------
 au BufRead,BufNewFile *.json set filetype=json
 let g:vim_json_syntax_conceal = 0
@@ -241,43 +246,42 @@ au BufNewFile,BufRead *.flow set filetype=javascript
 "------  Markdown Settings  ------
 let g:vim_markdown_folding_disabled = 1
 let g:pencil#wrapModeDefault = 'soft'
-autocmd FileType markdown setlocal spell " spell check markdown files
+autocmd FileType markdown setlocal spell
 autocmd FileType markdown call pencil#init()
 let g:vim_markdown_conceal = 0
 
 
+"------  AsciiDoc Settings  ------
+autocmd FileType asciidoc setlocal spell wrap
+
+
 "------  Lightline Settings ------
-let g:lightline = {
-	\ 'active': {
-	\   'left': [ [ 'mode', 'paste' ],
-	\             [ 'gitbranch', 'readonly', 'filename', 'modified', 'wc' ] ]
-	\ },
-	\ 'component_function': {
-	\   'gitbranch': 'fugitive#statusline',
-	\   'wc': 'WordCount'
-	\ },
-	\ }
+" let g:lightline = {
+"     \ 'active': {
+"     \   'left': [ [ 'mode', 'paste' ],
+"     \             [ 'gitbranch', 'readonly', 'filename', 'modified', 'wc' ] ]
+"     \ },
+"     \ 'component_function': {
+"     \   'gitbranch': 'fugitive#statusline',
+"     \   'wc': 'WordCount'
+"     \ },
+"     \ }
 
 
 "------  Word Count  ------
-function! WordCount()
-  let s:old_status = v:statusmsg
-  let position = getpos(".")
-  exe ":silent normal g\<c-g>"
-  let stat = v:statusmsg
-  let s:word_count = 0
-  if stat != '--No lines in buffer--'
-    let s:word_count = str2nr(split(v:statusmsg)[11])
-    let v:statusmsg = s:old_status
-  end
-  call setpos('.', position)
-  return s:word_count
-endfunction
-
-
-"------  Text File Settings  ------
-:autocmd! BufNewFile,BufRead * setlocal nowrap
-:autocmd! BufNewFile,BufRead *.txt,*.md,*.tex setlocal wrap
+" function! WordCount()
+"   let s:old_status = v:statusmsg
+"   let position = getpos(".")
+"   exe ":silent normal g\<c-g>"
+"   let stat = v:statusmsg
+"   let s:word_count = 0
+"   if stat != '--No lines in buffer--'
+"     let s:word_count = str2nr(split(v:statusmsg)[11])
+"     let v:statusmsg = s:old_status
+"   end
+"   call setpos('.', position)
+"   return s:word_count
+" endfunction
 
 
 let g:signify_realtime = 1
@@ -304,8 +308,8 @@ if has("gui_running")
 
 	" Open VIM in fullscreen window
 	" ...Unless you have dualscreens, then it's bigger than a screen...
-	"set lines=200 columns=500
-	set lines=60 columns=200
+	set lines=200 columns=500
+	" set lines=60 columns=200
 
 	" Build all help tags (slower launch, but I run GUI vim like once per day)
 	call pathogen#helptags()
@@ -340,7 +344,8 @@ if has("gui_running")
 		inoremap <4-MiddleMouse> <Nop>
 	elseif has("gui_gtk") " Linux
 		" set guifont=monospace\ 9
-		set guifont=ProggyCleanTT\ 12
+		" set guifont=ProggyCleanTT\ 12
+		set guifont=courier\ 10\ pitch\ 14
 
 		let g:NERDTreeDirArrowExpandable = '+'
 		let g:NERDTreeDirArrowCollapsible = '~'
