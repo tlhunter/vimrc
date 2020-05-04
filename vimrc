@@ -292,6 +292,7 @@ if has("gui_running")
 	set guioptions=gt
 
 	colorscheme hybrid
+	let g:gruvbox_bold=0
 
 	" Ctrl+A select all
 	map <C-a> ggVG
