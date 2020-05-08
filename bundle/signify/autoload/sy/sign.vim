@@ -1,8 +1,8 @@
-" vim: et sw=2 sts=2
+" vim: et sw=2 sts=2 fdm=marker
 
 scriptencoding utf-8
 
-" Init: values {{{1
+" Variables {{{1
 if get(g:, 'signify_sign_show_text', 1)
   let s:sign_delete = get(g:, 'signify_sign_delete', '_')
 else
@@ -11,22 +11,21 @@ endif
 
 let s:sign_show_count  = get(g:, 'signify_sign_show_count', 1)
 let s:delete_highlight = ['', 'SignifyLineDelete']
+" 1}}}
 
-" Function: #id_next {{{1
+" #id_next {{{1
 function! sy#sign#id_next(sy) abort
   let id = a:sy.signid
   let a:sy.signid += 1
   return id
 endfunction
 
-" Function: #get_current_signs {{{1
+" #get_current_signs {{{1
 function! sy#sign#get_current_signs(sy) abort
   let a:sy.internal = {}
   let a:sy.external = {}
 
-  redir => signlist
-    silent! execute 'sign place buffer='. a:sy.buffer
-  redir END
+  let signlist = sy#util#execute('sign place buffer='. a:sy.buffer)
 
   for signline in split(signlist, '\n')[2:]
     let tokens = matchlist(signline, '\v^\s+\S+\=(\d+)\s+\S+\=(\d+)\s+\S+\=(.*)$')
@@ -49,7 +48,7 @@ function! sy#sign#get_current_signs(sy) abort
 endfunction
 
 
-" Function: #process_diff {{{1
+" #process_diff {{{1
 function! sy#sign#process_diff(sy, vcs, diff) abort
   let a:sy.signtable             = {}
   let a:sy.hunks                 = []
@@ -62,15 +61,16 @@ function! sy#sign#process_diff(sy, vcs, diff) abort
     let a:sy.lines = []
     let ids        = []
 
-    let tokens = matchlist(line, '^@@ -\v(\d+),?(\d*) \+(\d+),?(\d*)')
+    let [old_line, old_count, new_line, new_count] = sy#sign#parse_hunk(line)
 
-    let old_line = str2nr(tokens[1])
-    let new_line = str2nr(tokens[3])
+    " Workaround for non-conventional diff output in older Fossil versions:
+    " https://fossil-scm.org/forum/forumpost/834ce0f1e1
+    " Fixed as of: https://fossil-scm.org/index.html/info/7fd2a3652ea7368a
+    if a:vcs == 'fossil' && new_line == 0
+      let new_line = old_line - 1 - deleted
+    endif
 
-    let old_count = empty(tokens[2]) ? 1 : str2nr(tokens[2])
-    let new_count = empty(tokens[4]) ? 1 : str2nr(tokens[4])
-
-    " 2 lines added:
+    " Pure add:
 
     " @@ -5,0 +6,2 @@ this is line 5
     " +this is line 5
@@ -85,7 +85,7 @@ function! sy#sign#process_diff(sy, vcs, diff) abort
         call add(ids, s:add_sign(a:sy, line, 'SignifyAdd'))
       endwhile
 
-    " 2 lines removed:
+    " Pure delete
 
     " @@ -6,2 +5,0 @@ this is line 5
     " -this is line 6
@@ -105,14 +105,13 @@ function! sy#sign#process_diff(sy, vcs, diff) abort
         call add(ids, s:add_sign(a:sy, new_line, 'SignifyDeleteMore', s:sign_delete))
       endif
 
-    " 2 lines changed:
-
-    " @@ -5,2 +5,2 @@ this is line 4
-    " -this is line 5
-    " -this is line 6
-    " +this os line 5
-    " +this os line 6
-    elseif old_count == new_count
+    " There are additions and deletions, however we don't know which lines are
+    " 'changed' and which are new so we just show the whole block as changed.
+    "
+    " With sufficiently smart heuristics we could see which lines are the most
+    " dissimilar to the previous lines and mark them as additions but for now
+    " we will not do that.
+    else
       let modified += old_count
       let offset    = 0
       while offset < new_count
@@ -121,58 +120,6 @@ function! sy#sign#process_diff(sy, vcs, diff) abort
         if s:external_sign_present(a:sy, line) | continue | endif
         call add(ids, s:add_sign(a:sy, line, 'SignifyChange'))
       endwhile
-    else
-
-      " 2 lines changed; 2 lines removed:
-
-      " @@ -5,4 +5,2 @@ this is line 4
-      " -this is line 5
-      " -this is line 6
-      " -this is line 7
-      " -this is line 8
-      " +this os line 5
-      " +this os line 6
-      if old_count > new_count
-        let modified += new_count
-        let removed   = old_count - new_count
-        let deleted  += removed
-        let offset    = 0
-        while offset < new_count - 1
-          let line    = new_line + offset
-          let offset += 1
-          if s:external_sign_present(a:sy, line) | continue | endif
-          call add(ids, s:add_sign(a:sy, line, 'SignifyChange'))
-        endwhile
-        let line = new_line + offset
-        if s:external_sign_present(a:sy, line) | continue | endif
-        call add(ids, s:add_sign(a:sy, line, (removed > 9)
-              \ ? 'SignifyChangeDeleteMore'
-              \ : 'SignifyChangeDelete'. removed))
-
-      " lines changed and added:
-
-      " @@ -5 +5,3 @@ this is line 4
-      " -this is line 5
-      " +this os line 5
-      " +this is line 42
-      " +this is line 666
-      else
-        let modified += old_count
-        let offset    = 0
-        while offset < old_count
-          let line    = new_line + offset
-          let offset += 1
-          if s:external_sign_present(a:sy, line) | continue | endif
-          call add(ids, s:add_sign(a:sy, line, 'SignifyChange'))
-          let added += 1
-        endwhile
-        while offset < new_count
-          let line    = new_line + offset
-          let offset += 1
-          if s:external_sign_present(a:sy, line) | continue | endif
-          call add(ids, s:add_sign(a:sy, line, 'SignifyAdd'))
-        endwhile
-      endif
     endif
 
     if !empty(ids)
@@ -187,12 +134,6 @@ function! sy#sign#process_diff(sy, vcs, diff) abort
   for line in filter(keys(a:sy.internal), '!has_key(a:sy.signtable, v:val)')
     execute 'sign unplace' a:sy.internal[line].id 'buffer='.a:sy.buffer
   endfor
-
-  if has('gui_macvim') && has('gui_running') && mode() == 'n'
-    " MacVim needs an extra kick in the butt, when setting signs from the
-    " exit handler. :redraw would trigger a "hanging cursor" issue.
-    call feedkeys("\<c-l>", 'n')
-  endif
 
   if empty(a:sy.updated_by) && empty(a:sy.hunks)
     call sy#verbose('Successful exit value, but no diff. Keep VCS for time being.', a:vcs)
@@ -209,7 +150,7 @@ function! sy#sign#process_diff(sy, vcs, diff) abort
   let a:sy.stats = [added, modified, deleted]
 endfunction
 
-" Function: #remove_all_signs {{{1
+" #remove_all_signs {{{1
 function! sy#sign#remove_all_signs(bufnr) abort
   let sy = getbufvar(a:bufnr, 'sy')
 
@@ -222,7 +163,47 @@ function! sy#sign#remove_all_signs(bufnr) abort
   let sy.hunks = []
 endfunction
 
-" Function: s:add_sign {{{1
+" #parse_hunk {{{1
+" Parse a hunk as '@@ -273,3 +267,14' into [old_line, old_count, new_line, new_count]
+function! sy#sign#parse_hunk(diffline) abort
+  let tokens = matchlist(a:diffline, '^@@ -\v(\d+),?(\d*) \+(\d+),?(\d*)')
+  return [
+        \ str2nr(tokens[1]),
+        \ empty(tokens[2]) ? 1 : str2nr(tokens[2]),
+        \ str2nr(tokens[3]),
+        \ empty(tokens[4]) ? 1 : str2nr(tokens[4])
+        \ ]
+endfunction
+
+" #set_signs {{{1
+function! sy#sign#set_signs(sy, vcs, diff) abort
+  call sy#verbose('sy#sign#set_signs()', a:vcs)
+
+  if a:sy.stats == [-1, -1, -1]
+    let a:sy.stats = [0, 0, 0]
+  endif
+
+  if empty(a:diff)
+    call sy#verbose('No changes found.', a:vcs)
+    let a:sy.stats = [0, 0, 0]
+    call sy#sign#remove_all_signs(a:sy.buffer)
+    return
+  endif
+
+  if get(g:, 'signify_line_highlight')
+    call sy#highlight#line_enable()
+  else
+    call sy#highlight#line_disable()
+  endif
+
+  call sy#sign#process_diff(a:sy, a:vcs, a:diff)
+
+  if exists('#User#Signify')
+    doautocmd <nomodeline> User Signify
+  endif
+endfunction
+
+" s:add_sign {{{1
 function! s:add_sign(sy, line, type, ...) abort
   call add(a:sy.lines, a:line)
   let a:sy.signtable[a:line] = 1
@@ -257,7 +238,7 @@ function! s:add_sign(sy, line, type, ...) abort
   return id
 endfunction
 
-" Function: s:external_sign_present {{{1
+" s:external_sign_present {{{1
 function! s:external_sign_present(sy, line) abort
   if has_key(a:sy.external, a:line)
     if has_key(a:sy.internal, a:line)
@@ -267,4 +248,3 @@ function! s:external_sign_present(sy, line) abort
     return 1
   endif
 endfunction
-

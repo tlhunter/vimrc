@@ -8,12 +8,14 @@ removed lines in a file that is managed by a version control system (VCS)._
 ---
 
 - Supports **git**, **mercurial**, **darcs**, **bazaar**, **subversion**,
-  **cvs**, **rcs**, **fossil**, **accurev**, **perforce**, **tfs**.
-- **Asynchronous** execution of VCS tools for Vim 7.4.1967+ and Neovim.
+  **cvs**, **rcs**, **fossil**, **accurev**, **perforce**, **tfs**, **yadm**.
+- **Asynchronous** execution of VCS tools for Vim 8.0.902+ and Neovim.
 - **Preserves signs** from other plugins.
 - Handles **nested repositories** controlled by different VCS.
 - Provides mappings for **navigating hunks** ("blocks of changed lines").
 - Provides an **operator** that acts on hunks.
+- **Preview** changes in the current line in a popup window.
+- Show all changes in **diff mode**.
 - Alternative workflow: Disable the plugin by default and **toggle it per
   buffer** on demand.
 - Optional **line highlighting**.
@@ -28,17 +30,26 @@ _Similar plugin for git: [vim-gitgutter](https://github.com/airblade/vim-gitgutt
 
 ## Installation
 
-Use your favorite [plugin
-manager](https://github.com/mhinz/vim-galore#managing-plugins), e.g. using
+The `master` branch is async-only and thus requires at least Vim 8.0.902. Use
+the `legacy` branch for older Vim versions.
+
+Using your favorite [plugin
+manager](https://github.com/mhinz/vim-galore#managing-plugins), e.g.
 [vim-plug](https://github.com/junegunn/vim-plug):
 
-    Plug 'mhinz/vim-signify'
+```vim
+if has('nvim') || has('patch-8.0.902')
+  Plug 'mhinz/vim-signify'
+else
+  Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+endif
+```
 
-## Documentation
-
-1. Understand how the plugin works:
-   [`:h signify-modus-operandi`](https://github.com/mhinz/vim-signify/blob/master/doc/signify.txt#L52)
-1. Spare the plugin some work and read: `:h g:signify_vcs_list`
+## Configuration for async update
+```vim
+" default updatetime 4000ms is not good for async update
+set updatetime=100
+```
 
 ## Demo
 
