@@ -37,7 +37,7 @@ wget https://github.com/tlhunter/vimrc/archive/master.zip
 
 ### Leader Key
 
-As of `v0.2.0`, the Leader key is now bound to `Space` (used to be `Comma`)
+- Space
 
 ### Switching between files (Buffers)
 
@@ -54,7 +54,6 @@ As of `v0.2.0`, the Leader key is now bound to `Space` (used to be `Comma`)
 * Use `<Leader>n` to toggle the file browser
 * Use `Ctrl P` to perform a recursive fuzzy filename search
 * Use `<Leader>a` and type a phrase to search to search based on content within your files (quote and escape if needed)
-* Use `<Leader>A` to close the open ack search results at the bottom of the screen
 
 ### File Browser (NERDTree)
 
@@ -67,29 +66,3 @@ As of `v0.2.0`, the Leader key is now bound to `Space` (used to be `Comma`)
 * Use `?` if you'd like some NERDTree documentation
 * Use `o` to open the selected file in a new buffer
 * Use `t` to open the selected file in a new tab
-
-### Tabs
-
-* Use `Cmd t` (or `Alt t` in Linux GVim) to open a new tab
-* Use `Cmd w` (or `Alt w` in Linux GVim) to close the current tab
-* Use `Cmd 1` to `Cmd 9` (or `Alt 1` to `Alt 9` in Linux GVim) to navigate to the specified tab
-
-### Themes (ColorSchemes)
-
-There is a very large collection of colorschemes in this repository.
-Many of them can be seen [here](http://vimcolors.com/).
-Set the scheme using `:colorscheme NAME`.
-
-* Use `<Leader>x` to switch to a random theme.
-
-### Text Navigation
-
-Other than the myriad of built-in methods for navigating text...
-
-* Use `<Leader><Leader>b` to highlight and jump to previous words
-* Use `<Leader><Leader>w` to highlight and jump to following words
-
-### Copying and Pasting between OS
-
-* Use `<Leader>c` to copy the highlighted text into the OS clipboard
-* Use `<Leader>v` to paste the OS clipboard into the document
