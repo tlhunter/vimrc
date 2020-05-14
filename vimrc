@@ -1,24 +1,17 @@
-call pathogen#infect()
 let mapleader = "\<Space>"
 set nocompatible
 set nomodeline
 set viminfo='1000,f1,:1000,/1000
 set history=1000
-" set updatetime=750
+set updatetime=1000
 scriptencoding utf-8
 set encoding=utf-8
-let g:signify_update_on_focusgained = 1
-
-
-"------  Visual Options  ------
 syntax on
 set number
 set nowrap
 set vb
 set ruler
 set statusline=%<%f\ %h%m%r%=%{fugitive#statusline()}\ \ %-14.(%l,%c%V%)\ %P
-
-" New splits open to right and bottom
 set splitbelow
 set splitright
 
@@ -26,12 +19,6 @@ set splitright
 nmap <Leader>s :set list!<CR>
 set listchars=tab:>\ ,trail:·,extends:»,precedes:«,nbsp:×
 :set list " Enable by default
-
-" <Leader>L = Toggle line numbers
-map <Leader>L :set invnumber<CR>
-
-" The search for the perfect color scheme...
-map <silent> <Leader>x :RandomColorScheme<CR>
 
 
 "------  Generic Behavior  ------
@@ -45,15 +32,9 @@ set autoindent
 "allow deletion of previously entered data in insert mode
 set backspace=indent,eol,start
 
-" Allow saving of files as sudo when I forgot to start vim using sudo.
-cmap w!! %!sudo tee > /dev/null %
-
 " Edit and Reload .vimrc files
 nmap <silent> <Leader>ev :e $MYVIMRC<CR>
 nmap <silent> <Leader>es :so $MYVIMRC<CR>
-
-" When pressing <Leader>cd switch to the directory of the open buffer
-map ,cd :cd %:p:h<CR>
 
 
 "------  Disable Annoying Features  ------
@@ -90,17 +71,6 @@ set nostartofline
 
 " Keep the cursor in place while joining lines
 nnoremap J mzJ`z
-
-" yyp / yyP will retain column number
-" https://vi.stackexchange.com/questions/18116/p-paste-but-keep-cursor-same-column
-function! Pcol(...) abort
-	let a:above = get(a:, 1, 0)
-	let l:col = virtcol('.')
-	execute 'normal!' a:above ? 'P' : 'p'
-	call cursor('.', l:col)
-endfunction
-nnoremap <silent> p :call Pcol(0)<CR>
-nnoremap <silent> P :call Pcol(1)<CR>
 
 " H = Home, L = End
 noremap H ^
@@ -148,9 +118,6 @@ nnoremap <silent> <leader>b :nohlsearch<CR>
 " <Leader>a will open a prmompt for a term to search for
 noremap <leader>a :Ack 
 
-" <Leader>A will close the Ack split
-noremap <leader>A <C-w>j<C-w>c<C-w>l
-
 let g:ackprg="ag --vimgrep --column"
 
 " CtrlP will load from the CWD, makes it easier with all these nested repos
@@ -159,13 +126,9 @@ let g:ctrlp_working_path_mode = ''
 " CtrlP won't show results from node_modules
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|coverage|target|dist)|(\.(swp|ico|git|svn|png|jpg|gif|ttf))$'
 
-"type S, then type what you're looking for, a /, and what to replace it with
-nmap S :%s//g<LEFT><LEFT>
-vmap S :s//g<LEFT><LEFT>
-
 
 "------  NERDTree Options  ------
-let NERDTreeIgnore=['CVS','\.dSYM$', '.git', '.DS_Store', '\.swp$', '\.swo$']
+let NERDTreeIgnore=['.git', '\.swp$', '\.swo$']
 
 "setting root dir in NT also sets VIM's cd (useful for switching projects)
 let NERDTreeChDirMode=2
@@ -238,11 +201,6 @@ autocmd BufNewFile,BufRead *.jshintrc set filetype=json
 autocmd BufNewFile,BufRead *.eslintrc set filetype=json
 
 
-"------  Flow Filetype Settings  ------
-let g:javascript_plugin_flow = 1
-au BufNewFile,BufRead *.flow set filetype=javascript
-
-
 "------  Markdown Settings  ------
 let g:vim_markdown_folding_disabled = 1
 let g:pencil#wrapModeDefault = 'soft'
@@ -253,38 +211,6 @@ let g:vim_markdown_conceal = 0
 
 "------  AsciiDoc Settings  ------
 autocmd FileType asciidoc setlocal spell wrap
-
-
-"------  Lightline Settings ------
-" let g:lightline = {
-"     \ 'active': {
-"     \   'left': [ [ 'mode', 'paste' ],
-"     \             [ 'gitbranch', 'readonly', 'filename', 'modified', 'wc' ] ]
-"     \ },
-"     \ 'component_function': {
-"     \   'gitbranch': 'fugitive#statusline',
-"     \   'wc': 'WordCount'
-"     \ },
-"     \ }
-
-
-"------  Word Count  ------
-" function! WordCount()
-"   let s:old_status = v:statusmsg
-"   let position = getpos(".")
-"   exe ":silent normal g\<c-g>"
-"   let stat = v:statusmsg
-"   let s:word_count = 0
-"   if stat != '--No lines in buffer--'
-"     let s:word_count = str2nr(split(v:statusmsg)[11])
-"     let v:statusmsg = s:old_status
-"   end
-"   call setpos('.', position)
-"   return s:word_count
-" endfunction
-
-
-let g:signify_realtime = 1
 
 "------  GUI Options  ------
 if has("gui_running")
@@ -302,7 +228,6 @@ if has("gui_running")
 
 	" Ctrl+B OS Clipboard paste
 	map <C-b> "*p
-	imap <C-b> "*p
 
 	" Highlights the current line background
 	set cursorline
@@ -311,9 +236,6 @@ if has("gui_running")
 	" ...Unless you have dualscreens, then it's bigger than a screen...
 	set lines=200 columns=500
 	" set lines=60 columns=200
-
-	" Build all help tags (slower launch, but I run GUI vim like once per day)
-	call pathogen#helptags()
 
 	" Set default starting directory to ~/Projects or ~/projects
 	silent! cd $HOME/Projects
@@ -328,11 +250,6 @@ if has("gui_running")
 		map <silent> <SwipeLeft> :bprev<CR>
 		map <silent> <SwipeRight> :bnext<CR>
 
-		" Cmd+P = CtrlP
-		" TODO: This doesn't actually work, still opens Print dialog
-		macmenu File.Print key=<nop>
-		nnoremap <silent> <D-p> :CtrlP<CR>
-
 		" Damn you scrollwheel paste
 		nnoremap <MiddleMouse> <Nop>
 		nnoremap <2-MiddleMouse> <Nop>
@@ -346,12 +263,13 @@ if has("gui_running")
 	elseif has("gui_gtk") " Linux
 		" set guifont=monospace\ 9
 		" set guifont=ProggyCleanTT\ 12
-		set guifont=courier\ 10\ pitch\ 14
+		" set guifont=courier\ 10\ pitch\ 14
 
 		let g:NERDTreeDirArrowExpandable = '+'
 		let g:NERDTreeDirArrowCollapsible = '~'
 
 		" Disable mouse scrolling while in INSERT mode
+		" TODO: This doesn't work when shift is pressed
 		inoremap <ScrollWheelUp> <Nop>
 		inoremap <ScrollWheelDown> <Nop>
 		inoremap <ScrollWheelLeft> <Nop>
@@ -362,10 +280,4 @@ else
 	set t_Co=256
 	colorscheme ir_black
 	set mouse=a
-endif
-
-
-"------  Local Overrides  ------
-if filereadable($HOME.'/.vim/local.vimrc')
-	source $HOME/.vim/local.vimrc
 endif
