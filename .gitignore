@@ -2,3 +2,5 @@ sessions/*
 .netrwhist
 tags
 tags-ja
+local.vimrc
+spell

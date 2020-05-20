@@ -1,0 +1,666 @@
+*signify.txt* Indicate changed lines within a file using a VCS.
+*signify*
+>
+                                              ___
+                    __                  __  /'___\
+               ____/\_\     __     ___ /\_\/\ \__/  __  __
+              /',__\/\ \  /'_ `\ /' _ `\/\ \ \ ,__\/\ \/\ \
+             /\__, `\ \ \/\ \L\ \/\ \/\ \ \ \ \ \_/\ \ \_\ \
+             \/\____/\ \_\ \____ \ \_\ \_\ \_\ \_\  \/`____ \
+              \/___/  \/_/\/___L\ \/_/\/_/\/_/\/_/   `/___/> \
+                            /\____/                     /\___/
+                            \_/__/                      \/__/
+<
+  by Marco Hinz~
+
+==============================================================================
+TOC                                                           *signify-contents*
+
+  INTRO .......................... |signify-intro|
+  MODUS OPERANDI ................. |signify-modus-operandi|
+  DEBUG .......................... |signify-debug|
+  SIGNS .......................... |signify-signs|
+  OPTIONS ........................ |signify-options|
+  COMMANDS ....................... |signify-commands|
+  AUTOCMDS ....................... |signify-autocmds|
+  EVENTS ......................... |signify-events|
+  MAPPINGS ....................... |signify-mappings|
+  COLORS ......................... |signify-colors|
+  FAQ ............................ |signify-faq|
+  EXAMPLE ........................ |signify-example|
+
+==============================================================================
+INTRO                                                            *signify-intro*
+
+Signify uses the sign column to indicate added, modified and removed lines
+based on the data of an underlying version control system.
+
+Supported VCS:~
+>
+    git
+    mercurial
+    darcs
+    bzr
+    subversion
+    cvs
+    rcs
+    fossil
+    accurev
+    perforce
+    tfs
+    yadm
+<
+==============================================================================
+MODUS OPERANDI                                          *signify-modus-operandi*
+
+When you open a new buffer, Sy registers it as `active` and tries to figure out
+whether the underlying file is controlled by a VCS (version control system) or
+not.
+
+For that, it asynchronously tries all the `diff` sub commands of all the VCS
+tools that are supported and executable.
+
+If one of the checks produces a proper diff, that VCS will automatically be
+used for all successive calls to Sy.
+
+See |signify-autocmds| for when signs get updated.
+
+If none of the checks produces a proper diff, the VCS will be set to `unknown`.
+The next time Sy gets run, the buffer will be marked as `inactive`, so it won't
+look for changes anymore.
+
+Or you set |g:signify_disable_by_default|, which registers all new buffers as
+`inactive`, and enable Sy on demand using |signify-:SignifyToggle|.
+
+Use |signify-:SignifyList| to list all buffers managed by Sy and their current
+state.
+
+==============================================================================
+DEBUG                                                            *signify-debug*
+
+If signs aren't showing up as expected, see if |signify-:SignifyDebug| shows
+anything suspicious. It will try all VCS and shows either errors or a diff for
+each VCS.
+
+If the output looks fine though, create an issue on GitHub:
+
+    https://github.com/mhinz/vim-signify/issues/new
+
+Make sure to mention your Vim version and which Sy version you use (latest
+release or master).
+
+Additionally, include the output of |:messages| after executing one of the
+following:
+
+    - opening the buffer via `vim -V1 <file>`
+    - or running `:verb w` in the buffer
+
+==============================================================================
+SIGNS                                                            *signify-signs*
+
+    `+`     This line was added.
+
+    `!`     This line was modified.
+
+    `_1`    The number of deleted lines below this sign. If the number is larger
+    `99`    than 9, the `_` will be omitted. For numbers larger than 99, `_>`
+    `_>`    will be shown instead.
+
+    `!1`    This line was modified and the lines below were deleted.
+    `!>`    It is a combination of `!` and `_`. If the number is larger than 9,
+          `!>` will be shown instead.
+
+    `‾`     The first line was removed. It's a special case of the `_` sign.
+
+See |g:signify_sign_add| on how to use different signs.
+
+==============================================================================
+OPTIONS                                                        *signify-options*
+
+Put these variables into your vimrc. The provided examples also indicate the
+default values, as long as no "Default:" section is given.
+
+    |g:signify_vcs_cmds|
+    |g:signify_vcs_cmds_diffmode|
+    |g:signify_disable_by_default|
+    |g:signify_skip_filetype|
+    |g:signify_skip_filename|
+    |g:signify_skip_filename_pattern|
+    |g:signify_line_highlight|
+    |g:signify_sign_add|
+    |g:signify_sign_delete|
+    |g:signify_sign_delete_first_line|
+    |g:signify_sign_change|
+    |g:signify_sign_show_count|
+    |g:signify_sign_show_text|
+    |g:signify_difftool|
+    |g:signify_fold_context|
+
+------------------------------------------------------------------------------
+                                                            *g:signify_vcs_cmds*  >
+    let g:signify_vcs_cmds = {
+        \ 'cvs': 'cvs -d '. $CVSROOT .' diff -U0 -- %f' }
+<
+The command to use for updating signs in an `unmodified` buffer, thus when the
+buffer is in sync with the file on disk.
+
+By default, it returns a diff for all the changes since the last commit.
+
+The key can be any from this list:
+
+    git
+    yadm
+    hg
+    svn
+    darcs
+    bzr
+    fossil
+    cvs
+    rcs
+    accurev
+    perforce
+    tfs
+
+Modifiers:~
+
+    %f       actual filepath
+    %d       |g:signify_difftool|
+    %n       Unix: `/dev/null`, Windows: `NUL`
+
+Redirection: Instead of `>foo` use `sy#util#shell_redirect('foo')`. This
+helper function takes 'shellredir' into account.
+
+The output format mustn't change, otherwise Sy won't give any reasonable
+results. It's probably wise to start with the respective default values.
+
+If your VCS program is not in `$PATH` and you have to specify an absolute path,
+escape spaces by quoting, e.g.:
+>
+    let g:signify_vcs_cmds = {
+      \ 'git': '"C:\Program Files (x86)\Git\bin\git.exe" diff --no-color --no-ext-diff -U0 -- %f'
+      \ }
+<
+NOTE: Always test these commands on the shell first and make sure that no
+colors are emitted. Our parser expects lines in the diff output to start with
+"@@", but with colors the line starts with escape sequences instead.
+
+Default:
+>
+    let g:signify_vcs_cmds = {
+      \ 'git':      'git diff --no-color --no-ext-diff -U0 -- %f',
+      \ 'yadm':     'yadm diff --no-color --no-ext-diff -U0 -- %f',
+      \ 'hg':       'hg diff --color=never --config aliases.diff= --nodates -U0 -- %f',
+      \ 'svn':      'svn diff --diff-cmd %d -x -U0 -- %f',
+      \ 'bzr':      'bzr diff --using %d --diff-options=-U0 -- %f',
+      \ 'darcs':    'darcs diff --no-pause-for-gui --no-unified --diff-opts=-U0 -- %f',
+      \ 'fossil':   'fossil diff --unified -c 0 -- %f',
+      \ 'cvs':      'cvs diff -U0 -- %f',
+      \ 'rcs':      'rcsdiff -U0 %f 2>%n',
+      \ 'accurev':  'accurev diff %f -- -U0',
+      \ 'perforce': 'p4 info '. sy#util#shell_redirect('%n') . (has('win32') ? ' &&' : ' && env P4DIFF= P4COLORS=') .' p4 diff -du0 %f',
+      \ 'tfs':      'tf diff -version:W -noprompt -format:Unified %f'
+      \ }
+<
+------------------------------------------------------------------------------
+                                                   *g:signify_vcs_cmds_diffmode*  >
+    let g:signify_vcs_cmds_diffmode = {
+      \ 'git':      'git show HEAD:./%f',
+      \ 'yadm':     'yadm show HEAD:./%f',
+      \ 'hg':       'hg cat %f',
+      \ 'svn':      'svn cat %f',
+      \ 'bzr':      'bzr cat %f',
+      \ 'darcs':    'darcs show contents -- %f',
+      \ 'fossil':   'fossil cat %f',
+      \ 'cvs':      'cvs up -p -- %f 2>%n',
+      \ 'rcs':      'co -q -p %f',
+      \ 'accurev':  'accurev cat %f',
+      \ 'perforce': 'p4 print %f',
+      \ 'tfs':      'tf view -version:W -noprompt %f',
+      \ }
+<
+The command to use for updating signs in a `modified` buffer, thus when the
+buffer is `not` in sync with the file on disk. Also for |signify-:SignifyDiff|.
+
+By default, it returns the file as of the last commit. Thus without any of the
+current changes in the buffer.
+
+Works the same as |g:signify_vcs_cmds|.
+
+------------------------------------------------------------------------------
+                                                  *g:signify_disable_by_default*  >
+    let g:signify_disable_by_default = 0
+<
+This makes Sy not looking for changes for each new buffer. You can easily
+enable it later using |signify-:SignifyToggle|.
+
+------------------------------------------------------------------------------
+                                               *g:signify_skip_filename_pattern*
+                                                       *g:signify_skip_filename*
+                                                       *g:signify_skip_filetype*
+>
+    let g:signify_skip_filetype = { 'vim': 1, 'c': 1 }
+    let g:signify_skip_filename = { '/home/user/.vimrc': 1 }
+<
+Don't activate the plugin for these filetypes and/or filenames. Filenames have
+to be absolute paths.
+
+These options must be |Dict|s for faster lookup.
+>
+    let g:signify_skip_filename_pattern = [ 'foo.*bar', 'tmp' ]
+<
+Don't activate the plugin for filenames matching these patterns.
+
+Default: <none>
+
+------------------------------------------------------------------------------
+                                                      *g:signify_line_highlight*  >
+    let g:signify_line_highlight = 0
+<
+Enable line highlighting in addition to using signs by default.
+
+------------------------------------------------------------------------------
+                                              *g:signify_sign_add*
+                                              *g:signify_sign_delete*
+                                              *g:signify_sign_delete_first_line*
+                                              *g:signify_sign_change*
+>
+    let g:signify_sign_add               = '+'
+    let g:signify_sign_delete            = '_'
+    let g:signify_sign_delete_first_line = '‾'
+    let g:signify_sign_change            = '!'
+<
+The sign to use if a line was added, deleted or changed or a combination of
+these.
+
+You can use Unicode characters, but signs must not take up more than two
+cells. Otherwise, |E239| is thrown.
+
+------------------------------------------------------------------------------
+                                                     *g:signify_sign_show_count*  >
+    let g:signify_sign_show_count = 1
+<
+Add the number of deleted lines to |g:signify_sign_delete| (up to 99).
+Otherwise, only the usual sign text will be shown.
+
+------------------------------------------------------------------------------
+                                                      *g:signify_sign_show_text*  >
+    let g:signify_sign_show_text = 1
+<
+Don't show any text in the sign column. (Actually it will show a non-breaking
+space.)
+
+This is useful if you only want to see colors instead. If your colorscheme
+doesn't do it for you, you can set the background color of a particular sign
+yourself: |signify-colors|.
+
+If you want no sign column at all and use Vim 7.4.2201+, use 'signcolumn'.
+
+------------------------------------------------------------------------------
+                                                            *g:signify_difftool*  >
+    let g:signify_difftool = 'gnudiff'
+<
+This will avoid the attempt to find the proper diff tool for version control
+systems that rely on an external diff tool that supports the -U0 flag. These
+are: svn, bzr, darcs, fossil.
+
+Default: "diff"
+
+------------------------------------------------------------------------------
+                                                        *g:signify_fold_context*  >
+    let g:signify_fold_context = [0, 3]
+<
+This changes the number of lines of context that |signify-:SignifyFold| should
+use. The first element describes the context at foldlevel 0 and the second the
+context at foldlevel 1.
+
+Example:~
+
+Using "[0,3]" means that after using :SignifyFold, only changed lines will be
+unfolded. Using |zo| (and similar |fold-commands|) on a folded line will reveal
+3 more lines of context. Using |zo| a second time will reveal everything.
+
+Default: [3, 8]
+
+==============================================================================
+COMMAND                                                       *signify-commands*
+                                                        *signify-:SignifyEnable*  >
+    :SignifyEnable
+<
+Enable the plugin for the current buffer only.
+
+Can also be used to when a repository was initialized while Sy was already
+loaded.
+
+------------------------------------------------------------------------------
+                                                       *signify-:SignifyDisable*  >
+    :SignifyDisable
+<
+Disable the plugin for the current buffer only.
+
+------------------------------------------------------------------------------
+                                                        *signify-:SignifyToggle*  >
+    :SignifyToggle
+<
+Toggle the plugin for the current buffer only.
+
+------------------------------------------------------------------------------
+                                               *signify-:SignifyToggleHighlight*  >
+    :SignifyToggleHighlight
+<
+Toggle line highlighting for lines containing changes.
+
+------------------------------------------------------------------------------
+                                                       *signify-:SignifyRefresh*  >
+    :SignifyRefresh
+<
+Refresh signs in all windows.
+
+NOTE: Nothing will happen, if :SignifyRefresh is used from the |cmdline-window|.
+
+------------------------------------------------------------------------------
+                                                          *signify-:SignifyDiff*  >
+    :SignifyDiff[!]
+<
+Open a new tab with two windows using |diff-mode| to show the differences
+between the current file and its version that was last checked in.
+
+With [!], no new tab will be opened.
+
+Also see |g:signify_vcs_cmds_diffmode|.
+
+------------------------------------------------------------------------------
+                                                          *signify-:SignifyFold*  >
+    :SignifyFold[!]
+<
+Open the current buffer in a new tab page and set 'foldexpr' so that only
+changed lines with their surrounding context are unfolded.
+
+The number of lines per context can be changed via |g:signify_fold_context|.
+
+The |foldtext| will be set so that the left side shows the first line in the
+fold and the right side shows something like "50 [1]" which whereas "50"
+stands for the number of folded lines and the "1" is the 'foldlevel'.
+
+If [!] is given, Sy will do the same without opening an extra tab page.
+Another ":SignifyFold!" will toggle back to the previous settings.
+
+See |folds| to learn more about folding.
+
+------------------------------------------------------------------------------
+                                                      *signify-:SignifyHunkDiff*  >
+    :SignifyHunkDiff
+<
+Used on a line with a change, this will show a diff of the hunk in a floating
+window (Nvim), popup (Vim), or preview window (fallback).
+
+------------------------------------------------------------------------------
+                                                      *signify-:SignifyHunkUndo*  >
+    :SignifyHunkUndo
+<
+Used on a line with a change, this will restore the hunk to the base version.
+This effectively undoes the changes that |signify-:SignifyHunkDiff| would show.
+
+------------------------------------------------------------------------------
+                                                          *signify-:SignifyList*  >
+    :SignifyList
+<
+Outputs debug info for all managed buffers.
+
+------------------------------------------------------------------------------
+                                                         *signify-:SignifyDebug*  >
+    :SignifyDebug
+<
+In case no signs are shown, although the buffer contains a file controlled by
+a supported VCS, use this command.
+
+It will show all tried commands and their output. Errors will be highlighted
+via |hl-ErrorMsg|.
+
+==============================================================================
+AUTOCMDS                                                      *signify-autocmds*
+
+By default, signs get updated on these events:
+
+    |BufEnter|      Opening or switching to another buffer.
+    |WinEnter|      Opening or switching to another window.
+    |BufWritePost|  Saving a buffer.
+    |FocusGained|   When the window containing Vim gains focus. Updates signs
+                  for all Vim windows. This event fires for all GUIs and even
+                  a few terminal emulators.
+                  For tmux, use this: `set-option -g focus-events on`
+    |CursorHold|    After 'updatetime' milliseconds without moving the cursor
+                  in normal mode.
+    |CursorHoldI|   After 'updatetime' milliseconds without moving the cursor
+                  in insert mode.
+    |ShellCmdPost|  After shelling out via |:!|. Think `:!git commit -m foo`
+    |VimResume|     After suspending Vim with `<c-z>`, then doing things in
+                  the shell, and resuming to Vim via `fg`. Only Neovim.
+
+See all of them with:
+>
+    :au signify
+<
+You can disable sign updating for certain events:
+>
+    autocmd User SignifySetup autocmd! signify CursorHold,CursorHoldI
+<
+If you don't need immediate feedback or responses from your VCS are slow, then
+use this to only update signs when writing the buffer:
+>
+    autocmd User SignifySetup
+          \ exe 'au! signify' | au signify BufWritePost * call sy#start()
+<
+==============================================================================
+EVENTS                                                          *signify-events*
+
+Signify fires these user events:
+
+User SignifySetup~
+
+    This event fires at the end of `plugin/signify.vim`, in case you want to
+    change any of the default autocmds, commands, or mappings.
+
+User Signify~
+
+    This event fires when Sy updated the signs.
+
+Hook into these user events like this:
+>
+    autocmd User Signify echomsg 'updated!'
+<
+NOTE: Autocmds don't nest by default. If you use any command that triggers
+other events, make sure to use |autocmd-nested|.
+
+==============================================================================
+MAPPINGS                                                      *signify-mappings*
+
+------------------------------------------------------------------------------
+Hunk jumping:~
+
+    ]c   Jump to the next hunk.
+    [c   Jump to the previous hunk.
+
+    ]C   Jump to the last hunk.
+    [C   Jump to the first hunk.
+
+These keys only get mapped by default when:
+
+  - The keys are not mapped already (by you or another plugin).
+  - There are no other keys that are mapped to do the same (to avoid duplicate
+    mappings).
+
+Mapping other keys:
+>
+    nmap <leader>gj <plug>(signify-next-hunk)
+    nmap <leader>gk <plug>(signify-prev-hunk)
+    nmap <leader>gJ 9999<leader>gj
+    nmap <leader>gK 9999<leader>gk
+<
+------------------------------------------------------------------------------
+Hunk text object:~
+>
+    omap ic <plug>(signify-motion-inner-pending)
+    xmap ic <plug>(signify-motion-inner-visual)
+    omap ac <plug>(signify-motion-outer-pending)
+    xmap ac <plug>(signify-motion-outer-visual)
+<
+"ic" operates on all lines of the current hunk. "ac" does the same, but also
+removes all trailing empty lines.
+
+NOTE: Don't be surprised that this also works with "deleted lines".
+
+==============================================================================
+COLORS                                                          *signify-colors*
+
+This plugin defines highlighting groups for two different places: for lines
+and signs. Per default these don't exist but are linked to the standard
+highlighting groups: |hl-DiffAdd|, |hl-DiffChange|, |hl-DiffDelete|:
+>
+    highlight link SignifyLineAdd             DiffAdd
+    highlight link SignifyLineChange          DiffChange
+    highlight link SignifyLineDelete          DiffDelete
+    highlight link SignifyLineDeleteFirstLine SignifyLineDelete
+
+    highlight link SignifySignAdd             DiffAdd
+    highlight link SignifySignChange          DiffChange
+    highlight link SignifySignDelete          DiffDelete
+    highlight link SignifySignDeleteFirstLine SignifySignDelete
+<
+Thus if you do not want to change the standard highlighting groups, but want
+different colors for either your signs or lines, you can overwrite these
+highlighting groups in your vimrc.
+
+Assuming you prefer |hl-DiffText| over |hl-DiffChange| for changed lines:
+>
+    highlight link SignifyLineChange DiffText
+<
+Example configuration #1:~
+>
+    highlight SignifySignAdd    ctermfg=green  guifg=#00ff00 cterm=NONE gui=NONE
+    highlight SignifySignDelete ctermfg=red    guifg=#ff0000 cterm=NONE gui=NONE
+    highlight SignifySignChange ctermfg=yellow guifg=#ffff00 cterm=NONE gui=NONE
+<
+Example configuration #2:~
+>
+    let g:signify_sign_show_text = 0
+
+    highlight SignifySignAdd                  ctermbg=green                guibg=#00ff00
+    highlight SignifySignDelete ctermfg=black ctermbg=red    guifg=#ffffff guibg=#ff0000
+    highlight SignifySignChange ctermfg=black ctermbg=yellow guifg=#000000 guibg=#ffff00
+<
+Note: For Unix people there is a small script in the repo, showcolors.bash,
+that shows all 256 colors available in the terminal. That makes picking the
+right numbers much easier.
+
+Default highlight groups:~
+
+The sign column (often mistakenly called "gutter") itself (all lines without
+signs) is highlighted by |hl-SignColumn|. Some colorschemes define no background
+color for |hl-Normal| but for |hl-SignColumn|. To avoid that visible difference:
+>
+    highlight SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
+<
+==============================================================================
+FAQ                                                                *signify-faq*
+
+    |signify-faq-01|  How to display changes in the statusline?
+    |signify-faq-02|  The plugin is slow!
+    |signify-faq-03|  Line highlighting without showing signs?
+
+------------------------------------------------------------------------------
+                                                                *signify-faq-01*
+How to display changes in the statusline?~
+
+Use either of the following two functions. Both take an optional buffer number
+and default to the current one.
+
+  - sy#repo#get_stats(...)~
+
+    Returns a list with the number of added, modified, and removed lines.
+
+  - sy#repo#get_stats_decorated(...)~
+
+    Similar to sy#repo#get_stats(), but with added decorations.
+    Example: "[+3 -8 ~5]"
+
+Using 'statusline':
+>
+    function! MyStatusline()
+      return ' %f '. sy#repo#get_stats_decorated()
+    endfunction
+
+    set statusline=%!MyStatusline()
+<
+The above is the short form of:
+>
+    function! s:sy_stats_wrapper()
+      let [added, modified, removed] = sy#repo#get_stats()
+      let symbols = ['+', '-', '~']
+      let stats = [added, removed, modified]  " reorder
+      let statline = ''
+
+      for i in range(3)
+        if stats[i] > 0
+          let statline .= printf('%s%s ', symbols[i], stats[i])
+        endif
+      endfor
+
+      if !empty(statline)
+        let statline = printf('[%s]', statline[:-2])
+      endif
+
+      return statline
+    endfunction
+
+    function! MyStatusline()
+      return ' %f '. s:sy_stats_wrapper()
+    endfunction
+
+    set statusline=%!MyStatusline()
+<
+------------------------------------------------------------------------------
+                                                                *signify-faq-02*
+The plugin is slow!~
+
+  * Sy relies on external tools. Check if these are the bottleneck.
+
+    If you use a centralized VCS like Subversion, is the connection to the
+    server slow?
+
+    If you use a decentralized VCS like Git, are you working on a slow remote
+    file system?
+
+  * Vim's sign handling code is known to be slow. If the delay is very long,
+    chances are the diff is just huge. This often happens after adding (or
+    removing) a huge file to the repo.
+
+------------------------------------------------------------------------------
+                                                                *signify-faq-03*
+Line highlighting without showing signs?~
+
+The line highlighting relies on signs being placed. The sign column is being
+shown automatically if there are placed signs.
+
+With a recent Vim, you can change that behavior using 'signcolumn'.
+
+==============================================================================
+EXAMPLE                                                        *signify-example*
+
+An example configuration for Sy:
+>
+    nnoremap <leader>gd :SignifyDiff<cr>
+    nnoremap <leader>gp :SignifyHunkDiff<cr>
+    nnoremap <leader>gu :SignifyHunkUndo<cr>
+
+    " hunk jumping
+    nmap <leader>gj <plug>(signify-next-hunk)
+    nmap <leader>gk <plug>(signify-prev-hunk)
+
+    " hunk text object
+    omap ic <plug>(signify-motion-inner-pending)
+    xmap ic <plug>(signify-motion-inner-visual)
+    omap ac <plug>(signify-motion-outer-pending)
+    xmap ac <plug>(signify-motion-outer-visual)
+<
+==============================================================================
+vim: et tw=78

@@ -1,0 +1,34 @@
+*sleuth.txt*  Heuristically set buffer options
+
+Author:  Tim Pope <http://tpo.pe/>
+Repo:    https://github.com/tpope/vim-sleuth
+License: Same terms as Vim itself (see |license|)
+
+This plugin is only available if 'compatible' is not set.
+
+SUMMARY                                         *sleuth*
+
+This plugin automatically adjusts 'shiftwidth' and 'expandtab' heuristically
+based on the current file, or, in the case the current file is new, blank, or
+otherwise insufficient, by looking at other files of the same type in the
+current and parent directories.  In lieu of adjusting 'softtabstop',
+'smarttab' is enabled.
+
+                                                *:Sleuth*
+:Sleuth                 Manually detect indentation.
+
+                                                *SleuthIndicator()*
+SleuthIndicator()       Indicator for inclusion in 'statusline'.  Or use
+                        flagship.vim to have it included automatically.
+
+SETTINGS                                     *sleuth-settings*
+
+Automatic detection of buffer options can be controlled with:
+>
+  let g:sleuth_automatic = 0
+<
+or:
+>
+  let b:sleuth_automatic = 0
+<
+ vim:tw=78:et:ft=help:norl:
