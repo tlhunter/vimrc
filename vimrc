@@ -20,7 +20,6 @@ nmap <Leader>s :set list!<CR>
 set listchars=tab:>\ ,trail:·,extends:»,precedes:«,nbsp:×
 :set list " Enable by default
 
-
 "------  Generic Behavior  ------
 set tabstop=4
 set shiftwidth=4
@@ -236,6 +235,19 @@ if has("gui_running")
 	" ...Unless you have dualscreens, then it's bigger than a screen...
 	set lines=200 columns=500
 	" set lines=60 columns=200
+
+	function Screencast()
+		:set guifont=monospace\ 24
+		:colorscheme github
+		:NERDTreeClose
+		:set cursorline&
+		:set shortmess=F
+		:set noshowmode
+        :set noruler
+		:set laststatus=0
+		:set noshowcmd
+	endfunction
+	nmap <F3> :call Screencast()<CR>
 
 	" Set default starting directory to ~/Projects or ~/projects
 	silent! cd $HOME/Projects
