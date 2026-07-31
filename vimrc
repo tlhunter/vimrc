@@ -60,7 +60,10 @@ map! <S-Insert> <MiddleMouse>
 :nmap yZ :let @" = expand("%:p")<CR>
 
 " F2 = Paste Toggle (in insert mode, pasting indented text behavior changes)
-set pastetoggle=<F2>
+" Neovim removed the 'paste' option entirely (bracketed paste replaces it)
+if !has('nvim')
+	set pastetoggle=<F2>
+endif
 
 
 
@@ -153,12 +156,6 @@ let NERDTreeMinimalUI=1
 let g:NERDTreeShowHidden=1
 
 
-"------ NERDCommenter Options ------
-" Visual select text then use 'Leader c Leader' to comment the selection
-let g:NERDSpaceDelims = 1
-let g:NERDDefaultAlign = 'left'
-
-
 "------  Fugitive Plugin Options  ------
 "https://github.com/tpope/vim-fugitive
 nnoremap <Leader>gs :Gstatus<CR>
@@ -193,7 +190,7 @@ nmap gQ VipJ
 
 "------  JSON Filetype Settings  ------
 au BufRead,BufNewFile *.json set filetype=json
-let g:vim_json_syntax_conceal = 0
+let g:vim_json_conceal = 0
 nmap <silent> =j :%!python -m json.tool<CR>:setfiletype json<CR>
 autocmd BufNewFile,BufRead *.webapp set filetype=json
 autocmd BufNewFile,BufRead *.jshintrc set filetype=json
@@ -201,95 +198,19 @@ autocmd BufNewFile,BufRead *.eslintrc set filetype=json
 
 
 "------  Markdown Settings  ------
-let g:vim_markdown_folding_disabled = 1
 let g:pencil#wrapModeDefault = 'soft'
 autocmd FileType markdown setlocal spell
 autocmd FileType markdown call pencil#init()
-let g:vim_markdown_conceal = 0
+let g:markdown_syntax_conceal = 0
 
 
 "------  AsciiDoc Settings  ------
 autocmd FileType asciidoc setlocal spell wrap
 
-"------  GUI Options  ------
-if has("gui_running")
-	" Hides toolbar and scrollbars and File menu
-	set guioptions=gt
-
-	colorscheme hybrid
-	let g:gruvbox_bold=0
-
-	" Ctrl+A select all
-	map <C-a> ggVG
-
-	" Ctrl+C OS clipboard copy
-	vmap <C-c> "+y
-
-	" Ctrl+B OS Clipboard paste
-	map <C-b> "*p
-
-	" Highlights the current line background
-	set cursorline
-
-	" Open VIM in fullscreen window
-	" ...Unless you have dualscreens, then it's bigger than a screen...
-	set lines=200 columns=500
-	" set lines=60 columns=200
-
-	function Screencast()
-		:set guifont=monospace\ 24
-		:colorscheme github
-		:NERDTreeClose
-		:set cursorline&
-		:set shortmess=F
-		:set noshowmode
-        :set noruler
-		:set laststatus=0
-		:set noshowcmd
-	endfunction
-	nmap <F3> :call Screencast()<CR>
-
-	" Set default starting directory to ~/Projects or ~/projects
-	silent! cd $HOME/Projects
-	silent! cd $HOME/projects
-
-	if has("gui_macvim") " OS X
-		set guifont=Monaco:h10
-		set noantialias
-		"set transparency=15
-
-		" Swipe to move between buffers
-		map <silent> <SwipeLeft> :bprev<CR>
-		map <silent> <SwipeRight> :bnext<CR>
-
-		" Damn you scrollwheel paste
-		nnoremap <MiddleMouse> <Nop>
-		nnoremap <2-MiddleMouse> <Nop>
-		nnoremap <3-MiddleMouse> <Nop>
-		nnoremap <4-MiddleMouse> <Nop>
-
-		inoremap <MiddleMouse> <Nop>
-		inoremap <2-MiddleMouse> <Nop>
-		inoremap <3-MiddleMouse> <Nop>
-		inoremap <4-MiddleMouse> <Nop>
-	elseif has("gui_gtk") " Linux
-		" set guifont=monospace\ 9
-		" set guifont=ProggyCleanTT\ 12
-		" set guifont=courier\ 10\ pitch\ 14
-
-		let g:NERDTreeDirArrowExpandable = '+'
-		let g:NERDTreeDirArrowCollapsible = '~'
-
-		" Disable mouse scrolling while in INSERT mode
-		" TODO: This doesn't work when shift is pressed
-		inoremap <ScrollWheelUp> <Nop>
-		inoremap <ScrollWheelDown> <Nop>
-		inoremap <ScrollWheelLeft> <Nop>
-		inoremap <ScrollWheelRight> <Nop>
-	endif
-else
-	" Inside of a terminal
-	set t_Co=256
-	colorscheme ir_black
-	set mouse=a
+"------  Terminal Options  ------
+set t_Co=256
+if has('termguicolors')
+	set termguicolors
 endif
+colorscheme ir_black
+set mouse=a
