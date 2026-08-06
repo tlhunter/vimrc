@@ -3,13 +3,16 @@
 This plugin automatically adjusts `'shiftwidth'` and `'expandtab'`
 heuristically based on the current file, or, in the case the current file is
 new, blank, or otherwise insufficient, by looking at other files of the same
-type in the current and parent directories.  In lieu of adjusting
-`'softtabstop'`, `'smarttab'` is enabled.
+type in the current and parent directories.  Modelines and [EditorConfig][]
+are also consulted, adding `'tabstop'`, `'textwidth'`, `'endofline'`,
+`'fileformat'`, `'fileencoding'`, and `'bomb'` to the list of supported
+options.
 
 Compare to [DetectIndent][].  I wrote this because I wanted something fully
 automatic.  My goal is that by installing this plugin, you can remove all
 indenting related configuration from your vimrc.
 
+[EditorConfig]: https://editorconfig.org/
 [DetectIndent]: http://www.vim.org/scripts/script.php?script_id=1171
 
 ## Installation
@@ -24,15 +27,9 @@ support:
 
 ## Notes
 
-* Searching for other files of the same type continues up the directory
-  hierarchy until a match is found. This means, for example, the indent for
-  the first file in a brand new Ruby project might very well be derived from
-  your `.irbrc`.  I consider this a feature.
 * If your file is consistently indented with hard tabs, `'shiftwidth'` will be
-  set to your `'tabstop'`.  Otherwise, a `'tabstop'` of 8 is enforced.
-* The algorithm is rolled from scratch, fairly simplistic, and only lightly
-  battle tested.  It's probably not (yet) as good as [DetectIndent][].
-  Let me know what it fails on for you.
+  set to your `'tabstop'`.  Otherwise, a `'tabstop'` of 8 is enforced, unless
+  another value is explicitly declared in a modeline or EditorConfig.
 
 ## Self-Promotion
 

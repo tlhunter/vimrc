@@ -1,11 +1,11 @@
-" vim: et sw=2 sts=2 fdm=marker
+" vim: et sw=2 sts=2
 
-" SignifyFoldExpr {{{1
+" Function: SignifyFoldExpr {{{1
 function! SignifyFoldExpr(lnum)
   return s:levels[a:lnum]
 endfunction
 
-" SignifyFoldText {{{1
+" Function: SignifyFoldText {{{1
 function! SignifyFoldText()
   let linelen = &textwidth ? &textwidth : 80
   let marker  = &foldmarker[:stridx(&foldmarker, ',')-1]
@@ -31,7 +31,7 @@ function! SignifyFoldText()
   return left . fill . right
 endfunction
 
-" #dispatch {{{1
+" Function: #dispatch {{{1
 function! sy#fold#dispatch(do_tab) abort
   if a:do_tab
     call sy#fold#enable(1)
@@ -40,9 +40,12 @@ function! sy#fold#dispatch(do_tab) abort
   endif
 endfunction
 
-" #enable {{{1
+" Function: #enable {{{1
 function! sy#fold#enable(do_tab) abort
-  execute sy#util#return_if_no_changes()
+  if !exists('b:sy')
+    echomsg 'signify: I cannot detect any changes!'
+    return
+  endif
 
   if a:do_tab
     tabedit %
@@ -57,23 +60,23 @@ function! sy#fold#enable(do_tab) abort
   setlocal foldlevel=0
 endfunction
 
-" #disable {{{1
+" Function: #disable {{{1
 function! sy#fold#disable() abort
-  let &l:foldmethod = b:sy_folded.method
-  let &l:foldtext = b:sy_folded.text
+  let &l:foldmethod = w:sy_folded.method
+  let &l:foldtext = w:sy_folded.text
   normal! zv
 endfunction
 
-" #toggle {{{1
+" Function: #toggle {{{1
 function! sy#fold#toggle() abort
-  if exists('b:sy_folded')
+  if exists('w:sy_folded')
     call sy#fold#disable()
-    if b:sy_folded.method == 'manual'
+    if w:sy_folded.method == 'manual'
       loadview
     endif
-    unlet b:sy_folded
+    unlet w:sy_folded
   else
-    let b:sy_folded = { 'method': &foldmethod, 'text': &foldtext }
+    let w:sy_folded = { 'method': &foldmethod, 'text': &foldtext }
     if &foldmethod == 'manual'
       let old_vop = &viewoptions
       mkview
@@ -86,9 +89,14 @@ function! sy#fold#toggle() abort
   call sy#start()
 endfunction
 
-" s:get_lines {{{1
+" Function: s:get_lines {{{1
 function! s:get_lines() abort
-  let signlist = sy#util#execute('sign place buffer='. b:sy.buffer)
+  let lang = v:lang
+  language message C
+  redir => signlist
+    silent! execute 'sign place buffer='. b:sy.buffer
+  redir END
+  silent! execute 'language message' lang
 
   let lines = []
   for line in split(signlist, '\n')[2:]
@@ -97,8 +105,9 @@ function! s:get_lines() abort
 
   return reverse(lines)
 endfunction
+" }}}
 
-" s:get_levels {{{1
+" Function: s:get_levels {{{1
 function! s:get_levels(lines) abort
   let levels = {}
 

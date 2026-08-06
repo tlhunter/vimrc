@@ -1,10 +1,13 @@
-" vim: et sw=2 sts=2 fdm=marker
+" vim: et sw=2 sts=2
 
 scriptencoding utf-8
 
-" #next_hunk {{{1
+" Function: #next_hunk {{{1
 function! sy#jump#next_hunk(count)
-  execute sy#util#return_if_no_changes()
+  if !exists('b:sy')
+    echomsg 'signify: I cannot detect any changes!'
+    return
+  endif
 
   let lnum = line('.')
   let hunks = filter(copy(b:sy.hunks), 'v:val.start > lnum')
@@ -15,9 +18,12 @@ function! sy#jump#next_hunk(count)
   endif
 endfunction
 
-" #prev_hunk {{{1
+" Function: #prev_hunk {{{1
 function! sy#jump#prev_hunk(count)
-  execute sy#util#return_if_no_changes()
+  if !exists('b:sy')
+    echomsg 'signify: I cannot detect any changes!'
+    return
+  endif
 
   let lnum = line('.')
   let hunks = filter(copy(b:sy.hunks), 'v:val.start < lnum')

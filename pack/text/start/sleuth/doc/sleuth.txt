@@ -8,27 +8,76 @@ This plugin is only available if 'compatible' is not set.
 
 SUMMARY                                         *sleuth*
 
-This plugin automatically adjusts 'shiftwidth' and 'expandtab' heuristically
-based on the current file, or, in the case the current file is new, blank, or
-otherwise insufficient, by looking at other files of the same type in the
-current and parent directories.  In lieu of adjusting 'softtabstop',
-'smarttab' is enabled.
+Automatic detection happens on the |BufNewFile|, |BufReadPost|, and
+|BufFilePost| events.  Sleuth first consults modelines, then EditorConfig
+(https://editorconfig.org) files.  If neither of these produces a value for
+'expandtab' and 'shiftwidth', a heuristic algorithm is used to guess them,
+first on the current file, and then on other files with the same extension in
+the same and parent directories.
+
+The full list of detected options is as follows:
+
+Vim Option     Safe?  EditorConfig key ~
+'filetype'         Y  vim_filetype
+'expandtab'        Y  indent_style
+'shiftwidth'       Y  indent_size
+'tabstop'          Y  tab_width
+'textwidth'        Y  max_line_length
+'fixendofline'     Y  insert_final_newline
+'endofline'           insert_final_newline
+'fileformat'          end_of_line
+'fileencoding'        charset
+'bomb'                charset
+
+Options marked "safe" are those guaranteed not to toggle 'modified'.  These
+are the only options that will be set in 'nomodifiable' buffers, and the only
+options that Sleuth will detect in a modeline.  Safe options will also be
+reapplied on every |FileType| event, so that they can override any |ftplugin|
+settings.
+
+Sleuth always sets 'softtabstop' to -1, effectively mirroring 'shiftwidth'.
+It also sets 'smarttab' globally.
+
+INTERFACE                                       *sleuth-interface*
 
                                                 *:Sleuth*
 :Sleuth                 Manually detect indentation.
+
+:verbose Sleuth         Manually detect indentation, and display the reason
+                        each option was set.
 
                                                 *SleuthIndicator()*
 SleuthIndicator()       Indicator for inclusion in 'statusline'.  Or use
                         flagship.vim to have it included automatically.
 
-SETTINGS                                     *sleuth-settings*
+CONFIGURATION                                   *sleuth-configuration*
 
-Automatic detection of buffer options can be controlled with:
+To override detection and force options for a particular file or directory,
+use a |modeline| or EditorConfig (https://editorconfig.org/), respectively.
+
+                                                *g:sleuth_{filetype}_heuristics*
+To disable the heuristic algorithm for a given 'filetype', assign a false
+value to a variable named like g:sleuth_{filetype}_heuristics:
 >
-  let g:sleuth_automatic = 0
+        let g:sleuth_gitcommit_heuristics = 0
 <
-or:
+                                                *g:sleuth_heuristics*
+Alternatively, one can disable heuristics by default, and opt-in for
+individual file types:
 >
-  let b:sleuth_automatic = 0
+        let g:sleuth_heuristics = 0
+        let g:sleuth_perl_heuristics = 1
+<
+                                                *g:sleuth_automatic*
+Sleuth used to support setting g:sleuth_automatic to a false value and instead
+calling :Sleuth selectively from |FileType| autocommands.  This will no longer
+work quite right, and thus g:sleuth_automatic has been deprecated in favor of
+the heuristics options above.
+
+                                                *g:sleuth_no_filetype_indent_on*
+Sleuth forces |:filetype-indent-on| by default, which enables file-type
+specific indenting algorithms and is highly recommended. To opt out:
+>
+        let g:sleuth_no_filetype_indent_on = 1
 <
  vim:tw=78:et:ft=help:norl:

@@ -2,54 +2,48 @@
 
 ---
 
-_Signify (or just Sy) uses the sign column to indicate added, modified and
-removed lines in a file that is managed by a version control system (VCS)._
+Signify (or just Sy) is a quite unobtrusive plugin. It uses signs to indicate
+added, modified and removed lines based on data of an underlying version control
+system.
+
+It's __fast__, __easy to use__ and __well documented__.
 
 ---
 
-- Supports **git**, **mercurial**, **darcs**, **bazaar**, **subversion**,
-  **cvs**, **rcs**, **fossil**, **accurev**, **perforce**, **tfs**, **yadm**.
-- **Asynchronous** execution of VCS tools for Vim 8.0.902+ and Neovim.
-- **Preserves signs** from other plugins.
-- Handles **nested repositories** controlled by different VCS.
-- Provides mappings for **navigating hunks** ("blocks of changed lines").
-- Provides an **operator** that acts on hunks.
-- **Preview** changes in the current line in a popup window.
-- Show all changes in **diff mode**.
-- Alternative workflow: Disable the plugin by default and **toggle it per
-  buffer** on demand.
-- Optional **line highlighting**.
-- Optional **skipping of filetypes/filenames**.
-- Optional **stats in the statusline**.
-- **Works out of the box**, but allows fine-grained configuration.
-- **Great documentation** and **handsome maintainers**!
+- supports git, mercurial, darcs, bazaar, subversion, cvs, rcs, fossil, accurev,
+  perforce, tfs
+- quick jumping between blocks of changed lines ("hunks")
+- apart from signs there is also optional line highlighting
+- preserves signs from other plugins
+- you can toggle the plugin per buffer
+- good documentation
+- skip certain filetypes and filenames
+- depending on your usual workflow you can disable it per default and enable on
+  demand later
+- fully configurable through global variables (options and mappings)
 
 ---
 
-_Similar plugin for git: [vim-gitgutter](https://github.com/airblade/vim-gitgutter)_
+_If git is the only version control system you use, I suggest having a look at
+[vim-gitgutter](https://github.com/airblade/vim-gitgutter). It provides more
+git-specific features that would be unfeasible for Sy, since it only implements
+features that work for all supported VCS._
 
-## Installation
+## Installation and Documentation
 
-The `master` branch is async-only and thus requires at least Vim 8.0.902. Use
-the `legacy` branch for older Vim versions.
-
-Using your favorite [plugin
-manager](https://github.com/mhinz/vim-galore#managing-plugins), e.g.
+Use your favorite [plugin
+manager](https://github.com/mhinz/vim-galore#managing-plugins), e.g. using
 [vim-plug](https://github.com/junegunn/vim-plug):
 
-```vim
-if has('nvim') || has('patch-8.0.902')
-  Plug 'mhinz/vim-signify'
-else
-  Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
-endif
-```
+    Plug 'mhinz/vim-signify'
 
-## Configuration for async update
-```vim
-" default updatetime 4000ms is not good for async update
-set updatetime=100
-```
+It works without any configuration, but you might want to look into the
+documentation for further customization:
+
+    :h signify
+
+_The single most important option by far is `g:signify_vcs_list`. Please read
+`:h g:signify_vcs_list`._
 
 ## Demo
 
