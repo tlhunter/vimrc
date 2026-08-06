@@ -62,11 +62,16 @@ function! s:UI._dumpHelp()
         let help .= "\"\n\" ----------------------------\n"
         let help .= "\" Bookmark table mappings~\n"
         let help .= "\" double-click,\n"
+        let help .= '" '. g:NERDTreeMapJumpBookmarks .": jump to bookmark table\n"
         let help .= '" '. g:NERDTreeMapActivateNode .": open bookmark\n"
         let help .= '" '. g:NERDTreeMapPreview .": preview file\n"
         let help .= '" '. g:NERDTreeMapPreview .": find dir in tree\n"
         let help .= '" '. g:NERDTreeMapOpenInTab.": open in new tab\n"
         let help .= '" '. g:NERDTreeMapOpenInTabSilent .": open in new tab silently\n"
+        let help .= '" '. g:NERDTreeMapOpenSplit .": open split\n"
+        let help .= '" '. g:NERDTreeMapPreviewSplit .": preview split\n"
+        let help .= '" '. g:NERDTreeMapOpenVSplit .": open vsplit\n"
+        let help .= '" '. g:NERDTreeMapPreviewVSplit .": preview vsplit\n"
         let help .= '" '. g:NERDTreeMapCustomOpen .": custom open\n"
         let help .= '" '. g:NERDTreeMapDeleteBookmark .": delete bookmark\n"
 
@@ -99,6 +104,7 @@ function! s:UI._dumpHelp()
         let help .= '" '. g:NERDTreeMapToggleFilters .': file filters (' . (self.isIgnoreFilterEnabled() ? 'on' : 'off') . ")\n"
         let help .= '" '. g:NERDTreeMapToggleFiles .': files (' . (self.getShowFiles() ? 'on' : 'off') . ")\n"
         let help .= '" '. g:NERDTreeMapToggleBookmarks .': bookmarks (' . (self.getShowBookmarks() ? 'on' : 'off') . ")\n"
+        let help .= '" '. g:NERDTreeMapToggleFileLines .': files lines (' . (self.getShowFileLines() ? 'on' : 'off') . ")\n"
 
         " add quickhelp entries for each custom key map
         let help .= "\"\n\" ----------------------------\n"
@@ -143,6 +149,7 @@ function! s:UI.New(nerdtree)
     let newObj._showFiles = g:NERDTreeShowFiles
     let newObj._showHidden = g:NERDTreeShowHidden
     let newObj._showBookmarks = g:NERDTreeShowBookmarks
+    let newObj._showFileLines = g:NERDTreeFileLines
 
     return newObj
 endfunction
@@ -280,6 +287,11 @@ function! s:UI.getShowHidden()
     return self._showHidden
 endfunction
 
+" FUNCTION: s:UI.getShowFileLines() {{{1
+function! s:UI.getShowFileLines()
+    return self._showFileLines
+endfunction
+
 " FUNCTION: s:UI._indentLevelFor(line) {{{1
 function! s:UI._indentLevelFor(line)
     " Replace multi-character DirArrows with a single space so the
@@ -364,7 +376,7 @@ function! s:UI.saveScreenState()
         call g:NERDTree.CursorToTreeWin()
         let self._screenState['oldPos'] = getpos('.')
         let self._screenState['oldTopLine'] = line('w0')
-        let self._screenState['oldWindowSize']= winwidth('')
+        let self._screenState['oldWindowSize'] = winnr('$')==1 ? g:NERDTreeWinSize : winwidth('')
         call nerdtree#exec(win . 'wincmd w', 1)
     catch
     endtry
@@ -471,10 +483,10 @@ function! s:UI.toggleIgnoreFilter()
     call self.centerView()
 endfunction
 
-" FUNCTION: s:UI.toggleShowBookmarks() {{{1
-" Toggle the visibility of the Bookmark table.
-function! s:UI.toggleShowBookmarks()
-    let self._showBookmarks = !self._showBookmarks
+" FUNCTION: s:UI.setShowBookmarks() {{{1
+" Sets the visibility of the Bookmark table.
+function! s:UI.setShowBookmarks(value)
+    let self._showBookmarks = a:value
 
     if self.getShowBookmarks()
         call self.nerdtree.render()
@@ -490,6 +502,12 @@ function! s:UI.toggleShowBookmarks()
     endif
 
     call self.centerView()
+endfunction
+
+" FUNCTION: s:UI.toggleShowBookmarks() {{{1
+" Toggle the visibility of the Bookmark table.
+function! s:UI.toggleShowBookmarks()
+    call self.setShowBookmarks(!self._showBookmarks)
 endfunction
 
 " FUNCTION: s:UI.toggleShowFiles() {{{1
@@ -508,12 +526,23 @@ function! s:UI.toggleShowHidden()
     call self.centerView()
 endfunction
 
+" FUNCTION: s:UI.toggleShowFileLines() {{{1
+" toggles the display of file lines
+function! s:UI.toggleShowFileLines()
+    let self._showFileLines = !self._showFileLines
+    call self.nerdtree.root.refresh()
+    call self.renderViewSavingPosition()
+    call self.centerView()
+endfunction
+
 " FUNCTION: s:UI.toggleZoom() {{{1
 " zoom (maximize/minimize) the NERDTree window
 function! s:UI.toggleZoom()
     if exists('b:NERDTreeZoomed') && b:NERDTreeZoomed
-        let size = exists('b:NERDTreeOldWindowSize') ? b:NERDTreeOldWindowSize : g:NERDTreeWinSize
-        call nerdtree#exec('silent vertical resize '. size, 1)
+        setlocal nowinfixwidth
+        wincmd =
+        setlocal winfixwidth
+        call nerdtree#exec('silent vertical resize '. g:NERDTreeWinSize, 1)
         let b:NERDTreeZoomed = 0
     else
         call nerdtree#exec('vertical resize '. get(g:, 'NERDTreeWinSizeMax', ''), 1)

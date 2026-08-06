@@ -3,8 +3,87 @@
      PATCH versions are listed from newest to oldest under their respective MAJOR.MINOR
      version in an unordered list.  The format is:
         - **.PATCH**: Pull Request Title (PR Author) [PR Number](Link to PR)
+            or
+        - **.PATCH**:
+            - Pull Request Title 1 (PR Author) [PR Number](Link to PR)
+            - Pull Request Title 2 (PR Author) [PR Number](Link to PR)
+                .
+                .
+                .
+            - Pull Request Title n (PR Author) [PR Number](Link to PR)
 -->
+#### 7.1
+- **.3**:
+    - docs: update FAQ snippets containing quit command. (rzvxa) [#1417](https://github.com/preservim/nerdtree/pull/1417)
+    - feat: jump to bookmark table shortcut. (ds2606, rzvxa) [#1394](https://github.com/preservim/nerdtree/pull/1394)
+    - fix: typo in docs for show file lines setting. (lothardp) [#1426](https://github.com/preservim/nerdtree/pull/1426)
+- **.2**:
+    - fix: GetWinNum regex pattern. (rzvxa) [#1409](https://github.com/preservim/nerdtree/pull/1409)
+    - fix: session restore for nerdtree buffers. (rzvxa) [#1405](https://github.com/preservim/nerdtree/pull/1405)
+- **.1**:
+    - fix: change default binding of filelines to `FL`. (rzvxa) [#1400](https://github.com/preservim/nerdtree/pull/1400)
+    - fix: toggle zoom resizing. (ds2606) [#1395](https://github.com/preservim/nerdtree/pull/1395)
+- **.0**:
+    - fix: typo in the docs. (bl4kraven) [#1390](https://github.com/preservim/nerdtree/pull/1390)
+    - feat: add NERDTreeExplore command. (msibal6) [#1389](https://github.com/preservim/nerdtree/pull/1389)
+    - fix: mapping description in NERDTree.txt. (roccomao) [#1393](https://github.com/preservim/nerdtree/pull/1393)
+#### 7.0
+- **.1**:
+    - Fix NERDTreeFind to handle directory case sensitivity. (dangibson) [#1387](https://github.com/preservim/nerdtree/pull/1387)
+    - New Show file lines toggle. (hsnks100) [#1384](https://github.com/preservim/nerdtree/pull/1384)
+    - Add case sensitivity for refreshing nodes. (rzvxa) [#1382](https://github.com/preservim/nerdtree/pull/1382)
+    - Clarified the NERDTreeChangePermissions prompt. (rzvxa) [#1381](https://github.com/preservim/nerdtree/pull/1381)
+    - New reveal functionality for Windows. (rzvxa) [#1366](https://github.com/preservim/nerdtree/pull/1366)
+    - Fix bracket escaping in path names. (kai-patel) [#1359](https://github.com/preservim/nerdtree/pull/1359)
+    - Fix Case Sensitive Move Operation. (rzvxa) [#1375](https://github.com/preservim/nerdtree/pull/1375)
+    - New menu command for changing selected node permissions. (mjkloeckner) [#1348](https://github.com/preservim/nerdtree/pull/1348)
+    - Fix documentation errors. (BubuDavid) [#1372](https://github.com/preservim/nerdtree/pull/1372)
+    - Fix typo in nerdtree.vim file. (SandeshPyakurel) [#1380](https://github.com/preservim/nerdtree/pull/1380)
+- **.0**:
+    - Now we warn about invalid files instead of ignoring them silently. (rmonico) [#1365](https://github.com/preservim/nerdtree/pull/1365)
+    - New g:NERDTreeWinPos options for top and bottom. (rzvxa) [#1363](https://github.com/preservim/nerdtree/pull/1363)
+    - Fix error in README. (nickspoons) [#1330](https://github.com/preservim/nerdtree/pull/1330)
+    - Fix typo in the documentation. (chapeupreto) [#1306](https://github.com/preservim/nerdtree/pull/1306)
+#### 6.10
+- **.16**: Fix documentation errors. (lifecrisis) [#1269](https://github.com/preservim/nerdtree/pull/1269)
+- **.15**: Ensure backward compatible testing of types. (lifecrisis) [#1266](https://github.com/preservim/nerdtree/pull/1266)
+- **.14**: Replace trim() with a version-compatible alternative. (PhilRunninger) [#1265](https://github.com/preservim/nerdtree/pull/1265)
+- **.13**: Change highlighting of bookmarks in the tree. (PhilRunninger) [#1261](https://github.com/preservim/nerdtree/pull/1261)
+- **.12**: Answer the question about accessing files over scp or ftp. (PhilRunninger) [#1259](https://github.com/preservim/nerdtree/pull/1259)
+- **.11**: Trim filenames created via the fs_menu (elanorigby) [#1243](https://github.com/preservim/nerdtree/pull/1243)
+- **.10**: Improve F.A.Q. Answers and Issue Templates (PhilRunninger) [#1249](https://github.com/preservim/nerdtree/pull/1249)
+- **.9**: `go` on a bookmark directory will NERDTreeFind it. (PhilRunninger) [#1236](https://github.com/preservim/nerdtree/pull/1236)
+- **.8**: Put `Callback` function variables in local scope. (PhilRunninger) [#1230](https://github.com/preservim/nerdtree/pull/1230)
+- **.7**: Fix mouse-clicking a file to open it. (PhilRunninger) [#1225](https://github.com/preservim/nerdtree/pull/1225)
+- **.6**: Restore the default behavior of the `<CR>` key. (PhilRunninger) [#1221](https://github.com/preservim/nerdtree/pull/1221)
+- **.5**: Fix `{'keepopen':0}` in NERDTreeCustomOpenArgs (PhilRunninger) [#1217](https://github.com/preservim/nerdtree/pull/1217)
+- **.4**: Removed directory separator from sort key (Daniel E) [#1219](https://github.com/preservim/nerdtree/pull/1219)
+- **.3**: Add new FAQ and answer: How to prevent buffers replacing NERDTree. (PhilRunninger) [#1215](https://github.com/preservim/nerdtree/pull/1215)
+- **.2**: New menu command: Run a system command in this directory. (PhilRunninger) [#1214](https://github.com/preservim/nerdtree/pull/1214)
+- **.1**: Escape quotation marks so they can be used in key mappings. (PhilRunninger) [#1213](https://github.com/preservim/nerdtree/pull/1213)
+- **.0**: Enable full path specifications for NERDTreeIgnore (PhilRunninger) [#1207](https://github.com/preservim/nerdtree/pull/1207)
+#### 6.9
+- **.12**: Respect NERDTreeCustomOpenArgs when opening bookmark (przepompownia) [#1200](https://github.com/preservim/nerdtree/pull/1200)
+- **.11**: Revamp the README. (buncis, PhilRunninger) [#1192](https://github.com/preservim/nerdtree/pull/1192), [#1193](https://github.com/preservim/nerdtree/pull/1193)
+- **.10**: Open a mirrored NERDTree with correct width (PhilRunninger) [#1177](https://github.com/preservim/nerdtree/pull/1177)
+- **.9**: Updated Readme, removed typo (H3RSKO) [#1167](https://github.com/preservim/nerdtree/pull/1167)
+- **.8**: Refactor sort comparison functions, removing redundancy (PhilRunninger) [#1166](https://github.com/preservim/nerdtree/pull/1166)
+- **.7**: Fix argument of `exists()` function calls checking for autocommands. (PhilRunninger) [#1165](https://github.com/preservim/nerdtree/pull/1165)
+- **.6**: Don't use silent when raising User events (PhilRunninger) [#1164](https://github.com/preservim/nerdtree/pull/1164)
+- **.5**: Fix highlight for file node.  (pirey) [#1157](https://github.com/preservim/nerdtree/pull/1157)
+- **.4**: Make sure symbolic links' flags are highlighted correctly.  (PhilRunninger) [#1156](https://github.com/preservim/nerdtree/pull/1156)
+- **.3**: Fix new NERDTrees' width when previous one was in the only window. (PhilRunninger) [#1153](https://github.com/preservim/nerdtree/pull/1153)
+- **.2**: Fix the scope of several key mappings (lifecrisis, PhilRunninger) [#1151](https://github.com/preservim/nerdtree/pull/1151)
+- **.1**: Respect user's `&shellslash` setting in CopyNode and RemoveNode functions (PhilRunninger) [#1150](https://github.com/preservim/nerdtree/pull/1150)
+- **.0**: Enable opening bookmarks in split windows. (PhilRunninger) [#1144](https://github.com/preservim/nerdtree/pull/1144)
+#### 6.8
+- **.0**: Allow concealed characters to show another character. (PhilRunninger) [#1138](https://github.com/preservim/nerdtree/pull/1138)
 #### 6.7
+- **.15**: Add curly braces to the list of characters to be escaped. (PhilRunninger) [#1128](https://github.com/preservim/nerdtree/pull/1128)
+- **.14**: Use backward-compatible `nerdtree#and()` in one place that was missed. (PhilRunninger) [#1134](https://github.com/preservim/nerdtree/pull/1134)
+- **.13**: `cmd.exe /c start "" <filename>` for windows default viewer support. (J. Altayó) [#1130](https://github.com/preservim/nerdtree/pull/1130)
+- **.12**: Fixed a bug that caused the file-tree construction to slow down significantly. (Eugenij-W) [#1126](https://github.com/preservim/nerdtree/pull/1126)
+- **.11**: Fix exception in NERDTreeFind (on windows OS and If the file is located in the root directory of the disk) (Eugenij-W) [#1122](https://github.com/preservim/nerdtree/pull/1122)
 - **.10**: Do not consider the tree root to be "cascadable". (lifecrisis) [#1120](https://github.com/preservim/nerdtree/pull/1120)
 - **.9**: Force `:NERDTreeFocus` to allow events to be fired when switching windows. (PhilRunninger) [#1118](https://github.com/preservim/nerdtree/pull/1118)
 - **.8**: Fix example code for the `NERDTreeAddKeyMap()` function. (PhilRunninger) [#1116](https://github.com/preservim/nerdtree/pull/1116)

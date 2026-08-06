@@ -25,10 +25,10 @@ function! s:Path.AbsolutePathFor(pathStr)
     if l:prependWorkingDir
         let l:result = getcwd()
 
-        if l:result[-1:] ==# s:Path.Slash()
+        if l:result[-1:] == nerdtree#slash()
             let l:result = l:result . a:pathStr
         else
-            let l:result = l:result . s:Path.Slash() . a:pathStr
+            let l:result = l:result . nerdtree#slash() . a:pathStr
         endif
     endif
 
@@ -65,6 +65,25 @@ function! s:Path.cacheDisplayString() abort
         let self.cachedDisplayString = self.addDelimiter(self.cachedDisplayString) . ' -> ' . self.symLinkDest
     endif
 
+    if !self.isDirectory && b:NERDTree.ui.getShowFileLines() != 0
+        let l:bufname = self.str({'format': 'Edit'})
+        let l:lines = 0
+        if executable('wc') 
+            let l:lines = split(system('wc -l "'.l:bufname.'"'))[0]
+        elseif nerdtree#runningWindows()
+            let l:lines = substitute(system('type "'.l:bufname.'" | find /c /v ""'), '\n', '', 'g')
+        else 
+            let s:lines = readfile(l:bufname)
+            let l:lines = 0
+            for s:line in s:lines
+                let l:lines += 1
+                if l:lines >= 20000 
+                    break
+                endif
+            endfor
+        endif
+        let self.cachedDisplayString = self.addDelimiter(self.cachedDisplayString) . ' ('.l:lines.')'
+    endif
     if self.isReadOnly
         let self.cachedDisplayString = self.addDelimiter(self.cachedDisplayString) . ' ['.g:NERDTreeGlyphReadOnly.']'
     endif
@@ -97,50 +116,6 @@ function! s:Path.changeToDir()
     catch
         throw 'NERDTree.PathChangeError: cannot change CWD to ' . dir
     endtry
-endfunction
-
-" FUNCTION: Path.compareTo() {{{1
-"
-" Compares this Path to the given path and returns 0 if they are equal, -1 if
-" this Path is 'less than' the given path, or 1 if it is 'greater'.
-"
-" Args:
-" path: the path object to compare this to
-"
-" Return:
-" 1, -1 or 0
-function! s:Path.compareTo(path)
-    let thisPath = self.getLastPathComponent(1)
-    let thatPath = a:path.getLastPathComponent(1)
-
-    "if the paths are the same then clearly we return 0
-    if thisPath ==# thatPath
-        return 0
-    endif
-
-    let thisSS = self.getSortOrderIndex()
-    let thatSS = a:path.getSortOrderIndex()
-
-    "compare the sort sequences, if they are different then the return
-    "value is easy
-    if thisSS < thatSS
-        return -1
-    elseif thisSS > thatSS
-        return 1
-    else
-        if !g:NERDTreeSortHiddenFirst
-            let thisPath = substitute(thisPath, '^[._]', '', '')
-            let thatPath = substitute(thatPath, '^[._]', '', '')
-        endif
-        "if the sort sequences are the same then compare the paths
-        "alphabetically
-        let pathCompare = g:NERDTreeCaseSensitiveSort ? thisPath <# thatPath : thisPath <? thatPath
-        if pathCompare
-            return -1
-        else
-            return 1
-        endif
-    endif
 endfunction
 
 " FUNCTION: Path.Create(fullpath) {{{1
@@ -332,7 +307,7 @@ function! s:Path._escChars()
         return " `\|\"#%&,?()\*^<>$"
     endif
 
-    return " \\`\|\"#%&,?()\*^<>[]$"
+    return " \\`\|\"#%&,?()\*^<>[]{}$"
 endfunction
 
 " FUNCTION: Path.getDir() {{{1
@@ -438,7 +413,7 @@ function! s:Path.getSortKey()
             let self._sortKey = [self.getSortOrderIndex()] + metadata
         endif
 
-        let path = self.getLastPathComponent(1)
+        let path = self.getLastPathComponent(0)
         if !g:NERDTreeSortHiddenFirst
             let path = substitute(path, '^[._]', '', '')
         endif
@@ -503,10 +478,10 @@ function! s:Path.ignore(nerdtree)
             endif
         endfor
 
-        for Callback in g:NERDTree.PathFilters()
-            let Callback = type(Callback) ==# type(function('tr')) ? Callback : function(Callback)
-            if Callback({'path': self, 'nerdtree': a:nerdtree})
-                return 1
+        for l:Callback in g:NERDTree.PathFilters()
+            let l:Callback = type(l:Callback) ==# type(function('tr')) ? l:Callback : function(l:Callback)
+            if l:Callback({'path': self, 'nerdtree': a:nerdtree})
+               return 1
             endif
         endfor
     endif
@@ -527,7 +502,10 @@ endfunction
 " returns true if this path matches the given ignore pattern
 function! s:Path._ignorePatternMatches(pattern)
     let pat = a:pattern
-    if strpart(pat,len(pat)-7) ==# '[[dir]]'
+    if strpart(pat,len(pat)-8) ==# '[[path]]'
+        let pat = strpart(pat,0, len(pat)-8)
+        return self.str() =~# pat
+    elseif strpart(pat,len(pat)-7) ==# '[[dir]]'
         if !self.isDirectory
             return 0
         endif
@@ -546,26 +524,36 @@ endfunction
 " return 1 if this path is somewhere above the given path in the filesystem.
 "
 " a:path should be a dir
-function! s:Path.isAncestor(path)
-    if !self.isDirectory
-        return 0
-    endif
-
-    let this = self.str()
-    let that = a:path.str()
-    return stridx(that, this) ==# 0
+function! s:Path.isAncestor(child)
+    return a:child.isUnder(self)
 endfunction
 
 " FUNCTION: Path.isUnder(path) {{{1
 " return 1 if this path is somewhere under the given path in the filesystem.
-function! s:Path.isUnder(path)
-    if a:path.isDirectory ==# 0
+function! s:Path.isUnder(parent)
+    if a:parent.isDirectory ==# 0
         return 0
     endif
-
-    let this = self.str()
-    let that = a:path.str()
-    return stridx(this, that . s:Path.Slash()) ==# 0
+    if nerdtree#runningWindows() && a:parent.drive !=# self.drive
+        return 0
+    endif
+    let l:this_count = len(self.pathSegments)
+    if l:this_count ==# 0
+        return 0
+    endif
+    let l:that_count = len(a:parent.pathSegments)
+    if l:that_count ==# 0
+        return 1
+    endif
+    if l:that_count >= l:this_count
+        return 0
+    endif
+    for i in range(0, l:that_count-1)
+        if !nerdtree#pathEquals(self.pathSegments[i], a:parent.pathSegments[i])
+            return 0
+        endif
+    endfor
+    return 1
 endfunction
 
 " FUNCTION: Path.JoinPathStrings(...) {{{1
@@ -585,11 +573,7 @@ endfunction
 " Args:
 " path: the other path obj to compare this with
 function! s:Path.equals(path)
-    if nerdtree#runningWindows()
-        return self.str() ==? a:path.str()
-    else
-        return self.str() ==# a:path.str()
-    endif
+    return nerdtree#pathEquals(self.str(), a:path.str())
 endfunction
 
 " FUNCTION: Path.New(pathStr) {{{1
@@ -602,23 +586,6 @@ function! s:Path.New(pathStr)
     let l:newPath.flagSet = g:NERDTreeFlagSet.New()
 
     return l:newPath
-endfunction
-
-" FUNCTION: Path.Slash() {{{1
-" Return the path separator used by the underlying file system.  Special
-" consideration is taken for the use of the 'shellslash' option on Windows
-" systems.
-function! s:Path.Slash()
-
-    if nerdtree#runningWindows()
-        if exists('+shellslash') && &shellslash
-            return '/'
-        endif
-
-        return '\'
-    endif
-
-    return '/'
 endfunction
 
 " FUNCTION: Path.Resolve() {{{1
@@ -805,7 +772,7 @@ function! s:Path._strForEdit()
 
     " On Windows, the drive letter may be removed by "fnamemodify()".  Add it
     " back, if necessary.
-    if nerdtree#runningWindows() && l:result[0] ==# s:Path.Slash()
+    if nerdtree#runningWindows() && l:result[0] == nerdtree#slash()
         let l:result = self.drive . l:result
     endif
 
@@ -820,14 +787,14 @@ endfunction
 
 " FUNCTION: Path._strForGlob() {{{1
 function! s:Path._strForGlob()
-    let lead = s:Path.Slash()
+    let lead = nerdtree#slash()
 
     "if we are running windows then slap a drive letter on the front
     if nerdtree#runningWindows()
         let lead = self.drive . '\'
     endif
 
-    let toReturn = lead . join(self.pathSegments, s:Path.Slash())
+    let toReturn = lead . join(self.pathSegments, nerdtree#slash())
 
     if !nerdtree#runningWindows()
         let toReturn = escape(toReturn, self._escChars())
@@ -839,7 +806,7 @@ endfunction
 " Return the absolute pathname associated with this Path object.  The pathname
 " returned is appropriate for the underlying file system.
 function! s:Path._str()
-    let l:separator = s:Path.Slash()
+    let l:separator = nerdtree#slash()
     let l:leader = l:separator
 
     if nerdtree#runningWindows()

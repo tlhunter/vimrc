@@ -28,12 +28,37 @@ endfunction
 
 " FUNCTION: s:Creator._broadcastInitEvent() {{{1
 function! s:Creator._broadcastInitEvent()
-    silent doautocmd User NERDTreeInit
+    if exists('#User#NERDTreeInit')
+        doautocmd User NERDTreeInit
+    endif
 endfunction
 
 " FUNCTION: s:Creator.BufNamePrefix() {{{1
 function! s:Creator.BufNamePrefix()
     return 'NERD_tree_'
+endfunction
+
+" FUNCTION: s:Creator.CreateExploreTree(dir) {{{1
+function! s:Creator.CreateExploreTree(dir)
+    try
+        let path = g:NERDTreePath.New(a:dir)
+    catch /^NERDTree.InvalidArgumentsError/
+        call nerdtree#echo('Invalid directory name:' . a:dir)
+        return
+    endtry
+
+    let creator = s:Creator.New()
+    if getbufinfo('%')[0].changed && !&hidden && !&autowriteall
+        let l:splitLocation = g:NERDTreeWinPos ==# 'left' || g:NERDTreeWinPos ==# 'top' ? 'topleft ' : 'botright '
+        let l:splitDirection = g:NERDTreeWinPos ==# 'left' || g:NERDTreeWinPos ==# 'right' ? 'vertical' : ''
+        silent! execute l:splitLocation . l:splitDirection . ' new'
+    else
+        silent! execute 'enew'
+    endif
+
+    call creator.createWindowTree(a:dir)
+    "we want windowTree buffer to disappear after moving to any other buffer
+    setlocal bufhidden=wipe
 endfunction
 
 " FUNCTION: s:Creator.CreateTabTree(a:name) {{{1
@@ -93,7 +118,7 @@ function! s:Creator.createWindowTree(dir)
 
     "we need a unique name for each window tree buffer to ensure they are
     "all independent
-    exec g:NERDTreeCreatePrefix . ' edit ' . self._nextBufferName()
+    exec g:NERDTreeCreatePrefix . ' edit ' . self._nextBufferName('win')
 
     call self._createNERDTree(path, 'window')
     let b:NERDTree._previousBuf = bufnr(previousBuf)
@@ -170,6 +195,7 @@ function! s:Creator.createMirror()
     let t:NERDTreeBufName = bufferName
     call self._createTreeWin()
     exec 'buffer ' .  bufferName
+    call b:NERDTree.ui.restoreScreenState()
     if !&hidden
         call b:NERDTree.render()
     endif
@@ -179,16 +205,17 @@ endfunction
 " Initialize the NERDTree window.  Open the window, size it properly, set all
 " local options, etc.
 function! s:Creator._createTreeWin()
-    let l:splitLocation = g:NERDTreeWinPos ==# 'left' ? 'topleft ' : 'botright '
+    let l:splitLocation = g:NERDTreeWinPos ==# 'left' || g:NERDTreeWinPos ==# 'top' ? 'topleft ' : 'botright '
+    let l:splitDirection = g:NERDTreeWinPos ==# 'left' || g:NERDTreeWinPos ==# 'right' ? 'vertical' : ''
     let l:splitSize = g:NERDTreeWinSize
 
     if !g:NERDTree.ExistsForTab()
-        let t:NERDTreeBufName = self._nextBufferName()
-        silent! execute l:splitLocation . 'vertical ' . l:splitSize . ' new'
+        let t:NERDTreeBufName = self._nextBufferName('tab')
+        silent! execute l:splitLocation . l:splitDirection . ' ' . l:splitSize . ' new'
         silent! execute 'edit ' . t:NERDTreeBufName
-        silent! execute 'vertical resize '. l:splitSize
+        silent! execute l:splitDirection . ' resize '. l:splitSize
     else
-        silent! execute l:splitLocation . 'vertical ' . l:splitSize . ' split'
+        silent! execute l:splitLocation . l:splitDirection . ' ' . l:splitSize . ' split'
         silent! execute 'buffer ' . t:NERDTreeBufName
     endif
 
@@ -217,10 +244,22 @@ function! s:Creator.New()
     return newCreator
 endfunction
 
-" FUNCTION: s:Creator._nextBufferName() {{{1
-" returns the buffer name for the next nerd tree
-function! s:Creator._nextBufferName()
-    let name = s:Creator.BufNamePrefix() . self._nextBufferNumber()
+" FUNCTION: s:Creator._nextBufferName(type='') {{{1
+" gets an optional buffer type of either 'tab' or 'win'.
+" returns the buffer name for the next nerd tree of such type.
+function! s:Creator._nextBufferName(...)
+    if a:0 > 0
+        let type = a:1
+    else
+        let type = ''
+    end
+    let name = s:Creator.BufNamePrefix()
+    if type ==# 'tab'
+        let name = name . 'tab_'
+    elseif type ==# 'win'
+        let name = name . 'win_'
+    endif
+    let name = name . self._nextBufferNumber()
     return name
 endfunction
 
@@ -247,9 +286,13 @@ function! s:Creator._pathForString(str)
 
         "hack to get an absolute path if a relative path is given
         if dir =~# '^\.'
-            let dir = getcwd() . g:NERDTreePath.Slash() . dir
+            let dir = getcwd() . nerdtree#slash() . dir
         endif
-        let dir = g:NERDTreePath.Resolve(dir)
+
+        "hack to prevent removing slash if dir is the root of the file system.
+        if dir !=# '/'
+            let dir = g:NERDTreePath.Resolve(dir)
+        endif
 
         try
             let path = g:NERDTreePath.New(dir)

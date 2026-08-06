@@ -121,8 +121,14 @@ function! s:TreeDirNode.findNode(path)
     if a:path.equals(self.path)
         return self
     endif
-    if stridx(a:path.str(), self.path.str(), 0) ==# -1
-        return {}
+    if nerdtree#caseSensitiveFS()
+        if stridx(a:path.str(), self.path.str(), 0) ==# -1
+            return {}
+        endif
+    else
+        if stridx(tolower(a:path.str()), tolower(self.path.str()), 0) ==# -1
+            return {}
+        endif
     endif
 
     if self.path.isDirectory
@@ -236,7 +242,7 @@ function! s:TreeDirNode.getChildIndex(path)
     let z = self.getChildCount()
     while a < z
         let mid = (a+z)/2
-        let diff = a:path.compareTo(self.children[mid].path)
+        let diff = nerdtree#compareNodePaths(a:path, self.children[mid].path)
 
         if diff ==# -1
             let z = mid
@@ -278,8 +284,12 @@ function! s:TreeDirNode._glob(pattern, all)
     else
         let l:pathSpec = escape(fnamemodify(self.path.str({'format': 'Glob'}), ':.'), ',')
 
-        " On Windows, the drive letter may be removed by fnamemodify().
-        if nerdtree#runningWindows() && l:pathSpec[0] ==# g:NERDTreePath.Slash()
+        if nerdtree#runningWindows()
+            let l:pathSpec = substitute(l:pathSpec, "\\[\\(.*\\]\\)", "[[]\\1", "g")
+        endif
+
+        " On Windows, the drive letter may be removed by "fnamemodify()".
+        if nerdtree#runningWindows() && l:pathSpec[0] == nerdtree#slash()
             let l:pathSpec = self.path.drive . l:pathSpec
         endif
     endif
@@ -421,6 +431,7 @@ function! s:TreeDirNode._initChildren(silent)
     endif
 
     let invalidFilesFound = 0
+    let invalidFiles = []
     for i in files
         try
             let path = g:NERDTreePath.New(i)
@@ -428,15 +439,17 @@ function! s:TreeDirNode._initChildren(silent)
             call g:NERDTreePathNotifier.NotifyListeners('init', path, self.getNerdtree(), {})
         catch /^NERDTree.\(InvalidArguments\|InvalidFiletype\)Error/
             let invalidFilesFound += 1
+            let invalidFiles += [i]
         endtry
     endfor
 
+    let g:NERDTreeOldSortOrder = g:NERDTreeSortOrder
     call self.sortChildren()
 
     call nerdtree#echo('')
 
     if invalidFilesFound
-        call nerdtree#echoWarning(invalidFilesFound . ' file(s) could not be loaded into the NERD tree')
+        call nerdtree#echoWarning(invalidFilesFound . ' Invalid file(s): ' . join(invalidFiles, ', '))
     endif
     return self.getChildCount()
 endfunction
@@ -563,12 +576,13 @@ function! s:TreeDirNode.refresh()
         let files = self._glob('*', 1) + self._glob('.*', 0)
         let newChildNodes = []
         let invalidFilesFound = 0
+        let invalidFiles = []
         for i in files
             try
                 "create a new path and see if it exists in this nodes children
                 let path = g:NERDTreePath.New(i)
                 let newNode = self.getChild(path)
-                if newNode !=# {}
+                if newNode !=# {} && path.str() ==# newNode.path.str()
                     call newNode.refresh()
                     call add(newChildNodes, newNode)
 
@@ -579,7 +593,8 @@ function! s:TreeDirNode.refresh()
                     call add(newChildNodes, newNode)
                 endif
             catch /^NERDTree.\(InvalidArguments\|InvalidFiletype\)Error/
-                let invalidFilesFound = 1
+                let invalidFilesFound += 1
+                let invalidFiles += [i]
             endtry
         endfor
 
@@ -588,7 +603,7 @@ function! s:TreeDirNode.refresh()
         call self.sortChildren()
 
         if invalidFilesFound
-            call nerdtree#echoWarning('some files could not be loaded into the NERD tree')
+            call nerdtree#echoWarning(invalidFilesFound . ' Invalid file(s): ' . join(invalidFiles, ', '))
         endif
     endif
 endfunction
@@ -665,7 +680,7 @@ function! s:TreeDirNode.sortChildren()
     if count(g:NERDTreeSortOrder, '*') < 1
         call add(g:NERDTreeSortOrder, '*')
     endif
-    let CompareFunc = function('nerdtree#compareNodesBySortKey')
+    let CompareFunc = function('nerdtree#compareNodes')
     call sort(self.children, CompareFunc)
     let g:NERDTreeOldSortOrder = g:NERDTreeSortOrder
 endfunction

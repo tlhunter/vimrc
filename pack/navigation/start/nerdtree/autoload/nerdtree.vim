@@ -30,9 +30,21 @@ endfunction
 " SECTION: General Functions {{{1
 "============================================================
 
-"FUNCTION: nerdtree#slash() {{{2
-function! nerdtree#slash() abort
+" FUNCTION: nerdtree#closeTreeOnOpen() {{{2
+function! nerdtree#closeTreeOnOpen() abort
+    return g:NERDTreeQuitOnOpen == 1 || g:NERDTreeQuitOnOpen == 3
+endfunction
 
+" FUNCTION: nerdtree#closeBookmarksOnOpen() {{{2
+function! nerdtree#closeBookmarksOnOpen() abort
+    return g:NERDTreeQuitOnOpen == 2 || g:NERDTreeQuitOnOpen == 3
+endfunction
+
+" FUNCTION: nerdtree#slash() {{{2
+" Return the path separator used by the underlying file system.  Special
+" consideration is taken for the use of the 'shellslash' option on Windows
+" systems.
+function! nerdtree#slash() abort
     if nerdtree#runningWindows()
         if exists('+shellslash') && &shellslash
             return '/'
@@ -42,28 +54,6 @@ function! nerdtree#slash() abort
     endif
 
     return '/'
-endfunction
-
-"FUNCTION: nerdtree#and(x,y) {{{2
-" Implements and() function for Vim <= 7.2
-function! nerdtree#and(x,y) abort
-    if exists('*and')
-        return and(a:x, a:y)
-    else
-        let l:x = a:x
-        let l:y = a:y
-        let l:n = 0
-        let l:result = 0
-        while l:x > 0 && l:y > 0
-            if (l:x % 2) && (l:y % 2)
-                let l:result += float2nr(pow(2, l:n))
-            endif
-            let l:x = float2nr(l:x / 2)
-            let l:y = float2nr(l:y / 2)
-            let l:n += 1
-        endwhile
-        return l:result
-    endif
 endfunction
 
 "FUNCTION: nerdtree#checkForBrowse(dir) {{{2
@@ -108,32 +98,32 @@ function! nerdtree#completeBookmarks(A,L,P) abort
     return filter(g:NERDTreeBookmark.BookmarkNames(), 'v:val =~# "^' . a:A . '"')
 endfunction
 
-"FUNCTION: nerdtree#compareNodes(dir) {{{2
+"FUNCTION: nerdtree#compareNodes(n1, n2) {{{2
 function! nerdtree#compareNodes(n1, n2) abort
-    return a:n1.path.compareTo(a:n2.path)
+    return nerdtree#compareNodePaths(a:n1.path, a:n2.path)
 endfunction
 
-"FUNCTION: nerdtree#compareNodesBySortKey(n1, n2) {{{2
-function! nerdtree#compareNodesBySortKey(n1, n2) abort
-    let sortKey1 = a:n1.path.getSortKey()
-    let sortKey2 = a:n2.path.getSortKey()
+"FUNCTION: nerdtree#compareNodePaths(p1, p2) {{{2
+function! nerdtree#compareNodePaths(p1, p2) abort
+    let sortKey1 = a:p1.getSortKey()
+    let sortKey2 = a:p2.getSortKey()
     let i = 0
     while i < min([len(sortKey1), len(sortKey2)])
         " Compare chunks upto common length.
         " If chunks have different type, the one which has
         " integer type is the lesser.
-        if type(sortKey1[i]) ==# type(sortKey2[i])
+        if type(sortKey1[i]) == type(sortKey2[i])
             if sortKey1[i] <# sortKey2[i]
                 return - 1
             elseif sortKey1[i] ># sortKey2[i]
                 return 1
             endif
-        elseif type(sortKey1[i]) ==# v:t_number
+        elseif type(sortKey1[i]) == type(0)
             return -1
-        elseif type(sortKey2[i]) ==# v:t_number
+        elseif type(sortKey2[i]) == type(0)
             return 1
         endif
-        let i = i + 1
+        let i += 1
     endwhile
 
     " Keys are identical upto common length.
@@ -208,14 +198,72 @@ function! nerdtree#postSourceActions() abort
     runtime! nerdtree_plugin/**/*.vim
 endfunction
 
-"FUNCTION: nerdtree#runningWindows(dir) {{{2
+"FUNCTION: nerdtree#runningWindows() {{{2
 function! nerdtree#runningWindows() abort
     return has('win16') || has('win32') || has('win64')
 endfunction
 
-"FUNCTION: nerdtree#runningCygwin(dir) {{{2
+"FUNCTION: nerdtree#runningCygwin() {{{2
 function! nerdtree#runningCygwin() abort
     return has('win32unix')
+endfunction
+
+"FUNCTION: nerdtree#runningMac() {{{2
+function! nerdtree#runningMac() abort
+    return has('gui_mac') || has('gui_macvim') || has('mac') || has('osx')
+endfunction
+
+" FUNCTION: nerdtree#osDefaultCaseSensitiveFS() {{{2
+function! nerdtree#osDefaultCaseSensitiveFS() abort
+    return s:osDefaultCaseSensitiveFS
+endfunction
+
+" FUNCTION: nerdtree#caseSensitiveFS() {{{2
+function! nerdtree#caseSensitiveFS() abort
+    return g:NERDTreeCaseSensitiveFS == 1 ||
+                \((g:NERDTreeCaseSensitiveFS == 2 || g:NERDTreeCaseSensitiveFS == 3) &&
+                \nerdtree#osDefaultCaseSensitiveFS())
+endfunction
+
+"FUNCTION: nerdtree#pathEquals(lhs, rhs) {{{2
+function! nerdtree#pathEquals(lhs, rhs) abort
+    if nerdtree#caseSensitiveFS()
+        return a:lhs ==# a:rhs
+    else
+        return a:lhs ==? a:rhs
+    endif
+endfunction
+
+"FUNCTION: nerdtree#onBufLeave() {{{2
+" used for handling the nerdtree BufLeave/WinLeave events.
+function! nerdtree#onBufLeave() abort
+    " detect whether we are in the middle of sourcing a session.
+    " if it is a buffer from the sourced session we need to restore it.
+    if exists('g:SessionLoad') && !exists('b:NERDTree')
+        let bname = bufname('%')
+        " is the buffer for a tab tree?
+        if bname =~# '^' . g:NERDTreeCreator.BufNamePrefix() . 'tab_\d\+$'
+            " rename loaded buffer and mark it as trash to prevent this event
+            " getting fired again
+            exec 'file TRASH_' . bname
+            " delete the trash buffer
+            exec 'bwipeout!'
+            " rescue the tab tree at the current working directory
+            call g:NERDTreeCreator.CreateTabTree(getcwd())
+        " is the buffer for a window tree?
+        elseif bname =~# '^' . g:NERDTreeCreator.BufNamePrefix(). 'win_\d\+$'
+            " rescue the window tree at the current working directory
+            call g:NERDTreeCreator.CreateWindowTree(getcwd())
+        else " unknown buffer type
+            " rename buffer to mark it as broken.
+            exec 'file BROKEN_' . bname
+            call nerdtree#echoError('Failed to restore "' . bname . '" from session. Is this session created with an older version of NERDTree?')
+        endif
+    else
+        if g:NERDTree.IsOpen()
+            call b:NERDTree.ui.saveScreenState()
+        endif
+    endif
 endfunction
 
 " SECTION: View Functions {{{1
@@ -255,5 +303,13 @@ endfunction
 function! nerdtree#renderView() abort
     call b:NERDTree.render()
 endfunction
+
+if nerdtree#runningWindows()
+    let s:osDefaultCaseSensitiveFS = 0
+elseif nerdtree#runningMac()
+    let s:osDefaultCaseSensitiveFS = 0
+else
+    let s:osDefaultCaseSensitiveFS = 1
+endif
 
 " vim: set sw=4 sts=4 et fdm=marker:

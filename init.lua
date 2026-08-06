@@ -10,7 +10,6 @@ vim.opt.updatetime = 1000
 vim.opt.number = true
 vim.opt.wrap = false
 vim.opt.visualbell = true
-vim.opt.statusline = '%<%f %h%m%r%=%{fugitive#statusline()}  %-14.(%l,%c%V%) %P'
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.cursorline = true
@@ -246,3 +245,34 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.opt.termguicolors = true
 vim.cmd.colorscheme('dracula')
 vim.opt.mouse = 'a'
+
+--------  Statusline  --------
+-- https://github.com/nvim-lualine/lualine.nvim
+require('lualine').setup({
+	options = {
+		theme = 'dracula',
+		-- Covers the fileformat/filetype icons; the branch icon below
+		-- isn't gated by this flag, so it needs its own override.
+		icons_enabled = false,
+	},
+	sections = {
+		lualine_a = { 'mode' },
+		lualine_b = { { 'branch', icon = '' }, 'diff', 'diagnostics' },
+		lualine_c = { 'filename' },
+		lualine_x = { 'encoding', 'fileformat', 'filetype' },
+		lualine_y = { 'progress' },
+		lualine_z = { 'location' },
+	},
+})
+
+--------  Bufferline  --------
+-- https://github.com/akinsho/bufferline.nvim
+require('bufferline').setup({
+	options = {
+		-- show_buffer_icons stays off: the filetype icons are nerd-font
+		-- glyphs and render as boxes without a patched font installed.
+		show_buffer_icons = false,
+		buffer_close_icon = '×',
+		close_icon = '×',
+	},
+})
