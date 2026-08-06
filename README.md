@@ -1,21 +1,28 @@
-# /home/tlhunter/.vim/vimrc
+# ~/.vim/init.lua
 
-![Screenshot](./screenshot.png "Screenshot of this .vimrc in action")
+![Screenshot](./screenshot.png "Screenshot of this config in action")
 
-This NeoVim configuration is meant to make Vim feel more like an IDE than a simple console-based text editor.
-This configuration is optimized for terminal use with Vim and Neovim.
+This Neovim configuration is meant to make Neovim feel more like an IDE than a simple console-based text editor.
+It's written in Lua and targets Neovim only.
 
 ## Installation
 
 ### Clone with GIT
 
-Run these commands to get this Vim configuration working on your OS X or Linux machine.
+Run these commands to get this configuration working on your OS X or Linux machine.
 You can run `git pull` inside of `~/.vim` if you'd ever like to grab the latest version.
 
 ```bash
 cd ~
 git clone git@github.com:tlhunter/vimrc.git .vim
-ln -s ~/.vim/vimrc ~/.vimrc # Optional, needed for some VIM installations
+mkdir -p ~/.config/nvim
+cat > ~/.config/nvim/init.lua <<'EOF'
+vim.opt.rtp:prepend(vim.fn.expand('~/.vim'))
+vim.opt.rtp:append(vim.fn.expand('~/.vim/after'))
+vim.o.packpath = vim.o.runtimepath
+
+dofile(vim.fn.expand('~/.vim/init.lua'))
+EOF
 ```
 
 ### One Time Download
