@@ -13,6 +13,7 @@ vim.opt.visualbell = true
 vim.opt.statusline = '%<%f %h%m%r%=%{fugitive#statusline()}  %-14.(%l,%c%V%) %P'
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+vim.opt.cursorline = true
 
 -- Toggle whitespace visibility with ,s
 vim.keymap.set('n', '<leader>s', ':set list!<CR>', { remap = true })
@@ -243,5 +244,5 @@ vim.api.nvim_create_autocmd('FileType', {
 
 --------  Terminal Options  --------
 vim.opt.termguicolors = true
-vim.cmd.colorscheme('ir_black')
+vim.cmd.colorscheme('dracula')
 vim.opt.mouse = 'a'
