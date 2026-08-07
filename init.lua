@@ -1,6 +1,5 @@
--- Real path to this file, used below so <Leader>ev/<Leader>es always point
--- at this config even though $MYVIMRC resolves to the ~/.config/nvim shim.
-local config_path = vim.fn.expand('<sfile>:p')
+-- Path to this file, used below so <Leader>ev/<Leader>es can open/reload it.
+local config_path = vim.env.MYVIMRC
 
 vim.g.mapleader = ' '
 vim.opt.shortmess:append({ I = true })

@@ -1,4 +1,4 @@
-# ~/.vim/init.lua
+# ~/.config/nvim/init.lua
 
 ![Screenshot](./screenshot.png "Screenshot of this config in action")
 
@@ -10,24 +10,16 @@ It's written in Lua and targets Neovim only.
 ### Clone with GIT
 
 Run these commands to get this configuration working on your OS X or Linux machine.
-You can run `git pull` inside of `~/.vim` if you'd ever like to grab the latest version.
+You can run `git pull` inside of `~/.config/nvim` if you'd ever like to grab the latest version.
 
 ```bash
-cd ~
-git clone git@github.com:tlhunter/vimrc.git .vim
-mkdir -p ~/.config/nvim
-cat > ~/.config/nvim/init.lua <<'EOF'
-vim.opt.rtp:prepend(vim.fn.expand('~/.vim'))
-vim.opt.rtp:append(vim.fn.expand('~/.vim/after'))
-vim.o.packpath = vim.o.runtimepath
-
-dofile(vim.fn.expand('~/.vim/init.lua'))
-EOF
+mkdir -p ~/.config
+git clone git@github.com:tlhunter/vimrc.git ~/.config/nvim
 ```
 
 ### One Time Download
 
-This method might be more sane. Simply download the latest version, extract to `~/.vim`, and configure to your liking.
+This method might be more sane. Simply download the latest version, extract to `~/.config/nvim`, and configure to your liking.
 
 ```bash
 # TODO
