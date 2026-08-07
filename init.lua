@@ -3,6 +3,7 @@
 local config_path = vim.fn.expand('<sfile>:p')
 
 vim.g.mapleader = ' '
+vim.opt.shortmess:append({ I = true })
 
 vim.opt.modeline = false
 vim.opt.shada = "'1000,f1,:1000,/1000"
@@ -80,6 +81,9 @@ vim.keymap.set({ 'n', 'x', 'o' }, '<C-l>', ':bnext<CR>', { silent = true })
 
 -- <Leader>q Closes the current buffer
 vim.keymap.set('n', '<leader>q', ':Bclose<CR>', { silent = true })
+-- https://stackoverflow.com/a/8585343/21136642
+-- vim.keymap.set({ 'n', 'x', 'o' }, '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>', { silent = true })
+
 
 -- <Leader>Q Closes the current window
 vim.keymap.set('n', '<leader>Q', '<C-w>c', { silent = true })
@@ -105,11 +109,39 @@ vim.keymap.set({ 'n', 'x', 'o' }, '<leader>a', ':Ack ', { remap = true })
 
 vim.g.ackprg = 'ag --vimgrep --column'
 
--- CtrlP will load from the CWD, makes it easier with all these nested repos
-vim.g.ctrlp_working_path_mode = ''
+-- https://github.com/nvim-telescope/telescope.nvim
+-- Ctrl+P performs a recursive fuzzy filename search from the CWD
+vim.keymap.set('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
 
--- CtrlP won't show results from node_modules
-vim.g.ctrlp_custom_ignore = '\\v[\\/](node_modules|coverage|target|dist)|(\\.(swp|ico|git|svn|png|jpg|gif|ttf))$'
+require('telescope').setup({
+	defaults = {
+		-- Telescope won't show results from node_modules
+		file_ignore_patterns = { 'node_modules', 'coverage', 'target', 'dist', '%.git/' },
+
+		-- Don't open the selected file in the NERDTree sidebar (matches
+		-- CtrlP's behavior). If NERDTree is the only window, split one.
+		get_selection_window = function(picker, entry)
+			local win = picker.original_win_id
+			if not (win and vim.api.nvim_win_is_valid(win) and vim.bo[vim.api.nvim_win_get_buf(win)].filetype == 'nerdtree') then
+				return 0
+			end
+			for _, w in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+				if vim.bo[vim.api.nvim_win_get_buf(w)].filetype ~= 'nerdtree' then
+					return w
+				end
+			end
+			vim.cmd('vsplit')
+			return vim.api.nvim_get_current_win()
+		end,
+	},
+	pickers = {
+		-- disable_devicons is belt-and-suspenders: we don't install
+		-- nvim-web-devicons, so there are no icons to disable yet, but
+		-- this keeps it that way if devicons ever gets pulled in as a
+		-- transitive dependency of another plugin.
+		find_files = { disable_devicons = true },
+	},
+})
 
 
 --------  NERDTree Options  --------
@@ -274,5 +306,27 @@ require('bufferline').setup({
 		show_buffer_icons = false,
 		buffer_close_icon = '×',
 		close_icon = '×',
+	},
+})
+
+--------  Noice  --------
+-- https://github.com/folke/noice.nvim
+-- Icons are nerd-font glyphs, which render as broken boxes without a
+-- patched font installed (see the bufferline note above for the same issue).
+require('noice').setup({
+	cmdline = {
+		format = {
+			cmdline = { icon = '' },
+			search_down = { icon = '' },
+			search_up = { icon = '' },
+			filter = { icon = '' },
+			lua = { icon = '' },
+			help = { icon = '' },
+			calculator = { icon = '' },
+			input = { icon = '' },
+		},
+	},
+	popupmenu = {
+		kind_icons = false,
 	},
 })

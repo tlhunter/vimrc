@@ -1,0 +1,19 @@
+{
+  "neodev": {
+    "library": {
+      "plugins": [
+        "nui.nvim",
+        "nvim-cmp",
+        "nvim-notify",
+        "telescope.nvim",
+        "plenary.nvim"
+      ]
+    }
+  },
+  "lspconfig": {
+    "sumneko_lua": {
+      "Lua.runtime.version": "LuaJIT",
+      "Lua.workspace.checkThirdParty": false
+    }
+  }
+}

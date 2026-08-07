@@ -1,0 +1,35 @@
+name: Check docs
+
+on:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-sources:
+    name: Check docs
+    runs-on: ubuntu-latest
+    env:
+      NVIM_URL: https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Prepare
+        run: |
+          test -d _neovim || {
+            mkdir -p _neovim
+            curl -sL ${{ env.NVIM_URL }} | tar xzf - --strip-components=1 -C "${PWD}/_neovim"
+          }
+          mkdir -p ~/.local/share/nvim/site/pack/vendor/start
+          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
+          ln -s $(pwd) ~/.local/share/nvim/site/pack/vendor/start
+
+      - name: Check docs
+        run: |
+          export PATH="${PWD}/_neovim/bin:${PATH}"
+          export VIM="${PWD}/_neovim/share/nvim/runtime"
+          nvim --version
+          make docgen
+          git diff --exit-code
