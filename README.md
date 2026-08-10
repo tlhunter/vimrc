@@ -73,7 +73,6 @@ wget https://github.com/tlhunter/vimrc/archive/master.zip
   * Opening a large directory in NerdTree results in a slow session until NeoVim is killed
   * If NerdTree is focused and you use `<Leader>a` and open an entry it opens in the NerdTree window
     * Basically there are many ways to clobber the NerdTree split
-  * The status bar at the bottom doesn't contain useful information
   * Ideally the bufferline would not be above NerdTree
 * **Telescope**
   * Make the find input box appear above the results list

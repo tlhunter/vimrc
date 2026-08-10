@@ -149,6 +149,9 @@ require('telescope').setup({
 
 
 --------  NERDTree Options  --------
+-- display paths relative to home in status line
+vim.g.NERDTreeStatusline = "%{exists('b:NERDTree') ? fnamemodify(b:NERDTree.root.path.str(), ':~') : ''}"
+
 vim.g.NERDTreeIgnore = { '^\\.git$', '\\.swp$', '\\.swo$' }
 
 -- setting root dir in NT also sets Neovim's cd (useful for switching projects)
@@ -290,6 +293,9 @@ require('lualine').setup({
 		-- Covers the fileformat/filetype icons; the branch icon below
 		-- isn't gated by this flag, so it needs its own override.
 		icons_enabled = false,
+		disabled_filetypes = {
+			'nerdtree',
+		},
 	},
 	sections = {
 		lualine_a = { 'mode' },
