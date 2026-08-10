@@ -22,11 +22,12 @@ git clone git@github.com:tlhunter/vimrc.git ~/.config/nvim
 This method might be more sane. Simply download the latest version, extract to `~/.config/nvim`, and configure to your liking.
 
 ```bash
-# TODO
+# TODO: wrong branch
 wget https://github.com/tlhunter/vimrc/archive/master.zip
 ```
 
-## Features
+
+## Features and Philosophy
 
 * Edit many files at the same time
 * File Browser on left panel
@@ -41,8 +42,7 @@ wget https://github.com/tlhunter/vimrc/archive/master.zip
 ### Switching between files (Buffers)
 
 * Use `<Leader>q` to close the current file (a different file will appear in its place)
-* Use `Ctrl h` `Ctrl l` to move between open files
- * `Ctrl Left` `Ctrl Right` also works for switching between files
+* Use `Ctrl h` and `Ctrl l` to cycle between open files
 
 ### Viewports (Windows/Splits)
 
@@ -52,7 +52,7 @@ wget https://github.com/tlhunter/vimrc/archive/master.zip
 * Use `<Leader>m` to focus on the file browser
 * Use `<Leader>M` to focus on the current file in the file browser
 * Use `Ctrl P` to perform a recursive fuzzy filename search
-* Use `<Leader>a` and type a phrase to search to search based on content within your files (quote and escape if needed)
+* Use `<Leader>a` and type a phrase to search within file contents
 
 ### File Browser (NERDTree)
 
@@ -65,3 +65,16 @@ wget https://github.com/tlhunter/vimrc/archive/master.zip
 * Use `?` if you'd like some NERDTree documentation
 * Use `o` to open the selected file in a new buffer
 * Use `t` to open the selected file in a new tab
+
+## TODO / Known Bugs
+
+* Can't horizontally scroll using trackpad (Linux + KDE + Wayland + Konsole + NeoVim)
+* **Nerdtree**
+  * Opening a large directory in NerdTree results in a slow session until NeoVim is killed
+  * If NerdTree is focused and you use `<Leader>a` and open an entry it opens in the NerdTree window
+    * Basically there are many ways to clobber the NerdTree split
+  * The status bar at the bottom doesn't contain useful information
+  * Ideally the bufferline would not be above NerdTree
+* **Telescope**
+  * Make the find input box appear above the results list
+  * Reverse the results list so the most relevant entry is first not last, go down for second most relevant not up

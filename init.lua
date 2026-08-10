@@ -1,4 +1,4 @@
--- Path to this file, used below so <Leader>ev/<Leader>es can open/reload it.
+-- Path to this file, used below so <Leader>ev/<Leader>es can, silent = true open/reload it.
 local config_path = vim.env.MYVIMRC
 
 vim.g.mapleader = ' '
@@ -14,8 +14,8 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.cursorline = true
 
--- Toggle whitespace visibility with ,s
-vim.keymap.set('n', '<leader>s', ':set list!<CR>', { remap = true })
+-- Toggle whitespace visibility with <Leader>s
+vim.keymap.set('n', '<leader>s', ':set list!<CR>', { remap = true, silent = true })
 vim.opt.listchars = { tab = '> ', trail = '·', extends = '»', precedes = '«', nbsp = '×' }
 vim.opt.list = true -- Enable by default
 
@@ -51,9 +51,6 @@ vim.keymap.set('n', 'yY', function() vim.fn.setreg('"', vim.fn.expand('%')) end)
 -- Copy file path
 vim.keymap.set('n', 'yZ', function() vim.fn.setreg('"', vim.fn.expand('%:p')) end)
 
--- F2 paste toggle isn't needed: Neovim removed the 'paste' option entirely
--- (bracketed paste replaces it), so there's nothing to toggle.
-
 
 --------  Text Navigation  --------
 -- Keep the cursor in place while joining lines
@@ -78,7 +75,7 @@ vim.keymap.set('n', '<leader>k', '<C-w>k')
 vim.keymap.set({ 'n', 'x', 'o' }, '<C-h>', ':bprev<CR>', { silent = true })
 vim.keymap.set({ 'n', 'x', 'o' }, '<C-l>', ':bnext<CR>', { silent = true })
 
--- <Leader>q Closes the current buffer
+-- <Leader>q Closes the current buffer but without closing the window
 vim.keymap.set('n', '<leader>q', ':Bclose<CR>', { silent = true })
 -- https://stackoverflow.com/a/8585343/21136642
 -- vim.keymap.set({ 'n', 'x', 'o' }, '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>', { silent = true })
@@ -112,8 +109,16 @@ vim.g.ackprg = 'ag --vimgrep --column'
 -- Ctrl+P performs a recursive fuzzy filename search from the CWD
 vim.keymap.set('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
 
+local telescope_actions = require("telescope.actions")
 require('telescope').setup({
 	defaults = {
+		mappings = {
+			i = {
+				["<esc>"] = telescope_actions.close,
+				["<c-j>"] = telescope_actions.move_selection_next,
+				["<c-k>"] = telescope_actions.move_selection_previous,
+			},
+		},
 		-- Telescope won't show results from node_modules
 		file_ignore_patterns = { 'node_modules', 'coverage', 'target', 'dist', '%.git/' },
 
@@ -329,3 +334,19 @@ require('noice').setup({
 		kind_icons = false,
 	},
 })
+
+vim.keymap.set('i', '<C-Space>', '<C-x><C-o>', { desc = 'Trigger LSP completion' })
+
+vim.lsp.config['ts_ls'] = {
+	cmd = { '/usr/local/bin/typescript-language-server', '--stdio' },
+	filetypes = { 'typescript' },
+	root_markers = { 'tsconfig.json' },
+--	setup = {
+--		init_options = {
+--			tsserver = {
+--				path = "/usr/local/lib/node_modules/typescript/lib/tsserver.js"
+--			}
+--		}
+--	}
+}
+vim.lsp.enable('ts_ls')
