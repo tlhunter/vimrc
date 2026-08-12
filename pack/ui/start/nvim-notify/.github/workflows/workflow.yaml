@@ -1,0 +1,73 @@
+name: nvim-notify Workflow
+on: 
+  - push
+jobs:
+  style:
+    name: style
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: JohnnyMorganz/stylua-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check lua/ tests/
+
+  tests:
+    name: tests
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-20.04
+            nvim-version: '0.10.3'
+    steps:
+      - uses: actions/checkout@v2
+      - id: nvim-sha
+        run: |
+          curl -sL https://github.com/neovim/neovim/releases/download/v${{ matrix.nvim-version }}/nvim-linux64.tar.gz.sha256sum > nvim-sha
+          echo "cache-key=$(awk '{print $2 "-" $1}' nvim-sha)" >> "$GITHUB_OUTPUT"
+      - name: Restore cache for today's nightly.
+        uses: actions/cache@v2
+        with:
+          path: _neovim
+          key: ${{ steps.nvim-sha.outputs.cache-key }}
+
+      - name: Prepare dependencies
+        run: |
+          test -d _neovim || {
+            mkdir -p _neovim
+            curl -sL https://github.com/neovim/neovim/releases/download/v${{ matrix.nvim-version }}/nvim-linux64.tar.gz | tar xzf - --strip-components=1 -C "${PWD}/_neovim"
+          }
+          mkdir -p ~/.local/share/nvim/site/pack/vendor/start
+          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
+          ln -s $(pwd) ~/.local/share/nvim/site/pack/vendor/start
+
+      - name: Run tests
+        run: |
+          export PATH="${PWD}/_neovim/bin:${PATH}"
+          export VIM="${PWD}/_neovim/share/nvim/runtime"
+          nvim --version
+          ./scripts/test
+          
+  release:
+    name: release
+    if: ${{ github.ref == 'refs/heads/master' }}
+    needs: 
+      - style
+      - tests
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 20
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
