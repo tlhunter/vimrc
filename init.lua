@@ -341,6 +341,8 @@ require('noice').setup({
 	},
 })
 
+require('colorizer').setup()
+
 vim.keymap.set('i', '<C-Space>', '<C-x><C-o>', { desc = 'Trigger LSP completion' })
 
 vim.lsp.config['ts_ls'] = {
