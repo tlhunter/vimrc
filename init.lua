@@ -13,17 +13,25 @@ vim.opt.visualbell = true
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.cursorline = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.termguicolors = true
+vim.opt.mouse = 'a'
 
--- Toggle whitespace visibility with <Leader>s
+vim.cmd.colorscheme('dracula')
+
+local user_config = vim.api.nvim_create_augroup('UserConfig', { clear = true })
+
+
+--------  Whitespace Visibility  --------
 vim.keymap.set('n', '<leader>s', ':set list!<CR>', { remap = true, silent = true })
 vim.opt.listchars = { tab = '> ', trail = '·', extends = '»', precedes = '«', nbsp = '×' }
 vim.opt.list = true -- Enable by default
 
---------  Generic Behavior  --------
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
 
--- Edit and reload this config
+--------  Config Edit and Reload  --------
 vim.keymap.set('n', '<leader>ev', function() vim.cmd.edit(config_path) end, { silent = true })
 vim.keymap.set('n', '<leader>es', function() dofile(config_path) end, { silent = true })
 
@@ -31,23 +39,19 @@ vim.keymap.set('n', '<leader>es', function() dofile(config_path) end, { silent =
 --------  Disable Annoying Features  --------
 -- Wtf is Ex Mode anyways?
 vim.keymap.set('n', 'Q', '<Nop>')
-
 -- Annoying window
 vim.keymap.set({ 'n', 'x', 'o' }, 'q:', ':q', { remap = true })
-
--- Accidentally pressing Shift K will no longer open stupid man entry
+-- Accidentally pressing Shift K no longer opens man entry
 vim.keymap.set({ 'n', 'x', 'o' }, 'K', '<Nop>')
 
 
---------  Clipboard  --------
+--------  Clipboard, Yanking  --------
 -- Allow Shift+Insert to paste
-vim.keymap.set({ 'n', 'x', 'o' }, '<S-Insert>', '<MiddleMouse>', { remap = true })
-vim.keymap.set({ 'i', 'c' }, '<S-Insert>', '<MiddleMouse>', { remap = true })
--- vim.opt.clipboard = 'unnamedplus'
-
+vim.keymap.set({ 'n', 'x', 'o', 'i', 'c' }, '<S-Insert>', '<MiddleMouse>', { remap = true })
+-- Ctrl+C copies to system clipboard
+vim.keymap.set({ "n", "v" }, "<C-c>", '"+y')
 -- Copy filename
 vim.keymap.set('n', 'yY', function() vim.fn.setreg('"', vim.fn.expand('%')) end)
-
 -- Copy file path
 vim.keymap.set('n', 'yZ', function() vim.fn.setreg('"', vim.fn.expand('%:p')) end)
 
@@ -55,7 +59,6 @@ vim.keymap.set('n', 'yZ', function() vim.fn.setreg('"', vim.fn.expand('%:p')) en
 --------  Text Navigation  --------
 -- Keep the cursor in place while joining lines
 vim.keymap.set('n', 'J', 'mzJ`z')
-
 -- H = Home, L = End
 vim.keymap.set({ 'n', 'x', 'o' }, 'H', '^')
 vim.keymap.set({ 'n', 'x', 'o' }, 'L', '$')
@@ -74,38 +77,87 @@ vim.keymap.set('n', '<leader>k', '<C-w>k')
 -- Ctrl+h & Ctrl+l cycle between buffers in the current split
 vim.keymap.set({ 'n', 'x', 'o' }, '<C-h>', ':bprev<CR>', { silent = true })
 vim.keymap.set({ 'n', 'x', 'o' }, '<C-l>', ':bnext<CR>', { silent = true })
-
 -- <Leader>q Closes the current buffer but without closing the window
 vim.keymap.set('n', '<leader>q', ':Bclose<CR>', { silent = true })
 -- https://stackoverflow.com/a/8585343/21136642
 -- vim.keymap.set({ 'n', 'x', 'o' }, '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>', { silent = true })
-
-
 -- <Leader>Q Closes the current window
 vim.keymap.set('n', '<leader>Q', '<C-w>c', { silent = true })
-
 -- <Leader>Ctrl+q Force Closes the current buffer
 vim.keymap.set('n', '<leader><C-q>', ':Bclose!<CR>', { silent = true })
-
 -- `g f` will open the filepath under the cursor in current split
 -- `Ctrl+w f` will open that same filepath in a horizontal split
 -- this allows `g F` to open it in a vertical split
 vim.keymap.set('n', 'gF', ':vertical wincmd f<CR>')
-
---------  Searching  --------
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-
 -- Clear search highlights when pressing <Leader>b
 vim.keymap.set('n', '<leader>b', ':nohlsearch<CR>', { silent = true })
 
+
+--------  Text Editing Utilities  --------
+-- <Leader>T = Delete all Trailing space in file
+vim.keymap.set('n', '<leader>T', [[:%s/\s\+$//<CR>]], { remap = true })
+-- <Leader>U = Deletes Unwanted empty lines
+vim.keymap.set('n', '<leader>U', ':g/^$/d<CR>', { remap = true })
+-- <Leader>R = Converts tabs to spaces in document
+vim.keymap.set('n', '<leader>R', ':retab<CR>', { remap = true })
+-- gq will wrap lines, so gQ will unwrap lines
+vim.keymap.set('n', 'gQ', 'VipJ', { remap = true })
+
+
+--------  Text File Settings  --------
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+	group = user_config,
+	pattern = '*',
+	command = 'setlocal nowrap',
+})
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+	group = user_config,
+	pattern = { '*.txt', '*.md', '*.tex' },
+	command = 'setlocal wrap',
+})
+
+
+--------  JSON Filetype Settings  --------
+vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
+	group = user_config,
+	pattern = '*.json',
+	command = 'set filetype=json',
+})
+vim.g.vim_json_conceal = 0
+vim.keymap.set('n', '=j', ':%!python -m json.tool<CR>:setfiletype json<CR>', { silent = true, remap = true })
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+	group = user_config,
+	pattern = '*.webapp',
+	command = 'set filetype=json',
+})
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+	group = user_config,
+	pattern = '*.jshintrc',
+	command = 'set filetype=json',
+})
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+	group = user_config,
+	pattern = '*.eslintrc',
+	command = 'set filetype=json',
+})
+
+
+
+
+
+--------  PLUGINS  --------
+
+
+
+
+
+--------  Ack  --------
 -- http://www.vim.org/scripts/script.php?script_id=2572
 -- <Leader>a will open a prompt for a term to search for
 vim.keymap.set({ 'n', 'x', 'o' }, '<leader>a', ':Ack ', { remap = true })
-
 vim.g.ackprg = 'ag --vimgrep --column'
 
--- https://github.com/nvim-telescope/telescope.nvim
+--------  Telescope  --------
 -- Ctrl+P performs a recursive fuzzy filename search from the CWD
 vim.keymap.set('n', '<C-p>', ':Telescope find_files<CR>', { silent = true })
 
@@ -148,24 +200,20 @@ require('telescope').setup({
 })
 
 
---------  NERDTree Options  --------
+--------  NERDTree  --------
 -- display paths relative to home in status line
 vim.g.NERDTreeStatusline = "%{exists('b:NERDTree') ? fnamemodify(b:NERDTree.root.path.str(), ':~') : ''}"
-
 vim.g.NERDTreeIgnore = { '^\\.git$', '\\.swp$', '\\.swo$' }
-
--- setting root dir in NT also sets Neovim's cd (useful for switching projects)
+-- setting root dir in NERDTree also sets Neovim's cd (useful for switching projects)
 vim.g.NERDTreeChDirMode = 2
-
+vim.g.NERDTreeMinimalUI = 1
+vim.g.NERDTreeShowHidden = 1
 -- Toggle visibility using <Leader>n
 vim.keymap.set({ 'n', 'x', 'o' }, '<leader>n', ':NERDTreeToggle<CR>', { remap = true, silent = true })
 -- Focus on NERDTree using <Leader>m
 vim.keymap.set({ 'n', 'x', 'o' }, '<leader>m', ':NERDTreeFocus<CR>', { remap = true, silent = true })
 -- Focus on NERDTree with the currently opened file with <Leader>M
 vim.keymap.set({ 'n', 'x', 'o' }, '<leader>M', ':NERDTreeFind<CR>', { remap = true, silent = true })
-
-local user_config = vim.api.nvim_create_augroup('UserConfig', { clear = true })
-
 -- These prevent accidentally loading files while focused on NERDTree
 vim.api.nvim_create_autocmd('FileType', {
 	group = user_config,
@@ -175,8 +223,8 @@ vim.api.nvim_create_autocmd('FileType', {
 		vim.keymap.set('n', '<C-l>', '<Nop>', { buffer = args.buf })
 	end,
 })
-
 -- Open NERDTree if we're executing nvim without specifying a file to open
+-- E.g. `nvim foo.txt` doesn't show NERDTree but `nvim` does.
 vim.api.nvim_create_autocmd('VimEnter', {
 	group = user_config,
 	callback = function()
@@ -186,79 +234,12 @@ vim.api.nvim_create_autocmd('VimEnter', {
 	end,
 })
 
--- Hides "Press ? for help"
-vim.g.NERDTreeMinimalUI = 1
 
--- Shows invisibles
-vim.g.NERDTreeShowHidden = 1
-
-
---------  Fugitive Plugin Options  --------
--- https://github.com/tpope/vim-fugitive
-vim.keymap.set('n', '<leader>gs', ':Git<CR>')
-vim.keymap.set('n', '<leader>gr', ':GRemove<CR>')
-vim.keymap.set('n', '<leader>gl', ':Gclog<CR>')
+--------  Fugitive  --------
 vim.keymap.set('n', '<leader>gb', ':Git blame<CR>')
-vim.keymap.set('n', '<leader>gm', ':GMove ')
-vim.keymap.set('n', '<leader>gp', ':Ggrep ')
-vim.keymap.set('n', '<leader>gR', ':Gread<CR>')
-vim.keymap.set('n', '<leader>gg', ':Git ')
-vim.keymap.set('n', '<leader>gd', ':Gdiffsplit<CR>')
 
 
---------  Text Editing Utilities  --------
--- <Leader>T = Delete all Trailing space in file
-vim.keymap.set('n', '<leader>T', [[:%s/\s\+$//<CR>]], { remap = true })
-
--- <Leader>U = Deletes Unwanted empty lines
-vim.keymap.set('n', '<leader>U', ':g/^$/d<CR>', { remap = true })
-
--- <Leader>R = Converts tabs to spaces in document
-vim.keymap.set('n', '<leader>R', ':retab<CR>', { remap = true })
-
--- gq will wrap lines, so gQ will unwrap lines
-vim.keymap.set('n', 'gQ', 'VipJ', { remap = true })
-
-
---------  Text File Settings  --------
-vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-	group = user_config,
-	pattern = '*',
-	command = 'setlocal nowrap',
-})
-vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-	group = user_config,
-	pattern = { '*.txt', '*.md', '*.tex', '*.asciidoc' },
-	command = 'setlocal wrap',
-})
-
-
---------  JSON Filetype Settings  --------
-vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
-	group = user_config,
-	pattern = '*.json',
-	command = 'set filetype=json',
-})
-vim.g.vim_json_conceal = 0
-vim.keymap.set('n', '=j', ':%!python -m json.tool<CR>:setfiletype json<CR>', { silent = true, remap = true })
-vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-	group = user_config,
-	pattern = '*.webapp',
-	command = 'set filetype=json',
-})
-vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-	group = user_config,
-	pattern = '*.jshintrc',
-	command = 'set filetype=json',
-})
-vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
-	group = user_config,
-	pattern = '*.eslintrc',
-	command = 'set filetype=json',
-})
-
-
---------  Markdown Settings  --------
+--------  Pencil/Markdown  --------
 vim.g['pencil#wrapModeDefault'] = 'soft'
 vim.api.nvim_create_autocmd('FileType', {
 	group = user_config,
@@ -272,18 +253,6 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 vim.g.markdown_syntax_conceal = 0
 
-
---------  AsciiDoc Settings  --------
-vim.api.nvim_create_autocmd('FileType', {
-	group = user_config,
-	pattern = 'asciidoc',
-	command = 'setlocal spell wrap',
-})
-
---------  Terminal Options  --------
-vim.opt.termguicolors = true
-vim.cmd.colorscheme('dracula')
-vim.opt.mouse = 'a'
 
 --------  Statusline  --------
 -- https://github.com/nvim-lualine/lualine.nvim
@@ -307,6 +276,7 @@ require('lualine').setup({
 	},
 })
 
+
 --------  Bufferline  --------
 -- https://github.com/akinsho/bufferline.nvim
 require('bufferline').setup({
@@ -318,6 +288,7 @@ require('bufferline').setup({
 		close_icon = '×',
 	},
 })
+
 
 --------  Noice  --------
 -- https://github.com/folke/noice.nvim
@@ -341,8 +312,12 @@ require('noice').setup({
 	},
 })
 
+
+--------  Colorizer  --------
 require('colorizer').setup()
 
+
+--------  Language Server  --------
 vim.keymap.set('i', '<C-Space>', '<C-x><C-o>', { desc = 'Trigger LSP completion' })
 
 vim.lsp.config['ts_ls'] = {
